@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta property="og:title" content="Astrobot – WhatsApp Bot Terbaik & Terpercaya"/>
+  <meta property="og:description" content="Sewa bot WhatsApp mulai Rp 1.000. Auto-reply, downloader, AI chat, game & 100+ fitur. Stabil 24/7."/>
+  <meta property="og:image" content="https://cdn.nekohime.site/file/bWENc47k.jpeg"/>
+  <meta property="og:url" content="https://astrobot.my.id"/>
+  <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:image" content="https://cdn.nekohime.site/file/bWENc47k.jpeg"/>
+  <link rel="icon" href="https://cdn.nekohime.site/file/bWENc47k.jpeg" type="image/jpeg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Astrobot – WhatsApp Bot Terbaik & Terpercaya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#080c14;color:#e2e8f0;overflow-x:hidden;padding-bottom:0;line-height:1.6}
+
+/* GRID BG */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+  z-index:0;
+}
+/* make all sections above grid */
+header,section,.banner,.hero,.why-sec,.testi-sec,.faq-sec,.btm-cta,footer,.sec,.hero-grid,.wrap{position:relative;z-index:1;}
+
+#bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#7c3aed,#06b6d4);z-index:9999;width:0}
+
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(8,12,20,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.06);z-index:500;display:flex;align-items:center}
+.hdr{width:100%;max-width:1100px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1.15rem;color:#f1f5f9;text-decoration:none}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:#7c3aed;flex-shrink:0}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.live-pill{display:flex;align-items:center;gap:5px;font-size:.75rem;color:#94a3b8;background:#1e293b;border:1px solid #334155;padding:4px 10px;border-radius:99px;white-space:nowrap}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:lp 1.5s infinite}
+@keyframes lp{0%,100%{opacity:1}50%{opacity:.3}}
+.menu-btn{width:38px;height:38px;border-radius:8px;background:#7c3aed;border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.85rem;flex-shrink:0}
+
+/* PANEL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:600;opacity:0;visibility:hidden;transition:.3s}
+.overlay.on{opacity:1;visibility:visible}
+.panel{position:fixed;top:0;right:0;width:272px;height:100dvh;background:#0f172a;border-left:1px solid #1e293b;z-index:700;transform:translateX(100%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);display:flex;flex-direction:column}
+.panel.on{transform:none}
+.panel-head{padding:18px 16px;border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between}
+.panel-head h3{font-weight:700;font-size:.95rem;color:#f1f5f9}
+.panel-close{width:30px;height:30px;border-radius:7px;background:#1e293b;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:#94a3b8}
+.panel-close:hover{background:#fee2e2;color:#ef4444}
+.panel-nav{flex:1;padding:8px 0;overflow-y:auto}
+.plink{display:flex;align-items:center;gap:10px;padding:13px 18px;color:#94a3b8;font-size:.875rem;font-weight:500;text-decoration:none;cursor:pointer;transition:.15s;border:none;background:none;width:100%;text-align:left;font-family:inherit}
+.plink i{width:16px;color:#7c3aed;font-size:.85rem}
+.plink:hover{background:#1e293b;color:#a78bfa}
+.plink.special{margin:6px 10px;width:calc(100% - 20px);border-radius:9px;background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.plink.special i{color:#22c55e}
+.plink.special:hover{background:#dcfce7}
+.panel-foot{padding:14px 16px;border-top:1px solid #1e293b;text-align:center;font-size:.7rem;color:#475569}
+
+/* QRIS MODAL */
+.qmodal{position:fixed;inset:0;z-index:800;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:.3s;background:rgba(0,0,0,0);backdrop-filter:blur(0)}
+.qmodal.on{opacity:1;visibility:visible;background:rgba(0,0,0,.55);backdrop-filter:blur(8px)}
+.qbox{background:#1e293b;border-radius:18px;width:90%;max-width:360px;padding:28px 24px;position:relative;transform:scale(.9) translateY(16px);opacity:0;transition:.4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.qmodal.on .qbox{transform:none;opacity:1}
+.qclose{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:7px;background:#f1f5f9;border:none;cursor:pointer;color:#64748b;font-size:.75rem;display:flex;align-items:center;justify-content:center}
+.qclose:hover{background:#fee2e2;color:#ef4444}
+.qtitle{font-weight:700;font-size:1rem;color:#f1f5f9;margin-bottom:3px}
+.qsub{font-size:.78rem;color:#64748b;margin-bottom:18px}
+.qimg{background:#0f172a;border:1px solid #334155;border-radius:12px;padding:20px;text-align:center;margin-bottom:14px}
+.qimg i{font-size:3.5rem;color:#94a3b8;display:block;margin-bottom:6px}
+.qimg p{font-size:.75rem;color:#475569}
+.qsteps{font-size:.78rem;color:#64748b;line-height:1.8;border-top:1px solid #334155;padding-top:12px}
+.qsteps b{color:#7c3aed}
+
+/* BANNER */
+.banner{margin-top:60px}
+.banner-wrap{position:relative}
+.banner-wrap img{width:100%;height:220px;object-fit:cover;display:block}
+.banner-caption{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,.75),transparent)}
+.banner-caption h2{color:#fff;font-size:1.2rem;font-weight:700}
+.banner-caption p{color:rgba(255,255,255,.7);font-size:.72rem;font-family:'JetBrains Mono',monospace;margin-top:3px}
+
+/* CONTAINERS */
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.sec{padding:52px 16px;max-width:1100px;margin:0 auto}
+
+/* HERO */
+.hero{padding:32px 16px 40px;max-width:1100px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:600;color:#a78bfa;background:#1e1040;border:1px solid #4c1d95;padding:5px 12px;border-radius:99px;margin-bottom:16px}
+.hero h1{font-size:clamp(1.9rem,6vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.025em;color:#f1f5f9;margin-bottom:12px}
+.hero h1 span{color:#7c3aed}
+.type-wrap{display:flex;align-items:center;gap:7px;margin-bottom:16px;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#94a3b8}
+.type-wrap::before{content:'>';color:#7c3aed;font-weight:700}
+.typed{color:#334155;white-space:nowrap;overflow:hidden;border-right:2px solid #7c3aed;animation:tl 5s steps(30) infinite}
+@keyframes tl{0%{width:0;border-color:#7c3aed}40%{width:100%}65%{width:100%}90%{width:0}100%{width:0;border-color:transparent}}
+.hero-desc{font-size:.88rem;color:#94a3b8;line-height:1.7;margin-bottom:22px;max-width:500px}
+.hero-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+.btn-purple{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;background:#7c3aed;color:#fff;font-weight:700;font-size:.85rem;border-radius:10px;text-decoration:none;transition:.2s;border:none;cursor:pointer;font-family:inherit}
+.btn-purple:hover{background:#6d28d9;transform:translateY(-1px)}
+.btn-outline{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;background:#1e293b;color:#cbd5e1;font-weight:600;font-size:.85rem;border-radius:10px;text-decoration:none;transition:.2s;border:1px solid #334155;cursor:pointer;font-family:inherit}
+.btn-outline:hover{background:#334155;border-color:#475569}
+
+/* STATS */
+.stats{display:flex;border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden;background:rgba(255,255,255,0.02)}
+.stat{flex:1;padding:14px 8px;text-align:center;border-right:1px solid rgba(255,255,255,0.06)}
+.stat:last-child{border-right:none}
+.stat-n{font-size:1.3rem;font-weight:800;color:#a78bfa;line-height:1}
+.stat-l{font-size:.68rem;color:#475569;margin-top:3px}
+
+/* FEATURE CARD */
+.feat-card{background:linear-gradient(145deg,#111827,#0d1424);border:1px solid rgba(124,58,237,0.2);border-radius:18px;overflow:hidden;margin-top:24px;box-shadow:0 0 0 1px rgba(255,255,255,0.03)}
+@media(min-width:900px){.feat-card{margin-top:0}}
+.fc-head{background:rgba(0,0,0,.3);border-bottom:1px solid rgba(255,255,255,0.06);padding:10px 14px;display:flex;align-items:center;gap:6px}
+.tl-d{width:9px;height:9px;border-radius:50%}
+.tl-r{background:#f87171}.tl-y{background:#fbbf24}.tl-g{background:#4ade80}
+.fc-head span{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#475569;margin-left:4px}
+.fc-body{padding:14px}
+.fc-lbl{font-size:.65rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.fc-lbl::before{content:'';width:5px;height:5px;border-radius:50%;background:#7c3aed}
+.feat-list{list-style:none}
+.feat-item{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:.8rem;color:#475569}
+.feat-item:last-child{border-bottom:none}
+.fi-ic{width:24px;height:24px;border-radius:6px;background:#2d1f6e;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.72rem;color:#7c3aed}
+.feat-item b{color:#e2e8f0;display:block;font-size:.78rem}
+
+/* SECTION TITLES */
+.sec-lbl{font-size:.68rem;font-weight:700;color:#a78bfa;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.sec-lbl::before{content:'';width:14px;height:2px;background:#7c3aed;border-radius:2px}
+.sec-title{font-size:clamp(1.5rem,4vw,2.1rem);font-weight:800;color:#f1f5f9;letter-spacing:-.02em;line-height:1.15;margin-bottom:32px}
+.sec-title span{color:#7c3aed}
+
+/* WHY */
+.why-sec{background:transparent;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05)}
+.why-grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:600px){.why-grid{grid-template-columns:repeat(3,1fr)}}
+.why-card{
+  background:linear-gradient(135deg,#111827,#0f172a);
+  border:1px solid rgba(124,58,237,0.2);
+  border-radius:18px;padding:28px 22px;transition:.25s;
+  box-shadow:0 0 0 1px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.why-card:hover{border-color:#c4b5fd;box-shadow:0 4px 16px rgba(124,58,237,.07);transform:translateY(-2px)}
+.why-ic{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:18px}
+.ic-p{background:rgba(124,58,237,0.15);color:#a78bfa;box-shadow:0 0 16px rgba(124,58,237,0.2)}
+.ic-b{background:rgba(59,130,246,0.12);color:#60a5fa;box-shadow:0 0 16px rgba(59,130,246,0.15)}
+.ic-g{background:rgba(34,197,94,0.1);color:#4ade80;box-shadow:0 0 16px rgba(34,197,94,0.12)}
+.why-t{font-weight:700;font-size:1rem;color:#f1f5f9;margin-bottom:8px}
+.why-d{font-size:.82rem;color:#64748b;line-height:1.7}
+
+/* ── PRICING CARDS ── */
+.pricing-wrap{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:700px){.pricing-wrap{grid-template-columns:repeat(2,1fr)}}
+
+.pc{
+  background:linear-gradient(145deg,#111827,#0d1424);
+  border-radius:20px;padding:24px;
+  border:1px solid rgba(124,58,237,0.2);
+  position:relative;overflow:hidden;
+  transition:transform .25s,box-shadow .25s;
+  box-shadow:0 0 0 1px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.pc:hover{transform:translateY(-4px);box-shadow:0 0 30px rgba(124,58,237,.15), 0 16px 40px rgba(0,0,0,.5)}
+.pc.cyan-card{border-color:#bae6fd;box-shadow:0 2px 16px rgba(6,182,212,.07)}
+.pc.cyan-card:hover{box-shadow:0 0 30px rgba(6,182,212,.12), 0 16px 40px rgba(0,0,0,.5)}
+.pc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+.pc.cyan-card::before{background:linear-gradient(90deg,#06b6d4,#67e8f9)}
+
+.pc-badge{display:inline-block;font-size:.65rem;font-weight:700;padding:4px 12px;border-radius:99px;margin-bottom:14px;background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe}
+.pc-badge.hot{background:#fef9c3;color:#a16207;border-color:#fde68a}
+.pc-badge.new-b{background:#dcfce7;color:#15803d;border-color:#bbf7d0}
+
+.pc-name{font-size:1.05rem;font-weight:800;color:#f1f5f9;margin-bottom:2px}
+.pc-sub{font-size:.75rem;color:#94a3b8;margin-bottom:20px}
+
+.pc-list{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.pc-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);transition:background .15s}
+.pc-row:hover{background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.2)}
+.pc-row.hl{background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.4)}
+.cyan-card .pc-row:hover{background:#0c2233}
+.cyan-card .pc-row.hl{background:#0c2233;border-color:#164e63}
+
+.row-left{display:flex;align-items:center;gap:8px;font-size:.84rem;color:#cbd5e1;font-weight:500}
+.row-dot{width:7px;height:7px;border-radius:50%;background:#334155;flex-shrink:0}
+.pc-row.hl .row-dot{background:#a78bfa}
+.cyan-card .row-dot{background:#a5f3fc}
+.cyan-card .pc-row.hl .row-dot{background:#06b6d4}
+
+.row-price{font-size:.88rem;font-weight:800;color:#7c3aed;white-space:nowrap}
+.cyan-card .row-price{color:#0891b2}
+.pc-row.hl .row-price{font-size:.95rem}
+
+.pc-perm{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:12px;margin-bottom:18px;background:linear-gradient(90deg,#7c3aed,#6d28d9);color:#fff}
+.cyan-card .pc-perm{background:linear-gradient(90deg,#06b6d4,#0891b2)}
+.perm-left{display:flex;flex-direction:column}
+.perm-title{font-size:.82rem;font-weight:700;line-height:1}
+.perm-note{font-size:.65rem;opacity:.7;margin-top:2px}
+.perm-amount{font-size:1rem;font-weight:800}
+
+.pc-bens{display:flex;flex-direction:column;gap:7px;margin-bottom:20px}
+.pc-ben{display:flex;align-items:center;gap:9px;font-size:.82rem;color:#94a3b8}
+.pc-ben i{color:#22c55e;font-size:.82rem;flex-shrink:0}
+
+.pc-cta{display:block;width:100%;padding:13px;border-radius:12px;border:none;font-family:inherit;font-size:.88rem;font-weight:700;text-align:center;text-decoration:none;cursor:pointer;transition:.2s;background:#7c3aed;color:#fff}
+.pc-cta:hover{background:#6d28d9;box-shadow:0 4px 16px rgba(124,58,237,.3);transform:translateY(-1px)}
+.cyan-card .pc-cta{background:#06b6d4}
+.cyan-card .pc-cta:hover{background:#0891b2;box-shadow:0 4px 16px rgba(6,182,212,.3)}
+
+/* PAYMENT */
+.pay-sec{margin-top:32px;padding-top:24px;border-top:1px solid #1e293b;text-align:center}
+.pay-lbl{font-size:.7rem;color:#475569;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;font-weight:600}
+.pay-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.pchip{display:flex;align-items:center;gap:5px;padding:6px 11px;background:#1e293b;border:1px solid #334155;border-radius:7px;font-size:.72rem;color:#94a3b8;cursor:default;text-decoration:none;transition:.15s}
+.pchip:hover{border-color:#4c1d95;background:#2d1f6e;color:#a78bfa}
+a.pchip{cursor:pointer}
+.pay-note{font-size:.7rem;color:#94a3b8;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:4px}
+.pay-note i{color:#22c55e}
+
+/* TESTIMONIALS */
+.testi-sec{background:transparent;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05)}
+.tcard{background:linear-gradient(145deg,#111827,#0d1424);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:20px;height:100%;box-shadow:inset 0 1px 0 rgba(255,255,255,0.05)}
+.t-stars{color:#f59e0b;font-size:.8rem;margin-bottom:8px;letter-spacing:1px}
+.t-text{font-size:.8rem;color:#94a3b8;line-height:1.7;font-style:italic;margin-bottom:12px}
+.t-author{display:flex;align-items:center;gap:9px}
+.t-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:#fff;flex-shrink:0}
+.t-name{font-weight:600;font-size:.8rem;color:#f1f5f9}
+.t-role{font-size:.68rem;color:#94a3b8}
+.swiper-pagination-bullet{background:#c4b5fd !important;opacity:1 !important}
+.swiper-pagination-bullet-active{background:#7c3aed !important}
+
+/* CTA BOX */
+.cta-box{background:linear-gradient(135deg,#130d2b,#0d1424 55%,#071626);border:1px solid rgba(124,58,237,0.25);border-radius:16px;padding:32px 22px;position:relative;overflow:hidden}
+.cta-box::after{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(124,58,237,.1),transparent 70%);pointer-events:none}
+.cta-inner{position:relative;z-index:1}
+.cta-note{background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:14px;font-size:.78rem;color:#64748b;line-height:1.65;margin-top:18px}
+.cta-note strong{color:#cbd5e1;display:block;margin-bottom:3px;font-size:.8rem}
+
+/* FAQ */
+.faq-sec{background:transparent;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05)}
+.faq-item{background:linear-gradient(145deg,#111827,#0d1424);border:1px solid rgba(255,255,255,0.07);border-radius:14px;margin-bottom:8px;overflow:hidden}
+.faq-btn{width:100%;padding:15px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:none;border:none;font-family:inherit;font-size:.85rem;font-weight:600;color:#e2e8f0;cursor:pointer;text-align:left;transition:.15s}
+.faq-btn:hover{color:#7c3aed}
+.faq-btn.open{color:#7c3aed}
+.faq-btn i{flex-shrink:0;font-size:.72rem;color:#94a3b8;transition:transform .3s}
+.faq-btn.open i{transform:rotate(45deg);color:#7c3aed}
+.faq-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.faq-body.open{max-height:400px}
+.faq-inner{padding:0 16px 14px;font-size:.8rem;color:#475569;line-height:1.8}
+.faq-inner li{list-style:none;padding:2px 0}
+.faq-inner li::before{content:'→  ';color:#7c3aed}
+
+/* BOTTOM CTA */
+.btm-cta{text-align:center;padding:52px 16px;background:transparent;border-top:1px solid rgba(255,255,255,0.05)}
+.btm-cta h2{font-size:clamp(1.4rem,5vw,2.2rem);font-weight:800;color:#f1f5f9;letter-spacing:-.02em;margin-bottom:10px}
+.btm-cta h2 span{color:#7c3aed}
+.btm-cta p{font-size:.85rem;color:#64748b;max-width:400px;margin:0 auto 24px;line-height:1.7}
+
+/* FOOTER */
+footer{border-top:1px solid rgba(255,255,255,0.05);padding:28px 16px;text-align:center;background:transparent}
+.ft-logo{font-weight:800;font-size:.95rem;color:#f1f5f9;margin-bottom:10px}
+.ft-disc{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:13px 14px;font-size:.73rem;color:#64748b;line-height:1.7;max-width:540px;margin:0 auto 12px;text-align:left}
+.ft-disc strong{color:#94a3b8}
+.ft-copy{font-size:.68rem;color:#94a3b8}
+
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.rv.on{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+
+/* DESKTOP LAYOUT */
+@media(min-width:900px){
+  .hero-grid{display:grid;grid-template-columns:1fr 360px;gap:36px;align-items:start}
+}
+
+
+/* JADIBOT CARD */
+.jb-card{
+  background:linear-gradient(145deg,#111827,#0d1424);
+  border-radius:20px;padding:24px;
+  border:1px solid rgba(250,204,21,0.2);
+  position:relative;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(255,255,255,0.03),inset 0 1px 0 rgba(255,255,255,0.05);
+  margin-top:14px;
+}
+.jb-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.jb-title{
+  text-align:center;font-size:.95rem;font-weight:800;
+  color:#fbbf24;letter-spacing:.04em;margin-bottom:20px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.jb-title::before,.jb-title::after{content:'';flex:1;height:1px;background:rgba(251,191,36,.2)}
+.jb-tier{
+  border-radius:12px;padding:14px 16px;margin-bottom:10px;
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+  transition:.2s;
+}
+.jb-tier:last-of-type{margin-bottom:0}
+.jb-tier:hover{border-color:rgba(250,204,21,0.3);background:rgba(250,204,21,0.05)}
+.jb-tier-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
+}
+.jb-price{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.25);
+  border-radius:8px;padding:4px 12px;
+  font-size:.85rem;font-weight:800;color:#fbbf24;
+}
+.jb-per{font-size:.65rem;color:#64748b;font-weight:400}
+.jb-divider{height:1px;background:rgba(255,255,255,0.06);margin:10px 0}
+.jb-feat{display:flex;align-items:center;gap:7px;font-size:.78rem;color:#94a3b8;padding:3px 0}
+.jb-feat i{color:#22c55e;font-size:.75rem;flex-shrink:0}
+.jb-cta{
+  display:block;width:100%;padding:12px;border-radius:12px;
+  border:none;font-family:inherit;font-size:.85rem;font-weight:700;
+  text-align:center;text-decoration:none;cursor:pointer;transition:.2s;
+  background:linear-gradient(90deg,#f59e0b,#fbbf24);color:#1a1000;
+  margin-top:16px;
+}
+.jb-cta:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(245,158,11,.3)}
+</style>
+</head>
+<body>
+
+<div id="bar"></div>
+
+<!-- QRIS MODAL -->
+<div id="qm" class="qmodal" onclick="if(event.target===this)closeQ()">
+  <div class="qbox">
+    <button class="qclose" onclick="closeQ()"><i class="fas fa-times"></i></button>
+    <div class="qtitle">QRIS Pembayaran</div>
+    <div class="qsub">Scan QR untuk bayar langsung &amp; aman</div>
+    <div class="qimg">
+      <i class="fas fa-qrcode"></i>
+      <p>QR Code Astrobot</p>
+      <p style="font-size:.65rem;margin-top:2px">Astrobot Payment</p>
+    </div>
+    <div class="qsteps">
+      <b>Cara bayar:</b><br>
+      1. Buka e-wallet / mobile banking<br>
+      2. Pilih menu Scan QRIS<br>
+      3. Arahkan ke QR di atas<br>
+      4. Konfirmasi &amp; kirim bukti ke admin
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY -->
+<div id="ov" class="overlay" onclick="closeMenu()"></div>
+
+<!-- MENU PANEL -->
+<div id="pn" class="panel">
+  <div class="panel-head">
+    <h3>Menu Navigasi</h3>
+    <button class="panel-close" onclick="closeMenu()"><i class="fas fa-times"></i></button>
+  </div>
+  <nav class="panel-nav">
+    <a class="plink" href="#features" onclick="closeMenu()"><i class="fas fa-star"></i> Fitur Unggulan</a>
+    <a class="plink" href="#pricing" onclick="closeMenu()"><i class="fas fa-tags"></i> Paket Harga</a>
+    <a class="plink" href="#testimonials" onclick="closeMenu()"><i class="fas fa-comment"></i> Testimoni</a>
+    <a class="plink" href="#faq" onclick="closeMenu()"><i class="fas fa-question-circle"></i> FAQ</a>
+    <a class="plink" href="https://wa.me/6287842203625" target="_blank"><i class="fab fa-whatsapp"></i> Hubungi Admin</a>
+    <button class="plink special" onclick="openQ();closeMenu()">
+      <i class="fas fa-qrcode"></i> QRIS Pembayaran
+      <span style="margin-left:auto;font-size:.63rem;background:#dcfce7;color:#16a34a;padding:2px 7px;border-radius:99px">Baru</span>
+    </button>
+  </nav>
+  <div class="panel-foot">© 2025 Astrobot · All rights reserved</div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="hdr">
+    <a href="#" class="logo">
+      <span class="logo-dot"></span>
+      Astrobot
+    </a>
+    <div class="hdr-right">
+      <div class="live-pill">
+        <span class="live-dot"></span>
+        <span><span id="lc">127</span> online</span>
+      </div>
+      <button class="menu-btn" onclick="openMenu()"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="banner-wrap">
+    <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1600&auto=format&fit=crop" alt="Astrobot" loading="lazy">
+    <div class="banner-caption">
+      <h2>Astrobot AI Assistant</h2>
+      <p>// WhatsApp Bot · Multi Device · 24/7 Online</p>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section>
+  <div class="hero">
+    <div class="hero-grid">
+
+      <!-- KIRI -->
+      <div>
+        <div class="hero-badge"><i class="fab fa-whatsapp" style="color:#22c55e"></i> WhatsApp Automation Bot</div>
+        <h1>Astrobot <span>WhatsApp</span> Bot</h1>
+        <div class="type-wrap">
+          <span class="typed">Otomatis untuk Grup &amp; Pribadi</span>
+        </div>
+        <p class="hero-desc">Bot WhatsApp multi-fitur — auto-reply, manajemen grup, downloader, game, dan AI chat. Stabil 24/7, setup mudah, harga terjangkau.</p>
+        <div class="hero-btns">
+          <a href="#pricing" class="btn-purple"><i class="fas fa-tags" style="font-size:.8rem"></i> Lihat Harga</a>
+          <a href="https://wa.me/6287842203625" target="_blank" class="btn-outline"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:.9rem"></i> Hubungi Admin</a>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-n"><span class="countup" data-n="7886">0</span> <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:#3b82f6;border-radius:50%;font-size:.6rem;color:#fff;vertical-align:middle;margin-left:1px">✓</span></div>
+            <div class="stat-l">Pengguna Verified</div>
+          </div>
+          <div class="stat">
+            <div class="stat-n">24h</div>
+            <div class="stat-l">Online</div>
+          </div>
+          <div class="stat">
+            <div class="stat-n">99%</div>
+            <div class="stat-l">Uptime</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KANAN: FEATURE CARD -->
+      <div id="features">
+        <div class="feat-card rv d2">
+          <div class="fc-head">
+            <span class="tl-d tl-r"></span>
+            <span class="tl-d tl-y"></span>
+            <span class="tl-d tl-g"></span>
+            <span>astrobot.features</span>
+          </div>
+          <div class="fc-body">
+            <div class="fc-lbl">Fitur Populer</div>
+            <ul class="feat-list">
+              <li class="feat-item">
+                <span class="fi-ic"><i class="fas fa-download"></i></span>
+                <span><b>All-in-One Downloader</b>TikTok, IG, FB tanpa watermark</span>
+              </li>
+              <li class="feat-item">
+                <span class="fi-ic"><i class="fas fa-robot"></i></span>
+                <span><b>AI Chat</b>Tanya apa saja, langsung dijawab</span>
+              </li>
+              <li class="feat-item">
+                <span class="fi-ic"><i class="fas fa-sticky-note"></i></span>
+                <span><b>Brat &amp; BratVid</b>Teks jadi stiker/video estetik</span>
+              </li>
+              <li class="feat-item">
+                <span class="fi-ic"><i class="fas fa-users"></i></span>
+                <span><b>Tools Grup</b>Welcome, anti-link, admin tools</span>
+              </li>
+              <li class="feat-item">
+                <span class="fi-ic"><i class="fas fa-gamepad"></i></span>
+                <span><b>RPG &amp; Game</b>Ekonomi, quest, dan game seru</span>
+              </li>
+              <li class="feat-item">
+                <span class="fi-ic"><i class="fas fa-comment-dots"></i></span>
+                <span><b>Auto-Reply</b>Respon cepat tanpa delay</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why-sec">
+  <div class="sec">
+    <div class="sec-lbl">Kenapa Astrobot?</div>
+    <h2 class="sec-title rv"></h2>
+    <div class="why-grid">
+      <div class="why-card rv d1">
+        <div class="why-ic ic-p"><i class="fas fa-bolt"></i></div>
+        <div class="why-t">Respon Instan</div>
+        <div class="why-d">Menjawab pesan dalam hitungan milidetik. Tidak ada delay, tidak ada lag.</div>
+      </div>
+      <div class="why-card rv d2">
+        <div class="why-ic ic-b"><i class="fas fa-users"></i></div>
+        <div class="why-t">Manajemen Grup</div>
+        <div class="why-d">Welcome message, anti-link, kick spam, dan tools admin lengkap.</div>
+      </div>
+      <div class="why-card rv d3">
+        <div class="why-ic ic-g"><i class="fas fa-shield-halved"></i></div>
+        <div class="why-t">Server Stabil</div>
+        <div class="why-d">Uptime 99%+. Bot down lebih 24 jam, masa aktif otomatis diperpanjang.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="sec">
+    <div class="sec-lbl">Paket &amp; Harga</div>
+    <h2 class="sec-title rv">Pilih paket <span>yang cocok.</span></h2>
+    <div class="pricing-wrap">
+
+      <!-- CARD 1: GRUP -->
+      <div class="pc rv d1">
+        <div class="pc-badge">Sewa Grup</div>
+        <div class="pc-name">Bot Grup</div>
+        <div class="pc-sub">Aktif untuk semua anggota di grup</div>
+        <div class="pc-list">
+          <div class="pc-row">
+            <span class="row-left"><span class="row-dot"></span>1 Hari</span>
+            <span class="row-price">Rp 1.000</span>
+          </div>
+          <div class="pc-row hl">
+            <span class="row-left"><span class="row-dot"></span>15 Hari <span style="font-size:.6rem;background:#7c3aed;color:#fff;padding:2px 7px;border-radius:99px;margin-left:4px;font-weight:700">Populer</span></span>
+            <span class="row-price">Rp 5.000</span>
+          </div>
+          <div class="pc-row">
+            <span class="row-left"><span class="row-dot"></span>20 Hari</span>
+            <span class="row-price">Rp 10.000</span>
+          </div>
+          <div class="pc-row">
+            <span class="row-left"><span class="row-dot"></span>30 Hari &nbsp;<span style="font-size:.72rem;color:#64748b;text-decoration:line-through">Rp 20.000</span></span>
+            <span class="row-price">Rp 15.000</span>
+          </div>
+          <div class="pc-row hl">
+            <span class="row-left"><span class="row-dot"></span>60 Hari &nbsp;<span style="font-size:.72rem;color:#64748b;text-decoration:line-through">Rp 30.000</span></span>
+            <span class="row-price">Rp 25.000</span>
+          </div>
+        </div>
+        <div class="pc-perm">
+          <div class="perm-left">
+            <span class="perm-title">Permanen</span>
+            <span class="perm-note">Aktif selamanya</span>
+          </div>
+          <span class="perm-amount">Rp 75.000</span>
+        </div>
+        <div class="pc-bens">
+          <div class="pc-ben"><i class="fas fa-check-circle"></i> Eksklusif untuk grup</div>
+          <div class="pc-ben"><i class="fas fa-check-circle"></i> Semua anggota bisa pakai</div>
+          <div class="pc-ben"><i class="fas fa-check-circle"></i> Fitur manajemen grup lengkap</div>
+          <div class="pc-ben"><i class="fas fa-check-circle"></i> Tanpa limit harian</div>
+        </div>
+        <a href="https://wa.me/6287842203625" target="_blank" class="pc-cta">
+          <i class="fab fa-whatsapp"></i> Sewa Bot Grup
+        </a>
+      </div>
+
+      <!-- CARD 2: PRIBADI -->
+      <div class="pc cyan-card rv d2">
+        <div class="pc-badge hot">⭐ Populer</div>
+        <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:10;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;backdrop-filter:blur(3px)"><span style="font-size:1.5rem">🔒</span><span style="font-size:.85rem;font-weight:800;color:#fff;background:rgba(239,68,68,0.9);padding:6px 18px;border-radius:99px;letter-spacing:.05em">CLOSED</span><span style="font-size:.72rem;color:rgba(255,255,255,.7)">Sementara tidak tersedia</span></div>
+        <div class="pc-name">Premium</div>
+        
+        <div class="pc-list">
+          <div class="pc-row">
+            <span class="row-left"><span class="row-dot"></span>30 Hari</span>
+            <span class="row-price">Rp 10.000</span>
+          </div>
+          <div class="pc-row">
+            <span class="row-left"><span class="row-dot"></span>3 Bulan</span>
+            <span class="row-price">Rp 30.000</span>
+          </div>
+          <div class="pc-row hl">
+            <span class="row-left"><span class="row-dot"></span>Tahunan</span>
+            <span class="row-price">Rp 70.000</span>
+          </div>
+        </div>
+        <div class="pc-bens">
+          <div class="pc-ben"><i class="fas fa-check-circle"></i> Limit unlimited</div>
+          <div class="pc-ben"><i class="fas fa-check-circle"></i> Semua fitur terbuka</div>
+          <div class="pc-ben"><i class="fas fa-check-circle"></i> Garansi 30 hari permanen</div>
+        </div>
+        <a href="https://wa.me/6287842203625" target="_blank" class="pc-cta">
+          <i class="fab fa-whatsapp"></i> Sewa Bot Pribadi
+        </a>
+      </div>
+
+    </div>
+
+      <!-- JADIBOT CARD -->
+      <div class="jb-card rv">
+        <div class="jb-title">🤖 List Harga Jadibot Astrobot VVIP</div>
+
+        <!-- Tier 5k -->
+        <div class="jb-tier">
+          <div class="jb-tier-head">
+            <span class="jb-price">5K <span class="jb-per">/ bulan</span></span>
+          </div>
+          <div class="jb-divider"></div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Nomor WA Kamu Sendiri</div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Respon Stabil & Fast</div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Tanpa Limit</div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Tanpa Iklan</div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Semua Fitur Terbuka</div>
+        </div>
+
+        <!-- Tier 10k -->
+        <div class="jb-tier">
+          <div class="jb-tier-head">
+            <span class="jb-price">10K <span class="jb-per">/ bulan</span></span>
+          </div>
+          <div class="jb-divider"></div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Nomor WA Kamu Sendiri</div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Respon Stabil & Anti Delay</div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Tanpa Limit</div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Tanpa Iklan</div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Semua Fitur Terbuka</div>
+        </div>
+
+        <!-- Tier 15k -->
+        <div class="jb-tier">
+          <div class="jb-tier-head">
+            <span class="jb-price">15K <span class="jb-per">/ bulan</span></span>
+            <span style="font-size:.62rem;background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3);padding:3px 9px;border-radius:99px;font-weight:700">⭐ Best</span>
+          </div>
+          <div class="jb-divider"></div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Nomor WA Kamu Sendiri</div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Performa Lebih Tinggi!</div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Optimal & Responsif</div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Tanpa Limit</div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Tanpa Iklan</div>
+          <div class="jb-feat"><i class="fas fa-check-circle"></i> Semua Fitur Terbuka</div>
+        </div>
+
+        <a href="https://wa.me/6287842203625" target="_blank" class="jb-cta">
+          <i class="fab fa-whatsapp"></i> Order Jadibot Sekarang
+        </a>
+      </div>
+
+    <!-- PAYMENT -->
+    <div class="pay-sec rv">
+      <div class="pay-lbl">Metode Pembayaran</div>
+      <div class="pay-chips">
+        <div class="pchip"><i class="fas fa-university" style="color:#0066a1"></i> BCA</div>
+        <div class="pchip"><i class="fas fa-university" style="color:#003087"></i> BRI</div>
+        <div class="pchip"><i class="fas fa-university" style="color:#00a2e3"></i> Mandiri</div>
+        <div class="pchip"><i class="fas fa-university" style="color:#f96d00"></i> BNI</div>
+        <div class="pchip"><i class="fas fa-wallet" style="color:#00aa13"></i> GoPay</div>
+        <div class="pchip"><i class="fas fa-wallet" style="color:#4c3494"></i> OVO</div>
+        <a href="dana://send?phoneNumber=087842203625" class="pchip"><i class="fas fa-money-bill-wave" style="color:#118eea"></i> DANA</a>
+        <div class="pchip"><i class="fas fa-bolt" style="color:#e40421"></i> LinkAja</div>
+        <div class="pchip"><i class="fas fa-shopping-bag" style="color:#ff5722"></i> ShopeePay</div>
+        <div class="pchip" onclick="openQ()" style="cursor:pointer;border-color:#a5f3fc;color:#06b6d4;background:#e0f2fe"><i class="fas fa-qrcode"></i> QRIS</div>
+      </div>
+      <div class="pay-note"><i class="fas fa-check-circle"></i> Semua metode pembayaran aman &amp; terjamin</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="testi-sec">
+  <div class="sec">
+    <div class="sec-lbl">Testimoni</div>
+    <h2 class="sec-title rv">Kata mereka <span>yang udah pakai.</span></h2>
+    <div class="swiper tSwiper rv" style="padding-bottom:40px">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><div class="tcard">
+          <div class="t-stars">★★★★★</div>
+          <p class="t-text">"Botnya stabil banget, jarang down! Fitur downloader sangat membantu anggota grup. Admin juga fast respon."</p>
+          <div class="t-author"><div class="t-av">RP</div><div><div class="t-name">Rizki Pratama</div><div class="t-role">Admin Grup Komunitas</div></div></div>
+        </div></div>
+        <div class="swiper-slide"><div class="tcard">
+          <div class="t-stars">★★★★½</div>
+          <p class="t-text">"Auto-reply sangat membantu respon customer. Harga terjangkau banget untuk fitur sebanyak ini. Recommended!"</p>
+          <div class="t-author"><div class="t-av">SD</div><div><div class="t-name">Sari Dewi</div><div class="t-role">Owner Online Shop</div></div></div>
+        </div></div>
+        <div class="swiper-slide"><div class="tcard">
+          <div class="t-stars">★★★★★</div>
+          <p class="t-text">"Fitur game RPG bikin grup tambah seru. Member jadi aktif terus karena ada daily quest dan sistem ekonomi."</p>
+          <div class="t-author"><div class="t-av">AW</div><div><div class="t-name">Andi Wijaya</div><div class="t-role">Game Community Leader</div></div></div>
+        </div></div>
+        <div class="swiper-slide"><div class="tcard">
+          <div class="t-stars">★★★★★</div>
+          <p class="t-text">"Paket permanen worth banget. Sekali bayar langsung bisa nikmatin semua fitur tanpa khawatir habis masa aktif."</p>
+          <div class="t-author"><div class="t-av">FA</div><div><div class="t-name">Fajar Aditya</div><div class="t-role">Pengguna Premium</div></div></div>
+        </div></div>
+        <div class="swiper-slide"><div class="tcard">
+          <div class="t-stars">★★★★★</div>
+          <p class="t-text">"Support 24/7 beneran aktif. Ada masalah tengah malam, langsung dibantu dan selesai dalam beberapa menit."</p>
+          <div class="t-author"><div class="t-av">NR</div><div><div class="t-name">Nita Rahayu</div><div class="t-role">Reseller Dropship</div></div></div>
+        </div></div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA JOIN -->
+<section>
+  <div class="sec">
+    <div class="cta-box rv">
+      <div class="cta-inner">
+        <div class="sec-lbl">Mulai Sekarang</div>
+        <h2 class="sec-title" style="margin-bottom:10px">Siap coba <span>Astrobot?</span></h2>
+        <p style="font-size:.86rem;color:#64748b;line-height:1.7;max-width:420px;margin-bottom:20px">Gabung ke grup resmi Astrobot untuk update fitur, bantuan, dan info terbaru seputar bot.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          <a href="https://chat.whatsapp.com/FSAf3UrrYIWLJerH6iVTaD" target="_blank" class="btn-purple"><i class="fab fa-whatsapp" style="color:#86efac"></i> Coba Gratis Sekarang</a>
+          <button onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})" class="btn-outline"><i class="fas fa-arrow-up" style="font-size:.75rem"></i> Lihat Paket</button>
+        </div>
+        <div class="cta-note">
+          <strong>📌 Info Aktivasi</strong>
+          Proses aktivasi bot dilakukan setelah verifikasi pembayaran. Semua penggunaan Astrobot mengikuti aturan dan kebijakan yang berlaku.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="faq-sec">
+  <div class="sec">
+    <div class="sec-lbl">FAQ</div>
+    <h2 class="sec-title rv">Pertanyaan <span>yang sering ditanya.</span></h2>
+
+    <div class="faq-item rv d1">
+      <button class="faq-btn" onclick="toggleFaq(this)">Apa itu Premium? <i class="fas fa-plus"></i></button>
+      <div class="faq-body"><div class="faq-inner"><ul>
+        <li>Premium adalah membership bot untuk pribadi dan grup pribadi.</li>
+        <li>Akses ke semua fitur dengan limit unlimited.</li>
+        <li>Permanen berlaku selama bot masih beroperasi.</li>
+        <li>Tidak akan hilang meski bot berganti nomor.</li>
+        <li>Akan hilang jika kamu mengganti nomor WhatsApp.</li>
+        <li>Tidak dapat dipindahkan ke nomor lain &amp; tidak dapat direfund.</li>
+      </ul></div></div>
+    </div>
+
+    <div class="faq-item rv d2">
+      <button class="faq-btn" onclick="toggleFaq(this)">Bagaimana cara aktivasi bot? <i class="fas fa-plus"></i></button>
+      <div class="faq-body"><div class="faq-inner"><ul>
+        <li>Pilih paket yang diinginkan dari halaman harga.</li>
+        <li>Hubungi admin via WhatsApp di nomor yang tertera.</li>
+        <li>Lakukan pembayaran sesuai metode yang dipilih.</li>
+        <li>Kirim bukti pembayaran ke admin.</li>
+        <li>Bot diaktifkan dalam 1–2 jam setelah verifikasi.</li>
+      </ul></div></div>
+    </div>
+
+    <div class="faq-item rv d3">
+      <button class="faq-btn" onclick="toggleFaq(this)">Apakah ada garansi? <i class="fas fa-plus"></i></button>
+      <div class="faq-body"><div class="faq-inner"><ul>
+        <li>Garansi 30 hari untuk paket permanen.</li>
+        <li>Bot down lebih dari 24 jam = ekstensi masa aktif gratis.</li>
+        <li>Support 24/7 via WhatsApp — admin selalu siap membantu.</li>
+      </ul></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="btm-cta">
+  <h2 class="rv">Tunggu apa lagi? <span>Sewa sekarang!</span></h2>
+  <p class="rv d1">Dapatkan pengalaman terbaik dengan Astrobot. Pilih paket dan nikmati fitur lengkap 24/7.</p>
+  <a href="https://wa.me/6287842203625" target="_blank" class="btn-purple rv d2" style="font-size:.9rem;padding:13px 28px;display:inline-flex">
+    <i class="fab fa-whatsapp" style="color:#86efac;font-size:1rem"></i> SEWA ASTROBOT SEKARANG
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-logo">Astrobot</div>
+  <div class="ft-disc">
+    <strong>Catatan Penting:</strong> Astrobot tidak menyediakan fitur bug WhatsApp, push kontak massal, maupun penjualan panel bot. Kami berkomitmen menjaga kenyamanan publik dan menggunakan bot hanya untuk fitur yang aman, wajar, dan bermanfaat.
+  </div>
+  <div class="ft-copy">© <span id="yr">2025</span> Astrobot. All rights reserved. · WhatsApp is a trademark of WhatsApp Inc.</div>
+</footer>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  new Swiper('.tSwiper', {
+    slidesPerView: 1, spaceBetween: 12,
+    pagination: { el: '.swiper-pagination', clickable: true },
+    autoplay: { delay: 5000, disableOnInteraction: false },
+    breakpoints: { 600: { slidesPerView: 2 }, 960: { slidesPerView: 3 } }
+  });
+
+  document.querySelectorAll('.countup').forEach(el => {
+    const t = parseInt(el.dataset.n), s = t / 60; let c = 0;
+    const ti = setInterval(() => {
+      c = Math.min(c + s, t);
+      el.textContent = Math.floor(c).toLocaleString('id');
+      if (c >= t) clearInterval(ti);
+    }, 22);
+  });
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+  window.addEventListener('scroll', () => {
+    const d = document.documentElement;
+    document.getElementById('bar').style.width = (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
+  });
+
+  setInterval(() => {
+    const el = document.getElementById('lc');
+    el.textContent = Math.max(110, parseInt(el.textContent) + Math.floor(Math.random() * 5) - 2);
+  }, 4000);
+});
+
+function openMenu() {
+  document.getElementById('pn').classList.add('on');
+  document.getElementById('ov').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closeMenu() {
+  document.getElementById('pn').classList.remove('on');
+  document.getElementById('ov').classList.remove('on');
+  document.body.style.overflow = '';
+}
+function openQ() { document.getElementById('qm').classList.add('on'); document.body.style.overflow = 'hidden'; }
+function closeQ() { document.getElementById('qm').classList.remove('on'); document.body.style.overflow = ''; }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeQ(); closeMenu(); } });
+
+function toggleFaq(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.faq-body.open').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.faq-btn.open').forEach(b => b.classList.remove('open'));
+  if (!isOpen) { body.classList.add('open'); btn.classList.add('open'); }
+}
+</script>
+</body>
+</html>
