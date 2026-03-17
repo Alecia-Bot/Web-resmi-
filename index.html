@@ -326,6 +326,52 @@ footer{border-top:1px solid rgba(255,255,255,0.05);padding:28px 16px;text-align:
   margin-top:16px;
 }
 .jb-cta:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(245,158,11,.3)}
+
+/* SEWA PRIBADI MURAH CARD */
+.sp-card{
+  background:linear-gradient(145deg,#0a1f14,#0d1a1a);
+  border:1px solid rgba(34,197,94,0.25);
+  border-radius:20px;padding:24px;
+  position:relative;overflow:hidden;
+  transition:transform .25s,box-shadow .25s;
+  box-shadow:0 0 0 1px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+@media(min-width:700px){.sp-card{grid-column:1 / -1}}
+.sp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#22c55e,#4ade80)}
+.sp-card:hover{transform:translateY(-4px);box-shadow:0 0 30px rgba(34,197,94,.15), 0 16px 40px rgba(0,0,0,.5)}
+.sp-card::after{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(34,197,94,.07),transparent 70%);pointer-events:none}
+
+.sp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px}
+.sp-badge-new{display:inline-flex;align-items:center;gap:5px;font-size:.65rem;font-weight:700;padding:4px 12px;border-radius:99px;background:#dcfce7;color:#15803d;border:1px solid #bbf7d0}
+.sp-title{font-size:.7rem;font-weight:700;color:#4ade80;letter-spacing:.12em;text-transform:uppercase;text-align:center;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:8px}
+.sp-title::before,.sp-title::after{content:'';flex:1;height:1px;background:rgba(74,222,128,.2)}
+
+.sp-name{font-size:1.05rem;font-weight:800;color:#f1f5f9;margin-bottom:2px}
+.sp-sub{font-size:.75rem;color:#64748b;margin-bottom:20px}
+
+.sp-list{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.sp-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);transition:.15s}
+.sp-row:hover{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.25)}
+.sp-row.sp-hl{background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35)}
+
+.sp-row-left{display:flex;align-items:center;gap:8px;font-size:.84rem;color:#cbd5e1;font-weight:500}
+.sp-dot{width:7px;height:7px;border-radius:50%;background:#334155;flex-shrink:0}
+.sp-row.sp-hl .sp-dot{background:#4ade80}
+.sp-price{font-size:.88rem;font-weight:800;color:#22c55e;white-space:nowrap}
+.sp-row.sp-hl .sp-price{font-size:.95rem}
+
+.sp-perm{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:12px;margin-bottom:18px;background:linear-gradient(90deg,#16a34a,#15803d);color:#fff}
+.sp-perm-left{display:flex;flex-direction:column}
+.sp-perm-title{font-size:.82rem;font-weight:700;line-height:1}
+.sp-perm-note{font-size:.65rem;opacity:.7;margin-top:2px}
+.sp-perm-amount{font-size:1rem;font-weight:800}
+
+.sp-bens{display:flex;flex-direction:column;gap:7px;margin-bottom:20px}
+.sp-ben{display:flex;align-items:center;gap:9px;font-size:.82rem;color:#94a3b8}
+.sp-ben i{color:#22c55e;font-size:.82rem;flex-shrink:0}
+
+.sp-cta{display:block;width:100%;padding:13px;border-radius:12px;border:none;font-family:inherit;font-size:.88rem;font-weight:700;text-align:center;text-decoration:none;cursor:pointer;transition:.2s;background:linear-gradient(90deg,#22c55e,#16a34a);color:#fff}
+.sp-cta:hover{background:linear-gradient(90deg,#16a34a,#15803d);box-shadow:0 4px 16px rgba(34,197,94,.3);transform:translateY(-1px)}
 </style>
 </head>
 <body>
@@ -517,7 +563,7 @@ footer{border-top:1px solid rgba(255,255,255,0.05);padding:28px 16px;text-align:
       <!-- CARD 1: GRUP -->
       <div class="pc rv d1">
         <div class="pc-badge">Sewa Grup</div>
-        <div class="pc-name">Bot Grup</div>
+        <div class="pc-name">Bot Grup <span style="font-size:.6rem;font-weight:800;background:linear-gradient(90deg,#7c3aed,#a78bfa);color:#fff;padding:3px 9px;border-radius:99px;vertical-align:middle;letter-spacing:.03em">-50% DISKON</span></div>
         <div class="pc-sub">Aktif untuk semua anggota di grup</div>
         <div class="pc-list">
           <div class="pc-row hl">
@@ -550,6 +596,59 @@ footer{border-top:1px solid rgba(255,255,255,0.05);padding:28px 16px;text-align:
         </div>
         <a href="https://wa.me/6287842203625" target="_blank" class="pc-cta">
           <i class="fab fa-whatsapp"></i> Sewa Bot Grup
+        </a>
+      </div>
+
+      <!-- CARD SEWA PRIBADI MURAH -->
+      <div class="sp-card rv d2">
+        <div class="sp-head">
+          <div>
+            <div class="sp-name">Sewa Pribadi <span style="font-size:.6rem;font-weight:800;background:linear-gradient(90deg,#16a34a,#22c55e);color:#fff;padding:3px 9px;border-radius:99px;vertical-align:middle;letter-spacing:.03em">-50% DISKON</span></div>
+            <div class="sp-sub">Pemakaian pribadi atau personal</div>
+          </div>
+          <span class="sp-badge-new"><i class="fas fa-bolt"></i> Harga Murah!</span>
+        </div>
+
+        <div class="sp-title">🙋 Paket Personal</div>
+
+        <div class="sp-list">
+          <div class="sp-row">
+            <span class="sp-row-left"><span class="sp-dot"></span>16 Hari</span>
+            <span class="sp-price">Rp 3.000</span>
+          </div>
+          <div class="sp-row sp-hl">
+            <span class="sp-row-left"><span class="sp-dot"></span>28 Hari <span style="font-size:.6rem;background:#22c55e;color:#fff;padding:2px 7px;border-radius:99px;margin-left:4px;font-weight:700">Populer</span></span>
+            <span class="sp-price">Rp 5.000</span>
+          </div>
+          <div class="sp-row">
+            <span class="sp-row-left"><span class="sp-dot"></span>59 Hari &nbsp;<span style="font-size:.72rem;color:#64748b;text-decoration:line-through">Rp 16.000</span></span>
+            <span class="sp-price">Rp 8.000</span>
+          </div>
+        </div>
+
+        <div class="sp-perm">
+          <div class="sp-perm-left">
+            <span class="sp-perm-title">Permanen <span style="font-size:.6rem;background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.35);padding:2px 7px;border-radius:99px;font-weight:700">⚠️ Slot Terbatas</span></span>
+            <span class="sp-perm-note">Buruan sebelum kehabisan!</span>
+          </div>
+          <span class="sp-perm-amount">Rp 25.000</span>
+        </div>
+
+        <div class="sp-bens">
+          <div class="sp-ben"><i class="fas fa-check-circle"></i> Semua fitur terbuka penuh</div>
+          <div class="sp-ben"><i class="fas fa-check-circle"></i> Limit unlimited setiap hari</div>
+          <div class="sp-ben"><i class="fas fa-check-circle"></i> Harga super terjangkau</div>
+          <div class="sp-ben"><i class="fas fa-check-circle"></i> Tanpa iklan &amp; tanpa gangguan</div>
+          <div class="sp-ben"><i class="fas fa-check-circle"></i> Support 24/7 via WhatsApp</div>
+        </div>
+
+        <div style="background:rgba(234,179,8,0.07);border:1px solid rgba(234,179,8,0.2);border-radius:10px;padding:12px 14px;margin-bottom:18px;font-size:.76rem;color:#a3a3a3;line-height:1.75">
+          <span style="color:#facc15;font-weight:700;display:block;margin-bottom:4px">📌 Catatan Penting</span>
+          Bot tidak dapat digunakan dalam private chat. Bot hanya merespon di dalam grup pribadi anda karena banyaknya perubahan terhadap update WhatsApp, jadi mohon maaf.....
+        </div>
+
+        <a href="https://wa.me/6287842203625" target="_blank" class="sp-cta">
+          <i class="fab fa-whatsapp"></i> Sewa Pribadi Sekarang
         </a>
       </div>
 
