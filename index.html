@@ -403,6 +403,41 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
 .nc-ben i{color:#22c55e;font-size:.85rem;flex-shrink:0}
 .nc-cta{display:block;width:100%;padding:14px;border-radius:14px;border:none;font-family:inherit;font-size:.9rem;font-weight:800;text-align:center;text-decoration:none;cursor:pointer;transition:.2s;background:#ffffff;color:#000000;letter-spacing:.02em}
 .nc-cta:hover{background:#e0e0e0;box-shadow:0 4px 20px rgba(255,255,255,.35);transform:translateY(-1px)}
+
+/* ── OWNER MODAL ─────────────────────────────── */
+.om-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .3s ease;backdrop-filter:blur(6px)}
+.om-overlay.show{opacity:1;pointer-events:all}
+.om-box{background:#111111;border:1px solid rgba(255,255,255,0.1);border-radius:22px;width:100%;max-width:380px;overflow:hidden;transform:translateY(24px) scale(.97);transition:transform .35s cubic-bezier(.22,1,.36,1);position:relative}
+.om-overlay.show .om-box{transform:translateY(0) scale(1)}
+
+/* Loading screen */
+.om-loading{padding:44px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
+.om-spinner{width:42px;height:42px;border-radius:50%;border:3px solid rgba(255,255,255,0.08);border-top-color:#7c3aed;animation:omSpin .7s linear infinite}
+@keyframes omSpin{to{transform:rotate(360deg)}}
+.om-loading p{font-size:.82rem;color:#64748b}
+
+/* Owner card */
+.om-card{padding:24px;display:none}
+.om-card.show{display:block}
+.om-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.om-avatar{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#4c1d95,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;position:relative}
+.om-online{position:absolute;bottom:2px;right:2px;width:13px;height:13px;border-radius:50%;background:#22c55e;border:2px solid #111111}
+.om-info-name{font-size:1rem;font-weight:800;color:#f1f5f9;display:flex;align-items:center;gap:6px}
+.om-badge-dev{font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:99px;background:#052030;color:#22d3ee;border:1px solid #164e63;letter-spacing:.05em}
+.om-badge-owner{font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:99px;background:#1a0e05;color:#fb923c;border:1px solid #7c2d12;letter-spacing:.05em}
+.om-info-role{font-size:.73rem;color:#64748b;margin-top:2px}
+.om-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:18px}
+.om-stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px 8px;text-align:center}
+.om-stat-val{font-size:.92rem;font-weight:800;color:#a78bfa}
+.om-stat-lbl{font-size:.6rem;color:#475569;margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
+.om-rows{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+.om-row{display:flex;align-items:center;gap:9px;font-size:.78rem;color:#94a3b8;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:9px}
+.om-row i{width:14px;color:#64748b;text-align:center;flex-shrink:0}
+.om-row span{color:#cbd5e1}
+.om-cta{display:block;width:100%;padding:13px;border-radius:12px;background:#16a34a;color:#fff;font-family:inherit;font-size:.9rem;font-weight:800;text-align:center;text-decoration:none;border:none;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:7px}
+.om-cta:hover{background:#15803d;box-shadow:0 4px 16px rgba(22,163,74,.3)}
+.om-close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.06);border:none;color:#64748b;font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.om-close:hover{background:rgba(255,255,255,0.12);color:#f1f5f9}
 /* ── SATURDAY PROMO BANNER ── */
 #sabtu-promo{
   display:none;
@@ -856,7 +891,7 @@ body.sabtu-mode .sp-card{animation:spglow 2.5s ease-in-out infinite .5s}
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Fitur manajemen grup lengkap</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Tanpa limit &amp; tanpa iklan</div>
         </div>
-        <a href="https://wa.me/6289674097203" target="_blank" class="nc-cta"><i class="fab fa-whatsapp"></i> Sewa Sekarang</a>
+        <button class="nc-cta" onclick="bukaOwner(this)"><i class="fab fa-whatsapp"></i> Sewa Sekarang</button>
       </div>
 
       <!-- CARD 30 HARI -->
@@ -876,7 +911,7 @@ body.sabtu-mode .sp-card{animation:spglow 2.5s ease-in-out infinite .5s}
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Tanpa limit &amp; tanpa iklan</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Cocok untuk grup aktif</div>
         </div>
-        <a href="https://wa.me/6289674097203" target="_blank" class="nc-cta"><i class="fab fa-whatsapp"></i> Sewa Sekarang</a>
+        <button class="nc-cta" onclick="bukaOwner(this)"><i class="fab fa-whatsapp"></i> Sewa Sekarang</button>
       </div>
 
       <!-- CARD 60 HARI -->
@@ -897,7 +932,7 @@ body.sabtu-mode .sp-card{animation:spglow 2.5s ease-in-out infinite .5s}
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Lebih hemat dari paket bulanan</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Cocok untuk komunitas jangka panjang</div>
         </div>
-        <a href="https://wa.me/6289674097203" target="_blank" class="nc-cta"><i class="fab fa-whatsapp"></i> Sewa Sekarang</a>
+        <button class="nc-cta" onclick="bukaOwner(this)"><i class="fab fa-whatsapp"></i> Sewa Sekarang</button>
       </div>
 
       <!-- CARD TAHUNAN / PERMANEN -->
@@ -905,25 +940,25 @@ body.sabtu-mode .sp-card{animation:spglow 2.5s ease-in-out infinite .5s}
         <div class="nc-shimmer"></div>
         <div class="nc-top">
           <div>
-            <div class="nc-name">Sewa Bot Grup Permanen</div>
-            <div class="nc-sub">Bayar sekali, hemat lebih banyak</div>
+            <div class="nc-name">Sewa Bot Grup Tahunan</div>
+            <div class="nc-sub">Bayar setahun, hemat lebih banyak</div>
           </div>
           <span class="nc-badge" style="background:#1c1a05;color:#fbbf24;border:1px solid #854d0e">🔥 Paling Hemat</span>
         </div>
         <div class="promo-sabtu-badge"><i class="fas fa-tag"></i> 🎉 PROMO HARI INI – Diskon Spesial!</div>
-        <div class="harga-promo" id="harga-promo-perm">20K <span class="nc-per" style="color:#64748b;font-size:.82rem">/ permanen</span></div>
-        <div class="harga-normal nc-price" style="color:#fbbf24">50K <span class="nc-per" style="color:#64748b">/ permanen</span></div>
-        <div class="nc-old" id="nc-old-perm">Harga normal <s>Rp 99.000</s></div>
-        <div class="nc-old" id="nc-old-promo" style="display:none;color:#4ade80">Hemat dari <s style="color:#475569">Rp 50.000</s> → <strong>Rp 20.000</strong> hari ini!</div>
+        <div class="harga-promo" id="harga-promo-perm">20K <span class="nc-per" style="color:#64748b;font-size:.82rem">/ tahunan</span></div>
+        <div class="harga-normal nc-price" style="color:#fbbf24">25K <span class="nc-per" style="color:#64748b">/ tahun</span></div>
+        <div class="nc-old" id="nc-old-perm">Harga normal <s>Rp 30.000</s> — hemat Rp 15.000</div>
+        <div class="nc-old" id="nc-old-promo" style="display:none;color:#4ade80">Hemat dari <s style="color:#475569">Rp 15.000</s> → <strong>Rp 20.000</strong> hari ini!</div>
         <div class="nc-bens">
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Semua anggota grup bisa pakai</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Fitur manajemen grup lengkap</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Tanpa limit &amp; tanpa iklan</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Jauh lebih murah dari bayar bulanan</div>
-          <div class="nc-ben"><i class="fas fa-check-circle"></i> Ga perlu repot perpanjang tiap bulan</div>
+          <div class="nc-ben"><i class="fas fa-check-circle"></i> Aktif penuh selama 1 tahun</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Prioritas support dari admin</div>
         </div>
-        <a href="https://wa.me/6289674097203" target="_blank" class="nc-cta" style="background:linear-gradient(90deg,#d97706,#f59e0b)"><i class="fab fa-whatsapp"></i> Sewa Sekarang</a>
+        <button class="nc-cta" style="background:linear-gradient(90deg,#d97706,#f59e0b)" onclick="bukaOwner(this)"><i class="fab fa-whatsapp"></i> Sewa Sekarang</button>
       </div>
 
     </div>
@@ -1326,5 +1361,101 @@ function toggleFaq(btn) {
   }, CYCLE)
 })()
 </script>
+
+<!-- OWNER MODAL -->
+<div class="om-overlay" id="omOverlay" onclick="tutupOwner(event)">
+  <div class="om-box" onclick="event.stopPropagation()">
+    <button class="om-close" onclick="tutupOwner()"><i class="fas fa-times"></i></button>
+
+    <!-- Loading -->
+    <div class="om-loading" id="omLoading">
+      <div class="om-spinner"></div>
+      <p>Menghubungkan ke owner...</p>
+    </div>
+
+    <!-- Owner Card -->
+    <div class="om-card" id="omCard">
+      <div class="om-head">
+        <div class="om-avatar">
+          🤖
+          <span class="om-online"></span>
+        </div>
+        <div>
+          <div class="om-info-name">
+            Astrobot Dev
+            <span class="om-badge-owner">👑 Owner</span>
+            <span class="om-badge-dev">🛠 Dev</span>
+          </div>
+          <div class="om-info-role">Developer &amp; Owner Astrobot · Aktif sekarang</div>
+        </div>
+      </div>
+
+      <div class="om-stats">
+        <div class="om-stat">
+          <div class="om-stat-val">24/7</div>
+          <div class="om-stat-lbl">Support</div>
+        </div>
+        <div class="om-stat">
+          <div class="om-stat-val">≤5m</div>
+          <div class="om-stat-lbl">Respon</div>
+        </div>
+        <div class="om-stat">
+          <div class="om-stat-val">100%</div>
+          <div class="om-stat-lbl">Trusted</div>
+        </div>
+      </div>
+
+      <div class="om-rows">
+        <div class="om-row"><i class="fab fa-whatsapp" style="color:#22c55e"></i> Nomor: <span>+62 896-7409-7203</span></div>
+        <div class="om-row"><i class="fas fa-code" style="color:#a78bfa"></i> Role: <span>Developer &amp; Owner</span></div>
+        <div class="om-row"><i class="fas fa-clock" style="color:#fbbf24"></i> Aktif: <span>Setiap hari, pagi–malam</span></div>
+        <div class="om-row"><i class="fas fa-shield-alt" style="color:#22c55e"></i> Status: <span style="color:#22c55e">● Online &amp; Siap melayani</span></div>
+        <div class="om-row"><i class="fas fa-bolt" style="color:#fb923c"></i> Proses: <span>Manual, maks 10 menit</span></div>
+      </div>
+
+      <a href="https://wa.me/6289674097203?text=Halo%20kak%2C%20saya%20mau%20sewa%20bot%20Astrobot%20nih%20👋" target="_blank" class="om-cta">
+        <i class="fab fa-whatsapp"></i> Chat Owner Sekarang
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function bukaOwner(btn) {
+  const overlay = document.getElementById('omOverlay')
+  const loading = document.getElementById('omLoading')
+  const card    = document.getElementById('omCard')
+
+  // Reset state
+  card.classList.remove('show')
+  loading.style.display = 'flex'
+
+  // Buka modal
+  overlay.classList.add('show')
+  document.body.style.overflow = 'hidden'
+
+  // Simulasi loading 1.8 detik lalu tampil kartu owner
+  setTimeout(() => {
+    loading.style.display = 'none'
+    card.classList.add('show')
+  }, 1800)
+}
+
+function tutupOwner(e) {
+  if (e && e.target !== document.getElementById('omOverlay')) return
+  document.getElementById('omOverlay').classList.remove('show')
+  document.body.style.overflow = ''
+}
+
+// Tutup dengan ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('omOverlay').classList.remove('show')
+    document.body.style.overflow = ''
+  }
+})
+</script>
 </body>
 </html>
+
