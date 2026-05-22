@@ -404,49 +404,12 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
 .nc-cta{display:block;width:100%;padding:14px;border-radius:14px;border:none;font-family:inherit;font-size:.9rem;font-weight:800;text-align:center;text-decoration:none;cursor:pointer;transition:.2s;background:#ffffff;color:#000000;letter-spacing:.02em}
 .nc-cta:hover{background:#e0e0e0;box-shadow:0 4px 20px rgba(255,255,255,.35);transform:translateY(-1px)}
 
-/* ── OWNER MODAL ─────────────────────────────── */
-.om-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .3s ease;backdrop-filter:blur(6px)}
-.om-overlay.show{opacity:1;pointer-events:all}
-.om-box{background:#111111;border:1px solid rgba(255,255,255,0.1);border-radius:22px;width:100%;max-width:380px;overflow:hidden;transform:translateY(24px) scale(.97);transition:transform .35s cubic-bezier(.22,1,.36,1);position:relative}
-.om-overlay.show .om-box{transform:translateY(0) scale(1)}
 
-/* Loading screen */
-.om-loading{padding:44px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
-.om-spinner{width:42px;height:42px;border-radius:50%;border:3px solid rgba(255,255,255,0.08);border-top-color:#7c3aed;animation:omSpin .7s linear infinite}
-@keyframes omSpin{to{transform:rotate(360deg)}}
-.om-loading p{font-size:.82rem;color:#64748b}
-
-/* Owner card */
-.om-card{padding:24px;display:none}
-.om-card.show{display:block}
-.om-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.07)}
-.om-avatar{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#4c1d95,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;position:relative}
-.om-online{position:absolute;bottom:2px;right:2px;width:13px;height:13px;border-radius:50%;background:#22c55e;border:2px solid #111111}
-.om-info-name{font-size:1rem;font-weight:800;color:#f1f5f9;display:flex;align-items:center;gap:6px}
-.om-badge-dev{font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:99px;background:#052030;color:#22d3ee;border:1px solid #164e63;letter-spacing:.05em}
-.om-badge-owner{font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:99px;background:#1a0e05;color:#fb923c;border:1px solid #7c2d12;letter-spacing:.05em}
-.om-info-role{font-size:.73rem;color:#64748b;margin-top:2px}
-.om-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:18px}
-.om-stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px 8px;text-align:center}
-.om-stat-val{font-size:.92rem;font-weight:800;color:#a78bfa}
-.om-stat-lbl{font-size:.6rem;color:#475569;margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
-.om-rows{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
-.om-row{display:flex;align-items:center;gap:9px;font-size:.78rem;color:#94a3b8;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:9px}
-.om-row i{width:14px;color:#64748b;text-align:center;flex-shrink:0}
-.om-row span{color:#cbd5e1}
-.om-cta{display:block;width:100%;padding:13px;border-radius:12px;background:#16a34a;color:#fff;font-family:inherit;font-size:.9rem;font-weight:800;text-align:center;text-decoration:none;border:none;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:7px}
-.om-cta:hover{background:#15803d;box-shadow:0 4px 16px rgba(22,163,74,.3)}
 .om-close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.06);border:none;color:#64748b;font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
 .om-close:hover{background:rgba(255,255,255,0.12);color:#f1f5f9}
 /* ── SATURDAY PROMO BANNER ── */
-#sabtu-promo{
-  display:none;
-  position:relative;
-  margin:0 0 0 0;
-  overflow:hidden;
-  z-index:2;
-}
-#sabtu-promo.aktif{display:block}
+
+
 .sp-banner{
   background:linear-gradient(135deg,#0f2a1a 0%,#0a1a2e 50%,#1a0a2e 100%);
   border-bottom:2px solid #22c55e;
@@ -514,48 +477,32 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
   box-shadow:0 0 0 1px rgba(124,58,237,0.3),0 0 30px rgba(124,58,237,.25),0 16px 40px rgba(0,0,0,.5) !important;
 }
 /* Saturday promo: all cards get extra glow */
-body.sabtu-mode .nc{
-  animation:cardpulse 3s ease-in-out infinite;
-}
-body.sabtu-mode .nc:nth-child(2){animation-delay:.4s}
-body.sabtu-mode .nc:nth-child(3){animation-delay:.8s}
-body.sabtu-mode .nc:nth-child(4){animation-delay:1.2s}
+
+
+
+
 @keyframes cardpulse{
   0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,0.03),inset 0 1px 0 rgba(255,255,255,0.05)}
   50%{box-shadow:0 0 20px rgba(124,58,237,0.15),0 0 0 1px rgba(124,58,237,0.15),inset 0 1px 0 rgba(255,255,255,0.05)}
 }
-body.sabtu-mode .nc-perm-glow{
-  animation:permglow-sabtu 1.8s ease-in-out infinite !important;
-}
-@keyframes permglow-sabtu{
-  0%,100%{box-shadow:0 0 30px rgba(251,191,36,0.3),0 0 0 1px rgba(251,191,36,0.25)}
+
+
   50%{box-shadow:0 0 60px rgba(251,191,36,0.6),0 0 100px rgba(251,191,36,0.2),0 0 0 1px rgba(251,191,36,0.5)}
 }
-/* promo badge on permanen card when sabtu */
-.promo-sabtu-badge{
-  display:none;
-  align-items:center;gap:5px;
-  background:linear-gradient(90deg,#16a34a,#15803d);
-  color:#fff;font-size:.65rem;font-weight:800;
-  padding:5px 12px;border-radius:99px;
-  letter-spacing:.05em;margin-bottom:10px;
-  width:fit-content;
-  animation:badgepop .4s cubic-bezier(.34,1.56,.64,1);
-}
 @keyframes badgepop{from{transform:scale(0)}to{transform:scale(1)}}
-body.sabtu-mode .promo-sabtu-badge{display:inline-flex}
+
 
 /* harga coret + harga promo */
-.harga-normal{transition:.3s}
-.harga-promo{display:none;font-size:2.8rem;font-weight:800;color:#4ade80;line-height:1;margin-bottom:4px;animation:fadeIn .5s ease}
+
+
 @keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-body.sabtu-mode .harga-promo{display:block}
-body.sabtu-mode .harga-normal{display:none}
+
+
 
 /* jb-card + sp-card glow */
-body.sabtu-mode .jb-card{animation:jbglow 2.5s ease-in-out infinite}
+
 @keyframes jbglow{0%,100%{box-shadow:0 0 0 1px rgba(250,204,21,0.2)}50%{box-shadow:0 0 30px rgba(250,204,21,0.25),0 0 0 1px rgba(250,204,21,0.3)}}
-body.sabtu-mode .sp-card{animation:spglow 2.5s ease-in-out infinite .5s}
+
 @keyframes spglow{0%,100%{box-shadow:0 0 0 1px rgba(34,197,94,0.2)}50%{box-shadow:0 0 30px rgba(34,197,94,0.25),0 0 0 1px rgba(34,197,94,0.3)}}
 
 /* SEWA PRIBADI MURAH CARD */
@@ -739,19 +686,7 @@ body.sabtu-mode .sp-card{animation:spglow 2.5s ease-in-out infinite .5s}
 </header>
 
 <!-- SABTU PROMO BANNER -->
-<div id="sabtu-promo" aria-live="polite">
-  <div class="sp-banner">
-    <div class="sp-banner-inner">
-      <div class="sp-banner-icon">🎉</div>
-      <div>
-        <div class="sp-banner-text"><span>PROMO HARI INI!</span> Diskon spesial paket permanen hari ini aja</div>
-        <div class="sp-banner-countdown">
-          Berakhir pukul 20.00 WIB · sisa waktu: <span id="sabtu-sisa">--:--:--</span>
-        </div>
-      </div>
-      <div class="sp-banner-badge">⚡ 25 April 2026</div>
-    </div>
-  </div>
+
 </div>
 
 <!-- BANNER -->
@@ -885,13 +820,12 @@ body.sabtu-mode .sp-card{animation:spglow 2.5s ease-in-out infinite .5s}
           <span class="nc-badge" style="background:#1e1040;color:#cccccc;border:1px solid #4c1d95">Populer 🔥</span>
         </div>
         <div class="nc-price">5K <span class="nc-per">/ 15 hari</span></div>
-        <div class="nc-old">Harga normal <s>Rp 10.000</s></div>
         <div class="nc-bens">
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Semua anggota grup bisa pakai</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Fitur manajemen grup lengkap</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Tanpa limit &amp; tanpa iklan</div>
         </div>
-        <button class="nc-cta" onclick="bukaOwner(this)"><i class="fab fa-whatsapp"></i> Sewa Sekarang</button>
+        <a href="https://wa.me/6289674097203" target="_blank" class="nc-cta"><i class="fab fa-whatsapp"></i> Sewa Sekarang</a>
       </div>
 
       <!-- CARD 30 HARI -->
@@ -904,14 +838,13 @@ body.sabtu-mode .sp-card{animation:spglow 2.5s ease-in-out infinite .5s}
           <span class="nc-badge" style="background:#1c1a05;color:#fbbf24;border:1px solid #854d0e">Hemat 💰</span>
         </div>
         <div class="nc-price">10K <span class="nc-per">/ 30 hari</span></div>
-        <div class="nc-old">Harga normal <s>Rp 20.000</s></div>
         <div class="nc-bens">
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Semua anggota grup bisa pakai</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Fitur manajemen grup lengkap</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Tanpa limit &amp; tanpa iklan</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Cocok untuk grup aktif</div>
         </div>
-        <button class="nc-cta" onclick="bukaOwner(this)"><i class="fab fa-whatsapp"></i> Sewa Sekarang</button>
+        <a href="https://wa.me/6289674097203" target="_blank" class="nc-cta"><i class="fab fa-whatsapp"></i> Sewa Sekarang</a>
       </div>
 
       <!-- CARD 60 HARI -->
@@ -924,7 +857,6 @@ body.sabtu-mode .sp-card{animation:spglow 2.5s ease-in-out infinite .5s}
           <span class="nc-badge" style="background:#052e16;color:#4ade80;border:1px solid #166534">Terbaik ⭐</span>
         </div>
         <div class="nc-price">18K <span class="nc-per">/ 60 hari</span></div>
-        <div class="nc-old">Harga normal <s>Rp 30.000</s></div>
         <div class="nc-bens">
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Semua anggota grup bisa pakai</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Fitur manajemen grup lengkap</div>
@@ -932,7 +864,7 @@ body.sabtu-mode .sp-card{animation:spglow 2.5s ease-in-out infinite .5s}
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Lebih hemat dari paket bulanan</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Cocok untuk komunitas jangka panjang</div>
         </div>
-        <button class="nc-cta" onclick="bukaOwner(this)"><i class="fab fa-whatsapp"></i> Sewa Sekarang</button>
+        <a href="https://wa.me/6289674097203" target="_blank" class="nc-cta"><i class="fab fa-whatsapp"></i> Sewa Sekarang</a>
       </div>
 
       <!-- CARD TAHUNAN / PERMANEN -->
@@ -945,11 +877,8 @@ body.sabtu-mode .sp-card{animation:spglow 2.5s ease-in-out infinite .5s}
           </div>
           <span class="nc-badge" style="background:#1c1a05;color:#fbbf24;border:1px solid #854d0e">🔥 Paling Hemat</span>
         </div>
-        <div class="promo-sabtu-badge"><i class="fas fa-tag"></i> 🎉 PROMO HARI INI – Diskon Spesial!</div>
-        <div class="harga-promo" id="harga-promo-perm">20K <span class="nc-per" style="color:#64748b;font-size:.82rem">/ tahunan</span></div>
-        <div class="harga-normal nc-price" style="color:#fbbf24">25K <span class="nc-per" style="color:#64748b">/ tahun</span></div>
-        <div class="nc-old" id="nc-old-perm">Harga normal <s>Rp 30.000</s> — hemat Rp 15.000</div>
-        <div class="nc-old" id="nc-old-promo" style="display:none;color:#4ade80">Hemat dari <s style="color:#475569">Rp 15.000</s> → <strong>Rp 20.000</strong> hari ini!</div>
+        
+        <div class="nc-price" style="color:#fbbf24">25K <span class="nc-per" style="color:#64748b">/ 365 hari</span></div>
         <div class="nc-bens">
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Semua anggota grup bisa pakai</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Fitur manajemen grup lengkap</div>
@@ -958,7 +887,7 @@ body.sabtu-mode .sp-card{animation:spglow 2.5s ease-in-out infinite .5s}
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Aktif penuh selama 1 tahun</div>
           <div class="nc-ben"><i class="fas fa-check-circle"></i> Prioritas support dari admin</div>
         </div>
-        <button class="nc-cta" style="background:linear-gradient(90deg,#d97706,#f59e0b)" onclick="bukaOwner(this)"><i class="fab fa-whatsapp"></i> Sewa Sekarang</button>
+        <a href="https://wa.me/6289674097203" target="_blank" class="nc-cta" style="background:linear-gradient(90deg,#d97706,#f59e0b)"><i class="fab fa-whatsapp"></i> Sewa Sekarang</a>
       </div>
 
     </div>
@@ -1264,66 +1193,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 4000);
 });
 
-// ── SABTU PROMO LOGIC ──
-function cekPromoSabtu() {
-  // WIB = UTC+7
-  const now = new Date();
-  const wibOffset = 7 * 60; // menit
-  const localOffset = -now.getTimezoneOffset(); // menit
-  const diffMs = (wibOffset - localOffset) * 60000;
-  const wib = new Date(now.getTime() + diffMs);
-
-  const hari = wib.getDay(); // 0=Sun,6=Sat
-  const jam = wib.getHours();
-  const menit = wib.getMinutes();
-  const detik = wib.getSeconds();
-
-  // Promo aktif: tanggal 25 April 2026, jam 06:00–20:00 WIB
-  const tgl = wib.getDate();
-  const bln = wib.getMonth() + 1; // 1-indexed
-  const thn = wib.getFullYear();
-  const isPromoAktif = (tgl === 25 && bln === 4 && thn === 2026 && (jam >= 6 && (jam < 20 || (jam === 20 && menit === 0 && detik === 0))));
-
-  const banner = document.getElementById('sabtu-promo');
-  const sisaEl = document.getElementById('sabtu-sisa');
-  const oldPerm = document.getElementById('nc-old-perm');
-  const oldPromo = document.getElementById('nc-old-promo');
-
-  if (isPromoAktif) {
-    // aktifkan banner & mode
-    banner.classList.add('aktif');
-    document.body.classList.add('sabtu-mode');
-
-    // tampil harga promo
-    if (oldPerm) oldPerm.style.display = 'none';
-    if (oldPromo) oldPromo.style.display = 'block';
-
-    // hitung sisa waktu ke 20:00 WIB
-    const batasWib = new Date(wib);
-    batasWib.setHours(20, 0, 0, 0);
-    const sisaMs = batasWib - wib;
-    const sisaJam = Math.floor(sisaMs / 3600000);
-    const sisaMenit = Math.floor((sisaMs % 3600000) / 60000);
-    const sisaDetik = Math.floor((sisaMs % 60000) / 1000);
-    if (sisaEl) {
-      sisaEl.textContent =
-        String(sisaJam).padStart(2,'0') + ':' +
-        String(sisaMenit).padStart(2,'0') + ':' +
-        String(sisaDetik).padStart(2,'0');
-    }
-  } else {
-    banner.classList.remove('aktif');
-    document.body.classList.remove('sabtu-mode');
-    if (oldPerm) oldPerm.style.display = '';
-    if (oldPromo) oldPromo.style.display = 'none';
-    if (sisaEl) sisaEl.textContent = '--:--:--';
-  }
-}
-
-// jalankan tiap detik
-cekPromoSabtu();
-setInterval(cekPromoSabtu, 1000);
-
 function openMenu() {
   document.getElementById('pn').classList.add('on');
   document.getElementById('ov').classList.add('on');
@@ -1362,100 +1231,6 @@ function toggleFaq(btn) {
 })()
 </script>
 
-<!-- OWNER MODAL -->
-<div class="om-overlay" id="omOverlay" onclick="tutupOwner(event)">
-  <div class="om-box" onclick="event.stopPropagation()">
-    <button class="om-close" onclick="tutupOwner()"><i class="fas fa-times"></i></button>
-
-    <!-- Loading -->
-    <div class="om-loading" id="omLoading">
-      <div class="om-spinner"></div>
-      <p>Menghubungkan ke owner...</p>
-    </div>
-
-    <!-- Owner Card -->
-    <div class="om-card" id="omCard">
-      <div class="om-head">
-        <div class="om-avatar">
-          🤖
-          <span class="om-online"></span>
-        </div>
-        <div>
-          <div class="om-info-name">
-            Astrobot Dev
-            <span class="om-badge-owner">👑 Owner</span>
-            <span class="om-badge-dev">🛠 Dev</span>
-          </div>
-          <div class="om-info-role">Developer &amp; Owner Astrobot · Aktif sekarang</div>
-        </div>
-      </div>
-
-      <div class="om-stats">
-        <div class="om-stat">
-          <div class="om-stat-val">24/7</div>
-          <div class="om-stat-lbl">Support</div>
-        </div>
-        <div class="om-stat">
-          <div class="om-stat-val">≤5m</div>
-          <div class="om-stat-lbl">Respon</div>
-        </div>
-        <div class="om-stat">
-          <div class="om-stat-val">100%</div>
-          <div class="om-stat-lbl">Trusted</div>
-        </div>
-      </div>
-
-      <div class="om-rows">
-        <div class="om-row"><i class="fab fa-whatsapp" style="color:#22c55e"></i> Nomor: <span>+62 896-7409-7203</span></div>
-        <div class="om-row"><i class="fas fa-code" style="color:#a78bfa"></i> Role: <span>Developer &amp; Owner</span></div>
-        <div class="om-row"><i class="fas fa-clock" style="color:#fbbf24"></i> Aktif: <span>Setiap hari, pagi–malam</span></div>
-        <div class="om-row"><i class="fas fa-shield-alt" style="color:#22c55e"></i> Status: <span style="color:#22c55e">● Online &amp; Siap melayani</span></div>
-        <div class="om-row"><i class="fas fa-bolt" style="color:#fb923c"></i> Proses: <span>Manual, maks 10 menit</span></div>
-      </div>
-
-      <a href="https://wa.me/6289674097203?text=Halo%20kak%2C%20saya%20mau%20sewa%20bot%20Astrobot%20nih%20👋" target="_blank" class="om-cta">
-        <i class="fab fa-whatsapp"></i> Chat Owner Sekarang
-      </a>
-    </div>
-
-  </div>
-</div>
-
-<script>
-function bukaOwner(btn) {
-  const overlay = document.getElementById('omOverlay')
-  const loading = document.getElementById('omLoading')
-  const card    = document.getElementById('omCard')
-
-  // Reset state
-  card.classList.remove('show')
-  loading.style.display = 'flex'
-
-  // Buka modal
-  overlay.classList.add('show')
-  document.body.style.overflow = 'hidden'
-
-  // Simulasi loading 1.8 detik lalu tampil kartu owner
-  setTimeout(() => {
-    loading.style.display = 'none'
-    card.classList.add('show')
-  }, 1800)
-}
-
-function tutupOwner(e) {
-  if (e && e.target !== document.getElementById('omOverlay')) return
-  document.getElementById('omOverlay').classList.remove('show')
-  document.body.style.overflow = ''
-}
-
-// Tutup dengan ESC
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    document.getElementById('omOverlay').classList.remove('show')
-    document.body.style.overflow = ''
-  }
-})
-</script>
 </body>
 </html>
 
