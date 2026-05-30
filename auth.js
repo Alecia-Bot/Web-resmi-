@@ -3,29 +3,11 @@
    Firebase Google Sign-In + Username Setup
    ===========================
 
-   SETUP (wajib):
-   1. Buka https://console.firebase.google.com
-   2. Buat project baru → pilih "Web app"
-   3. Aktifkan Authentication → Google provider
-   4. Aktifkan Firestore Database
-   5. Copy firebaseConfig di bawah & ganti dengan punya kamu
-   6. Di Firestore, tambahkan rule:
-      rules_version = '2';
-      service cloud.firestore {
-        match /databases/{database}/documents {
-          match /users/{uid} {
-            allow read, write: if request.auth != null && request.auth.uid == uid;
-          }
-          match /usernames/{username} {
-            allow read: if request.auth != null;
-            allow write: if request.auth != null && request.auth.uid == request.resource.data.uid;
-          }
-        }
-      }
+   Auth gate HANYA muncul saat user pencet "Sewa Sekarang" dan belum login.
+   Main content selalu tampil — tidak perlu login untuk browsing.
 */
 
 // ─── FIREBASE CONFIG ───────────────────────────────────────────────────────
-// Ganti dengan config dari Firebase Console kamu!
 const firebaseConfig = {
   apiKey:            "AIzaSyBsoZ8DizsO2DBqqq4kP6GYV8EJXX6rV2U",
   authDomain:        "astrobot-f248f.firebaseapp.com",
@@ -36,7 +18,6 @@ const firebaseConfig = {
 };
 // ───────────────────────────────────────────────────────────────────────────
 
-// Init Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db   = firebase.firestore();
@@ -46,7 +27,6 @@ const authGate       = document.getElementById('authGate');
 const loginScreen    = document.getElementById('loginScreen');
 const usernameScreen = document.getElementById('usernameScreen');
 const loadingScreen  = document.getElementById('loadingScreen');
-const mainContent    = document.getElementById('mainContent');
 const btnGoogleLogin = document.getElementById('btnGoogleLogin');
 const btnSaveUsername= document.getElementById('btnSaveUsername');
 const usernameInput  = document.getElementById('usernameInput');
@@ -58,38 +38,61 @@ const setupName      = document.getElementById('setupName');
 function showScreen(name) {
   [loginScreen, usernameScreen, loadingScreen].forEach(s => {
     s.classList.remove('active');
-    s.style.display = '';
+    s.style.display = 'none';
   });
   const map = { login: loginScreen, username: usernameScreen, loading: loadingScreen };
   const el = map[name];
   if (el) { el.style.display = 'flex'; el.classList.add('active'); }
 }
 
-// ─── AUTH STATE LISTENER ──────────────────────────────────────────────────
+// ─── AUTH STATE — hanya update UI, JANGAN sembunyikan main content ─────────
 auth.onAuthStateChanged(async (user) => {
   if (!user) {
-    showScreen('login');
+    // Tidak login: update panel saja, main content tetap tampil
+    updatePanelUser(null);
     return;
   }
-
-  showScreen('loading');
 
   try {
     const userDoc = await db.collection('users').doc(user.uid).get();
 
     if (userDoc.exists && userDoc.data().username) {
-      // Sudah punya username → masuk langsung
-      enterApp(user, userDoc.data());
+      // Sudah punya username
+      _onFullyLoggedIn(user, userDoc.data());
     } else {
-      // Belum punya username → setup dulu
-      prepareUsernameScreen(user);
-      showScreen('username');
+      // Belum set username — tapi hanya tampilkan setup KALAU auth gate lagi terbuka
+      if (authGate.style.display === 'flex') {
+        prepareUsernameScreen(user);
+        showScreen('username');
+      } else {
+        // Login dari luar gate (misal redirect) — tetap tunjukkan username setup
+        authGate.style.display = 'flex';
+        prepareUsernameScreen(user);
+        showScreen('username');
+        document.body.style.overflow = 'hidden';
+      }
     }
   } catch (e) {
     console.error('Auth check error:', e);
-    showScreen('login');
+    // Gagal cek — tutup gate, biarkan user tetap browse
+    closeAuthGate();
   }
 });
+
+// Dipanggil saat user sudah fully logged in (ada username)
+function _onFullyLoggedIn(user, userData) {
+  // Tutup auth gate kalau terbuka
+  closeAuthGate();
+  // Update panel & header badge
+  updatePanelUser(user);
+  injectUserBadge(user, userData);
+  // Kalau ada pending order, lanjutkan
+  if (window._pendingOrder) {
+    const p = window._pendingOrder;
+    window._pendingOrder = null;
+    _doOpenOrder(p.name, p.price, p.duration);
+  }
+}
 
 // ─── GOOGLE LOGIN ─────────────────────────────────────────────────────────
 btnGoogleLogin.addEventListener('click', async () => {
@@ -101,7 +104,7 @@ btnGoogleLogin.addEventListener('click', async () => {
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
     await auth.signInWithPopup(provider);
-    // onAuthStateChanged will handle the rest
+    // onAuthStateChanged handles the rest
   } catch (e) {
     console.error('Google login error:', e);
     btnGoogleLogin.disabled = false;
@@ -115,7 +118,6 @@ btnGoogleLogin.addEventListener('click', async () => {
 function prepareUsernameScreen(user) {
   setupName.textContent = user.displayName ? user.displayName.split(' ')[0] : 'Kamu';
 
-  // Avatar
   if (user.photoURL) {
     setupAvatar.innerHTML = `<img src="${user.photoURL}" alt="avatar" referrerpolicy="no-referrer">`;
   } else {
@@ -123,7 +125,6 @@ function prepareUsernameScreen(user) {
     setupAvatar.textContent = initials;
   }
 
-  // Pre-fill suggestion from Google displayName
   if (user.displayName) {
     const suggested = user.displayName.toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 20);
     usernameInput.value = suggested;
@@ -144,18 +145,9 @@ usernameInput.addEventListener('input', () => {
 
 function validateUsername(val) {
   btnSaveUsername.disabled = true;
-
-  if (val.length < 3) {
-    setHint('3–20 karakter, huruf/angka/underscore saja', '');
-    return;
-  }
-  if (!usernameRegex.test(val)) {
-    setHint('Hanya boleh huruf kecil, angka, dan underscore (_)', 'error');
-    return;
-  }
-
+  if (val.length < 3) { setHint('3–20 karakter, huruf/angka/underscore saja', ''); return; }
+  if (!usernameRegex.test(val)) { setHint('Hanya boleh huruf kecil, angka, dan underscore (_)', 'error'); return; }
   setHint('Mengecek ketersediaan...', '');
-
   checkTimeout = setTimeout(async () => {
     try {
       const snap = await db.collection('usernames').doc(val).get();
@@ -189,14 +181,10 @@ btnSaveUsername.addEventListener('click', async () => {
 
   try {
     const batch = db.batch();
-
-    // Reserve username
     batch.set(db.collection('usernames').doc(username), {
       uid: user.uid,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-
-    // Save user profile
     batch.set(db.collection('users').doc(user.uid), {
       username,
       displayName: user.displayName || '',
@@ -204,10 +192,8 @@ btnSaveUsername.addEventListener('click', async () => {
       photoURL: user.photoURL || '',
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-
     await batch.commit();
-
-    enterApp(user, { username, displayName: user.displayName, photoURL: user.photoURL });
+    _onFullyLoggedIn(user, { username, displayName: user.displayName, photoURL: user.photoURL });
   } catch (e) {
     console.error('Save username error:', e);
     btnSaveUsername.disabled = false;
@@ -216,22 +202,15 @@ btnSaveUsername.addEventListener('click', async () => {
   }
 });
 
-// ─── ENTER APP ────────────────────────────────────────────────────────────
-function enterApp(user, userData) {
-  authGate.classList.add('hidden');
-  mainContent.style.display = 'block';
-  injectUserBadge(user, userData);
-}
-
 // ─── USER BADGE IN HEADER ────────────────────────────────────────────────
+let _badgeInjected = false;
 function injectUserBadge(user, userData) {
+  if (_badgeInjected) return;
+  _badgeInjected = true;
+
   const hdrRight = document.querySelector('.hdr-right');
   if (!hdrRight) return;
 
-  // Remove live pill to make room (keep it on desktop)
-  const livePill = hdrRight.querySelector('.live-pill');
-
-  // Build badge
   const wrap = document.createElement('div');
   wrap.style.position = 'relative';
 
@@ -254,11 +233,9 @@ function injectUserBadge(user, userData) {
       </button>
     </div>`;
 
-  // Insert before menu button
   const menuBtn = hdrRight.querySelector('.menu-btn');
   hdrRight.insertBefore(wrap, menuBtn);
 
-  // Close dropdown on outside click
   document.addEventListener('click', (e) => {
     if (!wrap.contains(e.target)) {
       document.getElementById('userDropdown')?.classList.remove('open');
