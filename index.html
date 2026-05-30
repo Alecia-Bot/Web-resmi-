@@ -38,7 +38,7 @@
         <svg width="13" height="18" viewBox="0 0 13 18" fill="none"><defs><linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e9d5ff"/><stop offset="40%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><path d="M8.5 1L1 10.2H6.2L4.5 17L12 7.5H6.8L8.5 1Z" fill="url(#bg2)" stroke="#a78bfa" stroke-width="0.3" stroke-linejoin="round"/></svg>
       </div>
       <h1 class="auth-title">Selamat Datang</h1>
-      <p class="auth-sub">Masuk untuk mengakses semua fitur Astrobot</p>
+      <p class="auth-sub">Login untuk melakukan pembelian</p>
       <button id="btnGoogleLogin" class="auth-google-btn">
         <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
         Masuk dengan Google
@@ -281,7 +281,7 @@
 <div class="nc-ben"><i class="fas fa-check-circle"></i> Fitur manajemen grup lengkap</div>
 <div class="nc-ben"><i class="fas fa-check-circle"></i> Tanpa limit &amp; tanpa iklan</div>
 </div>
-<a class="nc-cta" href="https://wa.me/6289674097203" target="_blank"><i class="fab fa-whatsapp"></i> Sewa Sekarang</a>
+<button class="nc-cta" onclick="openOrder('Sewa Bot Grup 15 Hari', '5K', '15 hari')"><i class="fas fa-shopping-cart"></i> Sewa Sekarang</button>
 </div>
 <!-- CARD 30 HARI -->
 <div class="nc rv d2">
@@ -299,7 +299,7 @@
 <div class="nc-ben"><i class="fas fa-check-circle"></i> Tanpa limit &amp; tanpa iklan</div>
 <div class="nc-ben"><i class="fas fa-check-circle"></i> Cocok untuk grup aktif</div>
 </div>
-<a class="nc-cta" href="https://wa.me/6289674097203" target="_blank"><i class="fab fa-whatsapp"></i> Sewa Sekarang</a>
+<button class="nc-cta" onclick="openOrder('Sewa Bot Grup 30 Hari', '10K', '30 hari')"><i class="fas fa-shopping-cart"></i> Sewa Sekarang</button>
 </div>
 <!-- CARD 60 HARI -->
 <div class="nc rv d3">
@@ -318,7 +318,7 @@
 <div class="nc-ben"><i class="fas fa-check-circle"></i> Lebih hemat dari paket bulanan</div>
 <div class="nc-ben"><i class="fas fa-check-circle"></i> Cocok untuk komunitas jangka panjang</div>
 </div>
-<a class="nc-cta" href="https://wa.me/6289674097203" target="_blank"><i class="fab fa-whatsapp"></i> Sewa Sekarang</a>
+<button class="nc-cta" onclick="openOrder('Sewa Bot Grup 60 Hari', '18K', '60 hari')"><i class="fas fa-shopping-cart"></i> Sewa Sekarang</button>
 </div>
 <!-- CARD TAHUNAN / PERMANEN -->
 <div class="nc nc-perm-glow rv d4" id="card-permanen" style="border-color:rgba(251,191,36,0.35)">
@@ -339,7 +339,7 @@
 <div class="nc-ben"><i class="fas fa-check-circle"></i> Aktif penuh selama 1 tahun</div>
 <div class="nc-ben"><i class="fas fa-check-circle"></i> Prioritas support dari admin</div>
 </div>
-<a class="nc-cta" href="https://wa.me/6289674097203" style="background:linear-gradient(90deg,#d97706,#f59e0b)" target="_blank"><i class="fab fa-whatsapp"></i> Sewa Sekarang</a>
+<button class="nc-cta" onclick="openOrder('Sewa Bot Grup Tahunan', '25K', '365 hari')" style="background:linear-gradient(90deg,#d97706,#f59e0b)"><i class="fas fa-shopping-cart"></i> Sewa Sekarang</button>
 </div>
 </div>
 <!-- CARD 2: PRIBADI -->
@@ -677,6 +677,137 @@
 </div>
 </div>
 
+
+<!-- ===== ORDER PAGE MODAL ===== -->
+<div id="orderModal" onclick="if(event.target===this)closeOrder()" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,0.92);overflow-y:auto;">
+  <div style="max-width:520px;margin:0 auto;padding:16px;animation:slideUp .25s ease;">
+
+    <!-- Back button -->
+    <button onclick="closeOrder()" style="display:flex;align-items:center;gap:6px;background:none;border:none;color:#888;font-size:.85rem;cursor:pointer;margin-bottom:16px;font-family:inherit;padding:4px 0;">
+      <i class="fas fa-arrow-left"></i> Kembali
+    </button>
+
+    <div style="background:#0d0d0d;border:1px solid #2a2a2a;border-radius:16px;overflow:hidden;">
+
+      <!-- Header -->
+      <div style="padding:20px 20px 16px;border-bottom:1px solid #1a1a1a;">
+        <div style="font-size:.7rem;font-weight:700;color:#7c3aed;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;">⚡ Astrobot Digital</div>
+        <div style="font-size:1.1rem;font-weight:800;color:#fff;" id="orderTitle">Sewa Bot Grup</div>
+        <div style="font-size:.8rem;color:#555;margin-top:2px;" id="orderDuration">15 hari</div>
+      </div>
+
+      <!-- Deskripsi -->
+      <div style="padding:16px 20px;border-bottom:1px solid #1a1a1a;">
+        <div style="font-size:.8rem;color:#aaa;line-height:1.7;margin-bottom:12px;">
+          Bot disewakan khusus untuk dimasukkan ke dalam grup WhatsApp. Cocok untuk meramaikan grup, membantu admin, dan menyediakan berbagai fitur hiburan serta utilitas otomatis.
+        </div>
+
+        <!-- Fitur grid -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:10px 12px;">
+            <div style="font-size:.72rem;font-weight:700;color:#fff;margin-bottom:6px;">✨ Fitur Bot Group</div>
+            <div style="font-size:.72rem;color:#666;line-height:1.8;">
+              🎮 Game seru (tebak, quiz)<br>
+              😂 Fun command & hiburan<br>
+              👋 Auto welcome & goodbye<br>
+              🔗 Anti link / anti spam<br>
+              🤬 Anti toxic / kata kasar<br>
+              📢 Tag semua / hidetag<br>
+              🎭 Sticker & media converter<br>
+              ⬇️ Downloader (TikTok, IG)<br>
+              🎲 Random anime / quotes<br>
+              🏆 Leveling & rank member<br>
+              💤 AFK system<br>
+              🗳️ Vote & polling grup
+            </div>
+          </div>
+          <div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:10px 12px;">
+            <div style="font-size:.72rem;font-weight:700;color:#fff;margin-bottom:6px;">🛠 Fungsi Admin</div>
+            <div style="font-size:.72rem;color:#666;line-height:1.8;">
+              👢 Kick / add member<br>
+              🔒 Close / open grup<br>
+              🔄 Reset link grup<br>
+              ⭐ Promote / demote<br>
+              🚫 Anti link grup lain<br>
+              🛡️ Anti virtex / anti bug
+            </div>
+            <div style="font-size:.72rem;font-weight:700;color:#fff;margin:8px 0 6px;">🎮 Cocok Untuk</div>
+            <div style="font-size:.72rem;color:#666;line-height:1.8;">
+              👥 Grup komunitas<br>
+              🍜 Grup tongkrongan<br>
+              🌐 Grup publik<br>
+              🎭 Grup roleplay / game<br>
+              🛒 Grup jual beli
+            </div>
+          </div>
+        </div>
+
+        <!-- Ketentuan -->
+        <div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:10px 12px;">
+          <div style="font-size:.72rem;font-weight:700;color:#fff;margin-bottom:6px;">📦 Ketentuan Sewa</div>
+          <div style="font-size:.72rem;color:#666;line-height:1.8;">
+            ✅ Bot dimasukkan ke grup Anda<br>
+            ✅ Durasi sesuai paket sewa<br>
+            ✅ Owner grup bebas gunakan fitur bot<br>
+            ✅ Bot online 24 jam (selama server normal)<br>
+            ❌ Tidak untuk spam / bug grup lain
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Pesanan -->
+      <div style="padding:16px 20px 20px;">
+        <div style="font-size:.88rem;font-weight:700;color:#fff;margin-bottom:14px;">📝 Lengkapi Data Pesanan</div>
+
+        <div style="margin-bottom:12px;">
+          <label style="font-size:.75rem;color:#888;display:block;margin-bottom:5px;font-weight:600;">Nama Pembeli</label>
+          <input id="orderNama" type="text" placeholder="Masukkan nama pembeli" style="width:100%;background:#1a1a1a;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 14px;color:#fff;font-family:inherit;font-size:.85rem;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'"/>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <label style="font-size:.75rem;color:#888;display:block;margin-bottom:5px;font-weight:600;">Nomor WhatsApp Pembeli</label>
+          <input id="orderNomor" type="tel" placeholder="Contoh: 08123456789" style="width:100%;background:#1a1a1a;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 14px;color:#fff;font-family:inherit;font-size:.85rem;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'"/>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <label style="font-size:.75rem;color:#888;display:block;margin-bottom:5px;font-weight:600;">Link Grup WhatsApp</label>
+          <input id="orderLink" type="text" placeholder="https://chat.whatsapp.com/..." style="width:100%;background:#1a1a1a;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 14px;color:#fff;font-family:inherit;font-size:.85rem;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'"/>
+        </div>
+
+        <!-- Ringkasan harga -->
+        <div style="background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:12px 14px;margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;font-size:.8rem;color:#666;margin-bottom:6px;">
+            <span>Harga Produk</span>
+            <span id="orderHarga" style="color:#ccc;font-weight:600;">Rp 5.000</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:.8rem;color:#666;margin-bottom:8px;">
+            <span>Biaya Penanganan</span>
+            <span style="color:#ccc;font-weight:600;">Rp 75</span>
+          </div>
+          <div style="height:1px;background:#1e1e1e;margin-bottom:8px;"></div>
+          <div style="display:flex;justify-content:space-between;font-size:.9rem;color:#fff;font-weight:800;">
+            <span>Total</span>
+            <span id="orderTotal">Rp 5.075</span>
+          </div>
+        </div>
+
+        <!-- Stok -->
+        <div style="display:flex;align-items:center;gap:6px;font-size:.78rem;color:#22c55e;margin-bottom:14px;font-weight:600;">
+          <i class="fas fa-check-circle"></i> Stok Tersedia
+        </div>
+
+        <!-- Tombol -->
+        <div style="display:flex;gap:10px;">
+          <a id="orderWaBtn" href="#" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:#25d366;color:#fff;padding:14px;border-radius:12px;font-weight:700;font-size:.9rem;text-decoration:none;transition:.2s;" onclick="return buildOrderWa()">
+            <i class="fab fa-whatsapp"></i> Beli via WhatsApp
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- ===== END ORDER MODAL ===== -->
 
 </div><!-- end mainContent -->
 

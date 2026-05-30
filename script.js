@@ -84,3 +84,72 @@ function toggleFaq(btn) {
 
 function openScriptModal() { document.getElementById('scriptSaleModal').style.display='block'; document.body.style.overflow='hidden'; }
 function closeScriptModal() { document.getElementById('scriptSaleModal').style.display='none'; document.body.style.overflow=''; }
+
+/* ===== ORDER MODAL ===== */
+const priceMap = {
+  '5K':  { rp: 5000,  total: 5075  },
+  '10K': { rp: 10000, total: 10075 },
+  '18K': { rp: 18000, total: 18075 },
+  '25K': { rp: 25000, total: 25075 },
+};
+
+function openOrder(name, price, duration) {
+  document.getElementById('orderTitle').textContent = name;
+  document.getElementById('orderDuration').textContent = duration;
+
+  const p = priceMap[price] || { rp: 0, total: 0 };
+  document.getElementById('orderHarga').textContent = 'Rp ' + p.rp.toLocaleString('id');
+  document.getElementById('orderTotal').textContent = 'Rp ' + p.total.toLocaleString('id');
+
+  // Store current package for WA message
+  document.getElementById('orderModal').dataset.pkg = name;
+  document.getElementById('orderModal').dataset.price = price;
+  document.getElementById('orderModal').dataset.duration = duration;
+  document.getElementById('orderModal').dataset.total = p.total;
+
+  // Clear inputs
+  document.getElementById('orderNama').value = '';
+  document.getElementById('orderNomor').value = '';
+  document.getElementById('orderLink').value = '';
+
+  document.getElementById('orderModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  // Scroll to top of modal
+  document.getElementById('orderModal').scrollTop = 0;
+}
+
+function closeOrder() {
+  document.getElementById('orderModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function buildOrderWa() {
+  const nama   = document.getElementById('orderNama').value.trim();
+  const nomor  = document.getElementById('orderNomor').value.trim();
+  const link   = document.getElementById('orderLink').value.trim();
+  const modal  = document.getElementById('orderModal');
+  const pkg    = modal.dataset.pkg;
+  const total  = parseInt(modal.dataset.total).toLocaleString('id');
+
+  if (!nama || !nomor || !link) {
+    alert('Mohon lengkapi semua data pesanan terlebih dahulu!');
+    return false;
+  }
+
+  const msg = `Halo min, saya ingin melakukan pembelian:\n\n` +
+    `📦 *Paket:* ${pkg}\n` +
+    `👤 *Nama:* ${nama}\n` +
+    `📱 *Nomor WA:* ${nomor}\n` +
+    `🔗 *Link Grup:* ${link}\n` +
+    `💰 *Total:* Rp ${total}\n\n` +
+    `Mohon diproses ya min, terima kasih! 🙏`;
+
+  document.getElementById('orderWaBtn').href =
+    'https://wa.me/6289674097203?text=' + encodeURIComponent(msg);
+
+  return true;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeOrder();
+});
