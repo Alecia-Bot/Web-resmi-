@@ -176,8 +176,11 @@ function _doOpenOrder(name, price, duration) {
   document.getElementById('orderDuration').textContent = duration;
 
   const p = priceMap[price] || { rp: 0, total: 0 };
-  document.getElementById('orderTotal').textContent = 'Rp ' + p.total.toLocaleString('id');
-  document.getElementById('orderHargaBesar').textContent = 'Rp ' + p.total.toLocaleString('id');
+  const formatted = 'Rp ' + p.total.toLocaleString('id');
+  document.getElementById('orderTotal').textContent = formatted;
+  document.getElementById('orderHargaBesar').textContent = formatted;
+  const ringkas = document.getElementById('orderHargaRingkas');
+  if (ringkas) ringkas.textContent = formatted;
 
   document.getElementById('orderModal').dataset.pkg = name;
   document.getElementById('orderModal').dataset.price = price;

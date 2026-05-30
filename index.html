@@ -697,11 +697,11 @@
 </div>
 
 
-<!-- ===== ORDER PAGE (Full Screen) ===== -->
+<!-- ===== ORDER PAGE (Full Screen Scroll) ===== -->
 <div id="orderModal" style="display:none;position:fixed;inset:0;z-index:9998;background:#0a0a0a;overflow-y:auto;">
 
   <!-- TOP NAV -->
-  <div style="position:sticky;top:0;z-index:10;background:#0a0a0a;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;">
+  <div style="position:sticky;top:0;z-index:10;background:#0a0a0a;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:52px;">
     <button onclick="closeOrder()" style="display:flex;align-items:center;gap:8px;background:none;border:none;color:#ccc;font-size:1rem;cursor:pointer;font-family:inherit;padding:8px 0;">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </button>
@@ -709,123 +709,141 @@
     <div style="width:36px"></div>
   </div>
 
-  <!-- CONTENT -->
-  <div style="max-width:680px;margin:0 auto;padding:20px 16px 120px;">
+  <!-- MAIN CONTENT -->
+  <div style="max-width:680px;margin:0 auto;padding:0 0 120px;">
 
-    <!-- Product Badge + Title -->
-    <div style="margin-bottom:20px;">
-      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.35);border-radius:99px;padding:5px 14px;font-size:.72rem;font-weight:700;color:#c4b5fd;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px;">
-        ⚡ Astrobot Digital
-      </div>
-      <h1 style="font-size:1.75rem;font-weight:800;color:#fff;line-height:1.2;margin-bottom:6px;" id="orderTitle">Sewa Bot Grup</h1>
-      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <span style="font-size:.9rem;color:#888;" id="orderDuration">15 hari</span>
-        <span style="display:flex;align-items:center;gap:5px;font-size:.82rem;color:#22c55e;font-weight:600;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Stok Tersedia</span>
-      </div>
-    </div>
-
-    <!-- Harga besar -->
-    <div style="background:linear-gradient(135deg,#111 0%,#0d0d0d 100%);border:1px solid #222;border-radius:16px;padding:20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;">
-      <div>
-        <div style="font-size:.75rem;color:#666;font-weight:600;margin-bottom:4px;">HARGA SEWA</div>
-        <div style="font-size:2.4rem;font-weight:900;color:#fff;line-height:1;" id="orderHargaBesar">Rp 5.000</div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-size:.72rem;color:#22c55e;font-weight:700;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);padding:4px 12px;border-radius:99px;">Terpercaya ✓</div>
-      </div>
-    </div>
-
-    <!-- Deskripsi -->
-    <div style="margin-bottom:20px;">
-      <h2 style="font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:10px;">Deskripsi</h2>
-      <p style="font-size:.95rem;color:#aaa;line-height:1.8;">
+    <!-- DESKRIPSI -->
+    <div style="padding:20px 16px 0;">
+      <p style="font-size:.9rem;color:#aaa;line-height:1.8;margin-bottom:18px;">
         Bot disewakan khusus untuk dimasukkan ke dalam grup WhatsApp. Cocok untuk meramaikan grup, membantu admin, dan menyediakan berbagai fitur hiburan serta utilitas otomatis.
       </p>
     </div>
 
-    <!-- Fitur Bot Group -->
-    <div style="background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:18px;margin-bottom:14px;">
-      <h3 style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:14px;">✨ Fitur Bot Group</h3>
-      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">🎮</span> Game seru (tebak gambar, quiz, dll)</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">😂</span> Fun command &amp; hiburan</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">👋</span> Auto welcome &amp; goodbye member</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">🔗</span> Anti link / anti spam</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">🤬</span> Anti toxic / kata kasar</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">📢</span> Tag semua / hidetag</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">🎭</span> Sticker &amp; converter media</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">⬇️</span> Downloader (TikTok, IG, dll)</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">🎲</span> Random anime / quotes / dll</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">🏆</span> Leveling &amp; rank member</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">💤</span> AFK system</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">🗳️</span> Vote &amp; polling grup</li>
+    <!-- ✨ Fitur Bot Group -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">✨ Fitur Bot Group:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Game seru (tebak gambar, quiz, dll)</li>
+        <li style="font-size:.9rem;color:#ccc;">Fun command &amp; hiburan</li>
+        <li style="font-size:.9rem;color:#ccc;">Auto welcome &amp; goodbye member</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti link / anti spam</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti toxic / kata kasar</li>
+        <li style="font-size:.9rem;color:#ccc;">Tag semua / hidetag</li>
+        <li style="font-size:.9rem;color:#ccc;">Sticker &amp; converter media</li>
+        <li style="font-size:.9rem;color:#ccc;">Downloader (TikTok, IG, dll)</li>
+        <li style="font-size:.9rem;color:#ccc;">Random anime / quotes / dll</li>
+        <li style="font-size:.9rem;color:#ccc;">Leveling &amp; rank member</li>
+        <li style="font-size:.9rem;color:#ccc;">AFK system</li>
+        <li style="font-size:.9rem;color:#ccc;">Vote &amp; polling grup</li>
       </ul>
     </div>
 
-    <!-- Fungsi Admin -->
-    <div style="background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:18px;margin-bottom:14px;">
-      <h3 style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:14px;">🛠️ Fungsi Admin</h3>
-      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">👢</span> Kick / add member (jika bot admin)</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">🔒</span> Close / open grup</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">🔄</span> Reset link grup</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">⭐</span> Promote / demote</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">🚫</span> Anti link grup lain</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="font-size:1.1rem;">🛡️</span> Anti virtex / anti bug</li>
+    <!-- 🔧 Fungsi Admin -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">🔧 Fungsi Admin:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Kick / add member (jika bot admin)</li>
+        <li style="font-size:.9rem;color:#ccc;">Close / open grup</li>
+        <li style="font-size:.9rem;color:#ccc;">Reset link grup</li>
+        <li style="font-size:.9rem;color:#ccc;">Promote / demote</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti link grup lain</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti virtex / anti bug</li>
       </ul>
     </div>
 
-    <!-- Ketentuan -->
-    <div style="background:#111;border:1px solid #1e1e1e;border-radius:14px;padding:18px;margin-bottom:24px;">
-      <h3 style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:14px;">📦 Ketentuan Sewa</h3>
-      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="color:#22c55e;font-size:1.1rem;">✅</span> Bot dimasukkan ke grup Anda</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="color:#22c55e;font-size:1.1rem;">✅</span> Durasi sesuai paket sewa</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="color:#22c55e;font-size:1.1rem;">✅</span> Owner grup bebas gunakan fitur bot</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="color:#22c55e;font-size:1.1rem;">✅</span> Bot online 24 jam (selama server normal)</li>
-        <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;color:#ccc;"><span style="color:#f87171;font-size:1.1rem;">❌</span> Tidak untuk spam / bug grup lain</li>
+    <!-- 🎯 Cocok Untuk -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">🎯 Cocok Untuk:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Grup komunitas</li>
+        <li style="font-size:.9rem;color:#ccc;">Grup tongkrongan</li>
+        <li style="font-size:.9rem;color:#ccc;">Grup publik / open member</li>
+        <li style="font-size:.9rem;color:#ccc;">Grup roleplay / game</li>
+        <li style="font-size:.9rem;color:#ccc;">Grup jual beli biar rame</li>
       </ul>
     </div>
 
-    <!-- Divider -->
-    <div style="height:1px;background:#1a1a1a;margin-bottom:24px;"></div>
-
-    <!-- Form Pesanan - BESAR & NYAMAN -->
-    <h2 style="font-size:1.15rem;font-weight:800;color:#fff;margin-bottom:18px;">📝 Lengkapi Data Pesanan</h2>
-
-    <div style="margin-bottom:16px;">
-      <label style="font-size:.88rem;color:#aaa;display:block;margin-bottom:8px;font-weight:600;">Nama Pembeli</label>
-      <input id="orderNama" type="text" placeholder="Masukkan nama lengkap kamu" style="width:100%;background:#111;border:1.5px solid #2a2a2a;border-radius:12px;padding:15px 16px;color:#fff;font-family:inherit;font-size:1rem;outline:none;box-sizing:border-box;transition:border-color .2s;" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#2a2a2a'"/>
+    <!-- 📦 Ketentuan Sewa -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">📦 Ketentuan Sewa:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Bot dimasukkan ke grup Anda</li>
+        <li style="font-size:.9rem;color:#ccc;">Durasi sesuai paket sewa</li>
+        <li style="font-size:.9rem;color:#ccc;">Owner grup bebas menggunakan fitur bot</li>
+        <li style="font-size:.9rem;color:#ccc;">Bot online 24 jam (selama server normal)</li>
+        <li style="font-size:.9rem;color:#ccc;">Tidak untuk spam / bug grup lain</li>
+      </ul>
+      <p style="font-size:.85rem;color:#888;font-style:italic;margin-top:12px;">Bot siap meramaikan grup + membantu admin otomatis</p>
     </div>
 
-    <div style="margin-bottom:16px;">
-      <label style="font-size:.88rem;color:#aaa;display:block;margin-bottom:8px;font-weight:600;">Nomor WhatsApp</label>
-      <input id="orderNomor" type="tel" placeholder="Contoh: 08123456789" style="width:100%;background:#111;border:1.5px solid #2a2a2a;border-radius:12px;padding:15px 16px;color:#fff;font-family:inherit;font-size:1rem;outline:none;box-sizing:border-box;transition:border-color .2s;" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#2a2a2a'"/>
+    <!-- DIVIDER -->
+    <div style="height:1px;background:#1e1e1e;margin:8px 16px 24px;"></div>
+
+    <!-- HARGA -->
+    <div style="padding:0 16px;">
+      <div style="font-size:1.6rem;font-weight:900;color:#fff;margin-bottom:6px;" id="orderHargaBesar">Rp 5.000</div>
     </div>
 
-    <div style="margin-bottom:16px;">
-      <label style="font-size:.88rem;color:#aaa;display:block;margin-bottom:8px;font-weight:600;">Link Grup WhatsApp</label>
-      <input id="orderLink" type="text" placeholder="https://chat.whatsapp.com/..." style="width:100%;background:#111;border:1.5px solid #2a2a2a;border-radius:12px;padding:15px 16px;color:#fff;font-family:inherit;font-size:1rem;outline:none;box-sizing:border-box;transition:border-color .2s;" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#2a2a2a'"/>
-      <div style="font-size:.78rem;color:#555;margin-top:6px;">Dapatkan link dari menu grup → Info Grup → Link Undangan</div>
-    </div>
+    <!-- FORM PESANAN -->
+    <div style="padding:0 16px;">
+      <div style="font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:18px;">Lengkapi Data Pesanan</div>
 
-    <div style="margin-bottom:16px;">
-      <label style="font-size:.88rem;color:#aaa;display:block;margin-bottom:8px;font-weight:600;">Catatan (opsional)</label>
-      <textarea id="orderCatatan" placeholder="Ada catatan khusus untuk admin? Tulis di sini..." style="width:100%;background:#111;border:1.5px solid #2a2a2a;border-radius:12px;padding:15px 16px;color:#fff;font-family:inherit;font-size:1rem;outline:none;box-sizing:border-box;resize:none;height:90px;line-height:1.6;transition:border-color .2s;" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#2a2a2a'"></textarea>
+      <div style="margin-bottom:14px;">
+        <div style="font-size:.85rem;color:#ccc;font-weight:600;margin-bottom:8px;">Nama pembeli</div>
+        <input id="orderNama" type="text" placeholder="Masukkan Nama pembeli"
+          style="width:100%;background:transparent;border:1px solid #2a2a2a;border-radius:10px;padding:14px 15px;color:#fff;font-family:inherit;font-size:.95rem;outline:none;box-sizing:border-box;transition:border-color .2s;"
+          onfocus="this.style.borderColor='#555'" onblur="this.style.borderColor='#2a2a2a'"/>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <div style="font-size:.85rem;color:#ccc;font-weight:600;margin-bottom:8px;">Nomor pembeli</div>
+        <input id="orderNomor" type="tel" placeholder="Masukkan Nomor pembeli"
+          style="width:100%;background:transparent;border:1px solid #2a2a2a;border-radius:10px;padding:14px 15px;color:#fff;font-family:inherit;font-size:.95rem;outline:none;box-sizing:border-box;transition:border-color .2s;"
+          onfocus="this.style.borderColor='#555'" onblur="this.style.borderColor='#2a2a2a'"/>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <div style="font-size:.85rem;color:#ccc;font-weight:600;margin-bottom:8px;">Link group pembeli</div>
+        <input id="orderLink" type="text" placeholder="Masukkan Link group pembeli"
+          style="width:100%;background:transparent;border:1px solid #2a2a2a;border-radius:10px;padding:14px 15px;color:#fff;font-family:inherit;font-size:.95rem;outline:none;box-sizing:border-box;transition:border-color .2s;"
+          onfocus="this.style.borderColor='#555'" onblur="this.style.borderColor='#2a2a2a'"/>
+      </div>
+
+      <!-- Ringkasan Harga -->
+      <div style="margin-top:20px;border-top:1px solid #1e1e1e;padding-top:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:.9rem;color:#888;">Harga Produk</span>
+          <span style="font-size:.9rem;color:#ccc;font-weight:600;" id="orderHargaRingkas">Rp 5.000</span>
+        </div>
+        <div style="height:1px;background:#1e1e1e;margin:10px 0;"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:1rem;font-weight:800;color:#fff;">Total</span>
+          <span style="font-size:1rem;font-weight:800;color:#fff;" id="orderTotal">Rp 5.000</span>
+        </div>
+      </div>
+
+      <!-- Stok -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 12.5l3.5 3.5 6-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font-size:.9rem;color:#22c55e;font-weight:700;">Stok Tersedia</span>
+        </div>
+      </div>
     </div>
 
   </div>
 
   <!-- STICKY BOTTOM BAR -->
-  <div style="position:fixed;bottom:0;left:0;right:0;z-index:20;background:rgba(10,10,10,0.97);backdrop-filter:blur(16px);border-top:1px solid #1a1a1a;padding:14px 16px;">
-    <div style="max-width:680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;">
-      <div>
-        <div style="font-size:.72rem;color:#666;font-weight:600;">Total Pembayaran</div>
-        <div style="font-size:1.4rem;font-weight:900;color:#fff;line-height:1.2;" id="orderTotal">Rp 5.000</div>
-      </div>
-      <a id="orderWaBtn" href="#" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:9px;background:#25d366;color:#fff;padding:15px 28px;border-radius:14px;font-weight:800;font-size:1rem;text-decoration:none;transition:.2s;white-space:nowrap;flex-shrink:0;" onclick="return buildOrderWa()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        Pesan Sekarang
+  <div style="position:fixed;bottom:0;left:0;right:0;z-index:20;background:rgba(10,10,10,0.97);backdrop-filter:blur(16px);border-top:1px solid #1a1a1a;padding:12px 16px;">
+    <div style="max-width:680px;margin:0 auto;display:flex;align-items:center;gap:12px;">
+      <a href="https://wa.me/6289674097203" target="_blank"
+        style="width:52px;height:52px;border-radius:12px;background:#1a1a1a;border:1px solid #2a2a2a;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+      </a>
+      <a id="orderWaBtn" href="#" target="_blank"
+        onclick="return buildOrderWa()"
+        style="flex:1;display:flex;align-items:center;justify-content:center;background:#fff;color:#000;padding:15px 20px;border-radius:12px;font-weight:800;font-size:1rem;text-decoration:none;transition:.2s;letter-spacing:.01em;">
+        Beli
       </a>
     </div>
   </div>
