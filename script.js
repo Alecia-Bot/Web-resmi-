@@ -159,7 +159,7 @@ const priceMap = {
   '25K': { rp: 25000, total: 25000 },
 };
 
-// openOrder: langsung buka tanpa paksa login
+// openOrder: langsung buka, login dicek saat pencet Beli
 function openOrder(name, price, duration) {
   _doOpenOrder(name, price, duration);
 }
@@ -170,9 +170,9 @@ function _doOpenOrder(name, price, duration) {
   const p = priceMap[price] || { rp: 0, total: 0 };
   const formatted = 'Rp ' + p.total.toLocaleString('id');
 
-  if ($('orderHargaBesar'))   $('orderHargaBesar').textContent  = formatted;
-  if ($('orderHargaRingkas')) $('orderHargaRingkas').textContent = formatted;
-  if ($('orderTotal'))        $('orderTotal').textContent        = formatted;
+  if ($('orderHargaBesar'))    $('orderHargaBesar').textContent    = formatted;
+  if ($('orderHargaRingkas'))  $('orderHargaRingkas').textContent  = formatted;
+  if ($('orderTotal'))         $('orderTotal').textContent         = formatted;
 
   const modal = $('orderModal');
   modal.dataset.pkg      = name;
@@ -185,29 +185,52 @@ function _doOpenOrder(name, price, duration) {
   if ($('orderLink'))    $('orderLink').value    = '';
   if ($('orderCatatan')) $('orderCatatan').value = '';
 
+  // Slide-in animation
   modal.style.display = 'block';
+  modal.style.transform = 'translateX(100%)';
   document.body.style.overflow = 'hidden';
+  // force reflow then animate
+  modal.offsetHeight;
+  modal.style.transform = 'translateX(0)';
   modal.scrollTop = 0;
 }
 
 function closeOrder() {
-  document.getElementById('orderModal').style.display = 'none';
-  document.body.style.overflow = '';
+  const modal = document.getElementById('orderModal');
+  modal.style.transform = 'translateX(100%)';
+  setTimeout(() => {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }, 350);
 }
 
 function buildOrderWa() {
-  const nama   = document.getElementById('orderNama').value.trim();
-  const nomor  = document.getElementById('orderNomor').value.trim();
-  const link   = document.getElementById('orderLink').value.trim();
-  const modal  = document.getElementById('orderModal');
-  const pkg    = modal.dataset.pkg;
-  const total  = parseInt(modal.dataset.total).toLocaleString('id');
+  const nama  = document.getElementById('orderNama').value.trim();
+  const nomor = document.getElementById('orderNomor').value.trim();
+  const link  = document.getElementById('orderLink').value.trim();
+  const modal = document.getElementById('orderModal');
+  const pkg   = modal.dataset.pkg;
+  const total = parseInt(modal.dataset.total).toLocaleString('id');
 
   if (!nama || !nomor || !link) {
     alert('Mohon lengkapi nama, nomor WhatsApp, dan link grup!');
     return false;
   }
 
+  // Cek login — kalau belum login, simpan state & buka auth gate
+  const user = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth().currentUser : null;
+  if (!user) {
+    // Simpan pending supaya setelah login langsung kirim WA
+    window._pendingWa = { nama, nomor, link, pkg, total };
+    openAuthGate(null);
+    return false;
+  }
+
+  _sendToWa(nama, nomor, link, pkg, total);
+  return true;
+}
+
+function _sendToWa(nama, nomor, link, pkg, total) {
   const msg = `Halo min, saya ingin melakukan pembelian:\n\n` +
     `📦 *Paket:* ${pkg}\n` +
     `👤 *Nama:* ${nama}\n` +
@@ -216,10 +239,21 @@ function buildOrderWa() {
     `💰 *Total:* Rp ${total}\n\n` +
     `Mohon diproses ya min, terima kasih! 🙏`;
 
-  document.getElementById('orderWaBtn').href =
-    'https://wa.me/6289674097203?text=' + encodeURIComponent(msg);
+  const btn = document.getElementById('orderWaBtn');
+  btn.href = 'https://wa.me/6289674097203?text=' + encodeURIComponent(msg);
+  btn.click();
+}
 
-  return true;
+/* ===== PRICING FILTER TABS ===== */
+function filterPricing(tab) {
+  ['group','premium','jadibot'].forEach(t => {
+    const el = document.getElementById('pricing-' + t);
+    const btn = document.getElementById('tab-' + t);
+    if (el) el.style.display = t === tab ? 'block' : 'none';
+    if (btn) {
+      btn.classList.toggle('active-tab', t === tab);
+    }
+  });
 }
 
 document.addEventListener('keydown', e => {

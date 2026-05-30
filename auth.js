@@ -81,16 +81,22 @@ auth.onAuthStateChanged(async (user) => {
 
 // Dipanggil saat user sudah fully logged in (ada username)
 function _onFullyLoggedIn(user, userData) {
-  // Tutup auth gate kalau terbuka
   closeAuthGate();
-  // Update panel & header badge
   updatePanelUser(user);
   injectUserBadge(user, userData);
-  // Kalau ada pending order, lanjutkan
+
+  // Kalau ada pending order buka, lanjutkan
   if (window._pendingOrder) {
     const p = window._pendingOrder;
     window._pendingOrder = null;
     _doOpenOrder(p.name, p.price, p.duration);
+  }
+
+  // Kalau ada pending WA (pencet Beli sebelum login), langsung kirim
+  if (window._pendingWa) {
+    const w = window._pendingWa;
+    window._pendingWa = null;
+    _sendToWa(w.nama, w.nomor, w.link, w.pkg, w.total);
   }
 }
 

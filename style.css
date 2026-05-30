@@ -902,3 +902,43 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
 .user-dropdown-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
 .user-dropdown-item.danger:hover { background: rgba(248,113,113,0.1); color: #f87171; }
 .user-dropdown-item i { width: 14px; font-size: .8rem; }
+
+/* ===== PRICING TABS ===== */
+.pricing-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: #111;
+  color: #888;
+  font-family: inherit;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.pricing-tab:hover {
+  border-color: rgba(255,255,255,0.3);
+  color: #fff;
+  background: #1a1a1a;
+}
+.pricing-tab.active-tab {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+  font-weight: 700;
+}
+
+/* ===== ORDER MODAL SLIDE ANIMATION ===== */
+#orderModal {
+  display: none;
+  transform: translateX(100%);
+  transition: transform .35s cubic-bezier(.4,0,.2,1);
+}
+#orderModal.order-open {
+  display: block !important;
+  transform: translateX(0) !important;
+}
