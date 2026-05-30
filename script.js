@@ -292,17 +292,20 @@ async function _createQris(nominal) {
     document.getElementById('qrisKodeUnik').textContent = '+' + d.rincian.kode_unik;
     document.getElementById('qrisIdTrx').textContent = d.id_transaksi;
 
-    // Load gambar QRIS
-    const img = document.getElementById('qrisImg');
-    img.onload = () => {
-      document.getElementById('qrisImgLoader').style.display = 'none';
-      img.style.display = 'block';
-    };
-    img.onerror = () => {
-      document.getElementById('qrisImgLoader').innerHTML =
-        '<i class="fas fa-exclamation-triangle" style="color:#f97316;font-size:2rem;"></i><span style="color:#f97316;font-size:.8rem;">Gagal load QR</span>';
-    };
-    img.src = d.qris_image;
+    // Render QR dari qris_content (tidak bergantung pixhost)
+    const canvasWrap = document.getElementById('qrisCanvasWrap');
+    canvasWrap.innerHTML = '';
+    canvasWrap.style.display = 'block';
+    document.getElementById('qrisImgLoader').style.display = 'none';
+
+    new QRCode(canvasWrap, {
+      text: d.qris_content,
+      width: 240,
+      height: 240,
+      colorDark: '#000000',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
 
     // Mulai timer 5 menit
     _startQrisTimer(300);
