@@ -269,7 +269,7 @@ function _openQrisPay() {
 async function _createQris(nominal) {
   // Generate user ID unik dari timestamp
   const userId = 'USR' + Date.now().toString(36).toUpperCase();
-  const url = `https://qris.zakki.store/create?token=${QRIS_TOKEN}&nominal=${nominal}&id_user=${userId}`;
+  const url = `https://qris.zakki.store/topup?token=${QRIS_TOKEN}&nominal=${nominal}&id_user=${userId}`;
 
   try {
     const res  = await fetch(url);
@@ -362,9 +362,9 @@ async function cekStatusQris() {
   if (!window._qrisData) return;
 
   const idTrx = window._qrisData.id_transaksi;
-  // Ambil kode pendek dari ID (bagian setelah "topup-XXXX-")
-  const parts = idTrx.split('-');
-  const idShort = parts[1] || idTrx;
+  // Format: "topup-68714058-WGmI" → ambil "topup-68714058-WGmI" langsung (full ID)
+  // API cektopup menerima full id_transaksi
+  const idForCek = idTrx;
 
   // Tampil overlay checking
   const overlay = document.getElementById('qrisStatusOverlay');
@@ -372,7 +372,7 @@ async function cekStatusQris() {
   _showStatusState('checking');
 
   try {
-    const url = `https://qris.zakki.store/cektopup?idtopup=${idShort}`;
+    const url = `https://qris.zakki.store/cektopup?idtopup=${idForCek}`;
     const res  = await fetch(url);
     const data = await res.json();
 
