@@ -177,6 +177,7 @@ function _doOpenOrder(name, price, duration) {
 
   const p = priceMap[price] || { rp: 0, total: 0 };
   document.getElementById('orderTotal').textContent = 'Rp ' + p.total.toLocaleString('id');
+  document.getElementById('orderHargaBesar').textContent = 'Rp ' + p.total.toLocaleString('id');
 
   document.getElementById('orderModal').dataset.pkg = name;
   document.getElementById('orderModal').dataset.price = price;
@@ -186,6 +187,8 @@ function _doOpenOrder(name, price, duration) {
   document.getElementById('orderNama').value = '';
   document.getElementById('orderNomor').value = '';
   document.getElementById('orderLink').value = '';
+  const catatan = document.getElementById('orderCatatan');
+  if (catatan) catatan.value = '';
 
   document.getElementById('orderModal').style.display = 'block';
   document.body.style.overflow = 'hidden';
@@ -201,22 +204,25 @@ function buildOrderWa() {
   const nama   = document.getElementById('orderNama').value.trim();
   const nomor  = document.getElementById('orderNomor').value.trim();
   const link   = document.getElementById('orderLink').value.trim();
+  const catatan = (document.getElementById('orderCatatan')?.value || '').trim();
   const modal  = document.getElementById('orderModal');
   const pkg    = modal.dataset.pkg;
   const total  = parseInt(modal.dataset.total).toLocaleString('id');
 
   if (!nama || !nomor || !link) {
-    alert('Mohon lengkapi semua data pesanan terlebih dahulu!');
+    alert('Mohon lengkapi nama, nomor WhatsApp, dan link grup terlebih dahulu!');
     return false;
   }
 
-  const msg = `Halo min, saya ingin melakukan pembelian:\n\n` +
+  let msg = `Halo min, saya ingin melakukan pembelian:\n\n` +
     `📦 *Paket:* ${pkg}\n` +
     `👤 *Nama:* ${nama}\n` +
     `📱 *Nomor WA:* ${nomor}\n` +
     `🔗 *Link Grup:* ${link}\n` +
-    `💰 *Total:* Rp ${total}\n\n` +
-    `Mohon diproses ya min, terima kasih! 🙏`;
+    `💰 *Total:* Rp ${total}`;
+
+  if (catatan) msg += `\n📝 *Catatan:* ${catatan}`;
+  msg += `\n\nMohon diproses ya min, terima kasih! 🙏`;
 
   document.getElementById('orderWaBtn').href =
     'https://wa.me/6289674097203?text=' + encodeURIComponent(msg);
