@@ -59,20 +59,7 @@ function toggleFaq(btn) {
   if (!isOpen) { body.classList.add('open'); btn.classList.add('open'); }
 }
 
-// Logo text alternating
-;(function(){
-  const el = document.getElementById('logoName')
-  if (!el) return
-  const words = ['Astrobot', 'Digital']
-  let i = 0
-  const CYCLE = 4000
-  setInterval(() => {
-    setTimeout(() => {
-      i = (i + 1) % words.length
-      el.textContent = words[i]
-    }, CYCLE * 0.5)
-  }, CYCLE)
-})()
+
 
 /* ===== Script Modal ===== */
 function openScriptModal() { document.getElementById('scriptSaleModal').style.display='block'; document.body.style.overflow='hidden'; }
@@ -472,4 +459,3 @@ function filterPricing(tab) {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeOrder();
 });
-

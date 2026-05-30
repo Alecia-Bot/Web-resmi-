@@ -23,20 +23,11 @@ header,section,.banner,.hero,.why-sec,.testi-sec,.faq-sec,.btm-cta,footer,.sec,.
 /* HEADER */
 header{position:fixed;top:0;left:0;right:0;height:60px;background:#0a0a0a;backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08);z-index:500;display:flex;align-items:center}
 .hdr{width:100%;max-width:1100px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1.15rem;color:#ffffff;text-decoration:none;overflow:hidden}
-.logo-dot{width:8px;height:8px;border-radius:50%;background:#7c3aed;flex-shrink:0}
-.logo-text{display:inline-flex;align-items:center;gap:3px;animation:logoSlide .7s cubic-bezier(.22,1,.36,1) both}
+.logo{display:flex;align-items:center;text-decoration:none;}
+
+
 @keyframes logoSlide{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:translateX(0)}}
-.logo-name{
-  display:inline-block;
-  animation:logoFade 4s ease-in-out infinite;
-  white-space:nowrap;
-  background:linear-gradient(90deg,#fff 0%,#e9d5ff 35%,#a78bfa 50%,#e9d5ff 65%,#fff 100%);
-  background-size:250% auto;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-}
+
 @keyframes logoFade{
   0%{opacity:1;transform:translateX(0);background-position:200% center;filter:brightness(1)}
   30%{background-position:40% center;filter:brightness(1.4) drop-shadow(0 0 5px #7c3aed)}
@@ -45,11 +36,7 @@ header{position:fixed;top:0;left:0;right:0;height:60px;background:#0a0a0a;backdr
   70%{opacity:1;transform:translateX(0);filter:brightness(1)}
   100%{opacity:1;transform:translateX(0);background-position:200% center;filter:brightness(1)}
 }
-.logo-bolt{
-  display:inline-flex;align-items:center;margin-left:1px;
-  animation:boltMove 4s ease-in-out infinite;
-  transform-origin:center;
-}
+
 @keyframes boltMove{
   0%,28%{opacity:0.4;transform:translateX(0) scale(1)}
   40%{opacity:0.8;transform:translateX(4px) scale(1.1);filter:drop-shadow(0 0 3px #7c3aed)}

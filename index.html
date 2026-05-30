@@ -145,25 +145,10 @@
 <!-- HEADER -->
 <header>
 <div class="hdr">
-<a class="logo" href="#">
-<span class="logo-dot"></span>
-<span class="logo-text"><span class="logo-name" id="logoName">Astrobot</span><span class="logo-bolt"><svg fill="none" height="18" viewbox="0 0 13 18" width="13" xmlns="http://www.w3.org/2000/svg">
-<defs>
-<lineargradient id="boltGrad" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="#e9d5ff"></stop>
-<stop offset="40%" stop-color="#a78bfa"></stop>
-<stop offset="100%" stop-color="#7c3aed"></stop>
-</lineargradient>
-<filter id="boltGlow">
-<fegaussianblur result="blur" stddeviation="1.2"></fegaussianblur>
-<femerge><femergenode in="blur"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge>
-</filter>
-</defs>
-<path d="M8.5 1L1 10.2H6.2L4.5 17L12 7.5H6.8L8.5 1Z" fill="url(#boltGrad)" filter="url(#boltGlow)" stroke="#a78bfa" stroke-linejoin="round" stroke-width="0.3"></path>
-</svg></span></span>
+<a class="logo" href="#" style="display:flex;align-items:center;gap:6px;text-decoration:none;">
+<span style="font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:-.01em;">• Astrobot</span>
 </a>
 <div class="hdr-right">
-<div id="headerUserBadge" style="display:none"></div>
 <button class="menu-btn" onclick="openMenu()"><i class="fas fa-bars"></i></button>
 </div>
 </div>
@@ -186,7 +171,7 @@
 <div class="hero-grid">
 <!-- KIRI -->
 <div>
-<div class="hero-badge"><i class="fab fa-whatsapp" style="color:#22c55e"></i> WhatsApp Automation Bot</div>
+<div class="hero-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16c.01.31.01.62-.01.92z"/></svg> WhatsApp Automation Bot</div>
 <h1>Astrobot <span>WhatsApp</span> Bot</h1>
 <div class="type-wrap">
 <span class="typed">Otomatis untuk Grup &amp; Pribadi</span>
@@ -194,7 +179,6 @@
 <p class="hero-desc">Bot WhatsApp untuk manajemen grup, download media, game seru, dan AI chat. Stabil seharian, gampang dipake, harga ga bikin kantong jebol.</p>
 <div class="hero-btns">
 <a class="btn-purple" href="#pricing"><i class="fas fa-tags" style="font-size:.8rem"></i> Lihat Harga</a>
-<button class="btn-purple" onclick="openScriptModal()" style="border:none;cursor:pointer;"><i class="fas fa-code" style="font-size:.8rem"></i> Buy Script</button>
 <a class="btn-outline" href="https://wa.me/6289674097203" target="_blank"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:.9rem"></i> Hubungi Admin</a>
 </div>
 <div class="stats">
@@ -288,13 +272,13 @@
 <!-- FILTER TABS -->
 <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;">
   <button onclick="filterPricing('group')" id="tab-group" class="pricing-tab active-tab">
-    🤖 Sewa Bot (Group)
+    Sewa Bot (Group)
   </button>
   <button onclick="filterPricing('premium')" id="tab-premium" class="pricing-tab">
-    💎 Premium (Pribadi)
+    Premium (Pribadi)
   </button>
   <button onclick="filterPricing('jadibot')" id="tab-jadibot" class="pricing-tab">
-    ⚡ Jadibot (VIP)
+    Jadibot (VIP)
   </button>
 </div>
 
@@ -323,7 +307,7 @@
 <div class="nc-name">Sewa Bot Grup 30 Hari</div>
 <div class="nc-sub">Aktif untuk semua anggota di grup</div>
 </div>
-<span class="nc-badge" style="background:#1c1a05;color:#fbbf24;border:1px solid #854d0e">Hemat 💰</span>
+<span class="nc-badge" style="background:#1c1a05;color:#fbbf24;border:1px solid #854d0e">Hemat</span>
 </div>
 <div class="nc-price">10K <span class="nc-per">/ 30 hari</span></div>
 <div class="nc-bens">
@@ -341,7 +325,7 @@
 <div class="nc-name">Sewa Bot Grup 60 Hari</div>
 <div class="nc-sub">Aktif untuk semua anggota di grup</div>
 </div>
-<span class="nc-badge" style="background:#052e16;color:#4ade80;border:1px solid #166534">Terbaik ⭐</span>
+<span class="nc-badge" style="background:#052e16;color:#4ade80;border:1px solid #166534">Terbaik</span>
 </div>
 <div class="nc-price">18K <span class="nc-per">/ 60 hari</span></div>
 <div class="nc-bens">
@@ -381,7 +365,7 @@
 <div id="pricing-premium" style="display:none;">
 <div class="pc cyan-card rv d2 closed-card">
 <div class="prem-shimmer"></div>
-<div class="pc-badge hot">⭐ Premium</div>
+<div class="pc-badge hot">Premium</div>
 <div class="pc-name">Premium</div>
 <div style="font-size:.72rem;color:#94a3b8;margin:-6px 0 10px 0;font-family:'JetBrains Mono',monospace;letter-spacing:.03em">💬 Akses chat pribadi langsung ke bot — tanpa antrian, tanpa delay, tanpa iklan.</div>
 <div class="pc-list">
@@ -421,7 +405,7 @@
 <!-- JADIBOT -->
 <div id="pricing-jadibot" style="display:none;">
 <div class="jb-card rv closed-card" style="position:relative;overflow:hidden">
-<div class="jb-title">🤖 List Harga Jadibot Astrobot VVIP</div>
+<div class="jb-title">List Harga Jadibot Astrobot VVIP</div>
 <!-- Tier 5k -->
 <div class="jb-tier">
 <div class="jb-tier-head">
@@ -450,7 +434,7 @@
 <div class="jb-tier">
 <div class="jb-tier-head">
 <span class="jb-price">15K <span class="jb-per">/ bulan</span></span>
-<span style="font-size:.62rem;background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3);padding:3px 9px;border-radius:99px;font-weight:700">⭐ Best</span>
+<span style="font-size:.62rem;background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3);padding:3px 9px;border-radius:99px;font-weight:700">Best</span>
 </div>
 <div class="jb-divider"></div>
 <div class="jb-feat"><i class="fas fa-check-circle"></i> Nomor WA Kamu Sendiri</div>
@@ -466,82 +450,9 @@
 </div>
 </div><!-- end pricing-jadibot -->
 
-<!-- PAYMENT -->
-<div class="pay-sec rv">
-<div class="pay-lbl">Metode Pembayaran</div>
-<div class="pay-chips">
-<div class="pchip"><i class="fas fa-university" style="color:#0066a1"></i> BCA</div>
-<div class="pchip"><i class="fas fa-university" style="color:#003087"></i> BRI</div>
-<div class="pchip"><i class="fas fa-university" style="color:#00a2e3"></i> Mandiri</div>
-<div class="pchip"><i class="fas fa-university" style="color:#f96d00"></i> BNI</div>
-<div class="pchip"><i class="fas fa-wallet" style="color:#00aa13"></i> GoPay</div>
-<div class="pchip"><i class="fas fa-wallet" style="color:#4c3494"></i> OVO</div>
-<a class="pchip" href="dana://send?phoneNumber=087842203625"><i class="fas fa-money-bill-wave" style="color:#118eea"></i> DANA</a>
-<div class="pchip"><i class="fas fa-bolt" style="color:#e40421"></i> LinkAja</div>
-<div class="pchip"><i class="fas fa-shopping-bag" style="color:#ff5722"></i> ShopeePay</div>
-<div class="pchip" onclick="openQ()" style="cursor:pointer;border-color:#a5f3fc;color:#06b6d4;background:#e0f2fe"><i class="fas fa-qrcode"></i> QRIS</div>
-</div>
-<div class="pay-note"><i class="fas fa-check-circle"></i> Semua metode pembayaran aman &amp; terjamin</div>
-</div>
+</section>
 
-</section>
-<!-- TESTIMONIALS -->
-<section class="testi-sec" id="testimonials">
-<div class="sec">
-<div class="sec-lbl">Testimoni</div>
-<h2 class="sec-title rv">Kata mereka <span>yang udah pakai.</span></h2>
-<div class="swiper tSwiper rv" style="padding-bottom:40px">
-<div class="swiper-wrapper">
-<div class="swiper-slide"><div class="tcard">
-<div class="t-stars">★★★★★</div>
-<p class="t-text">"Botnya stabil banget, jarang down! Fitur downloader sangat membantu anggota grup. Admin juga fast respon."</p>
-<div class="t-author"><div class="t-av">RP</div><div><div class="t-name">Rizki Pratama</div><div class="t-role">Admin Grup Komunitas</div></div></div>
-</div></div>
-<div class="swiper-slide"><div class="tcard">
-<div class="t-stars">★★★★½</div>
-<p class="t-text">"Auto-reply sangat membantu respon customer. Harga terjangkau banget untuk fitur sebanyak ini. Recommended!"</p>
-<div class="t-author"><div class="t-av">SD</div><div><div class="t-name">Sari Dewi</div><div class="t-role">Owner Online Shop</div></div></div>
-</div></div>
-<div class="swiper-slide"><div class="tcard">
-<div class="t-stars">★★★★★</div>
-<p class="t-text">"Fitur game RPG bikin grup tambah seru. Member jadi aktif terus karena ada daily quest dan sistem ekonomi."</p>
-<div class="t-author"><div class="t-av">AW</div><div><div class="t-name">Andi Wijaya</div><div class="t-role">Game Community Leader</div></div></div>
-</div></div>
-<div class="swiper-slide"><div class="tcard">
-<div class="t-stars">★★★★★</div>
-<p class="t-text">"Paket permanen worth banget. Sekali bayar langsung bisa nikmatin semua fitur tanpa khawatir habis masa aktif."</p>
-<div class="t-author"><div class="t-av">FA</div><div><div class="t-name">Fajar Aditya</div><div class="t-role">Pengguna Premium</div></div></div>
-</div></div>
-<div class="swiper-slide"><div class="tcard">
-<div class="t-stars">★★★★★</div>
-<p class="t-text">"Support 24/7 beneran aktif. Ada masalah tengah malam, langsung dibantu dan selesai dalam beberapa menit."</p>
-<div class="t-author"><div class="t-av">NR</div><div><div class="t-name">Nita Rahayu</div><div class="t-role">Reseller Dropship</div></div></div>
-</div></div>
-</div>
-<div class="swiper-pagination"></div>
-</div>
-</div>
-</section>
-<!-- CTA JOIN -->
-<section>
-<div class="sec">
-<div class="cta-box rv">
-<div class="cta-inner">
-<div class="sec-lbl">Mulai Sekarang</div>
-<h2 class="sec-title" style="margin-bottom:10px">Siap coba <span>Astrobot?</span></h2>
-<p style="font-size:.86rem;color:#64748b;line-height:1.7;max-width:420px;margin-bottom:20px">Masuk ke grup resmi Astrobot buat dapetin info update terbaru, bantu-bantuan sesama user, dan notif kalau ada fitur baru.</p>
-<div style="display:flex;flex-wrap:wrap;gap:10px">
-<a class="btn-purple" href="https://chat.whatsapp.com/FSAf3UrrYIWLJerH6iVTaD" target="_blank"><i class="fab fa-whatsapp" style="color:#86efac"></i> Coba Gratis Sekarang</a>
-<button class="btn-outline" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})"><i class="fas fa-arrow-up" style="font-size:.75rem"></i> Lihat Paket</button>
-</div>
-<div class="cta-note">
-<strong>📌 Info Aktivasi</strong>
-          Proses aktivasi bot dilakukan setelah verifikasi pembayaran. Semua penggunaan Astrobot mengikuti aturan dan kebijakan yang berlaku.
-        </div>
-</div>
-</div>
-</div>
-</section>
+
 <!-- FAQ -->
 <section class="faq-sec" id="faq">
 <div class="sec">
@@ -559,7 +470,7 @@
 </ul></div></div>
 </div>
 <div class="faq-item rv d2">
-<button class="faq-btn" onclick="toggleFaq(this)">Bagaimana cara aktivasi bot? <i class="fas fa-plus"></i></button>
+<button class="faq-btn" onclick="toggleFaq(this)">Bagaimana proses pembelian? <i class="fas fa-plus"></i></button>
 <div class="faq-body"><div class="faq-inner"><ul>
 <li>Pilih paket yang diinginkan dari halaman harga.</li>
 <li>Hubungi admin via WhatsApp di nomor yang tertera.</li>
@@ -625,8 +536,8 @@
 <div style="background:#0d0d0d;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
 <!-- Header -->
 <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #1a1a1a;">
-<span style="color:#fff;font-weight:700;font-size:1rem;">⚡ Script Bot Astrobot Digital</span>
-<button onclick="closeScriptModal()" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#888;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:14px;">✕</button>
+<span style="color:#fff;font-weight:700;font-size:1rem;">Script Bot Astrobot Digital</span>
+<button onclick="closeScriptModal()" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#888;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 </div>
 <!-- Thumbnail 16:9 -->
 <div style="margin:16px 20px;border-radius:8px;overflow:hidden;border:1px solid #1a1a1a;">
@@ -646,7 +557,7 @@
 <!-- Info Grid -->
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px 16px;">
 <div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
-<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">⚙️ Info System</div>
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Info System</div>
 <ul style="list-style:none;padding:0;margin:0;color:#666;font-size:.8rem;line-height:1.9;">
 <li><span style="color:#555;">▸</span> Type: <strong style="color:#ccc;">ESM Module</strong></li>
 <li><span style="color:#555;">▸</span> Node: <strong style="color:#ccc;">18 / 20 / 22</strong></li>
@@ -656,7 +567,7 @@
 </ul>
 </div>
 <div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
-<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">🗄️ Info Database</div>
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Info Database</div>
 <ul style="list-style:none;padding:0;margin:0;color:#666;font-size:.8rem;line-height:1.9;">
 <li><span style="color:#555;">▸</span> Database: <strong style="color:#ccc;">SQLite</strong></li>
 <li><span style="color:#555;">▸</span> RPG &amp; Bank: <strong style="color:#ccc;">✅ Ada</strong></li>
@@ -666,7 +577,7 @@
 </ul>
 </div>
 <div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
-<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">📊 Total Fitur</div>
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Total Fitur</div>
 <ul style="list-style:none;padding:0;margin:0;color:#666;font-size:.8rem;line-height:1.9;">
 <li><span style="color:#555;">▸</span> Total Fitur: <strong style="color:#ccc;">900+</strong></li>
 <li><span style="color:#555;">▸</span> Plugins: <strong style="color:#ccc;">1007+</strong></li>
@@ -675,36 +586,36 @@
 </ul>
 </div>
 <div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
-<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">🌟 Menu Populer</div>
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Menu Populer</div>
 <div style="display:flex;flex-wrap:wrap;gap:5px;">
-<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">🤖 AI</span>
-<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">⬇️ Downloader</span>
-<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">🎮 Game</span>
-<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">⚔️ RPG</span>
-<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">🎭 Stiker</span>
-<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">🔧 Tools</span>
-<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">😂 Fun</span>
-<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">🌐 Internet</span>
-<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">👥 Group</span>
-<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">🎵 Audio</span>
-<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">📰 News</span>
-<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">🔍 Search</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">AI</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Downloader</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Game</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">RPG</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Stiker</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Tools</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Fun</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Internet</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Group</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Audio</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">News</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Search</span>
 </div>
 </div>
 </div>
 <!-- Fitur Unggulan -->
 <div style="padding:0 20px 16px;">
 <div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
-<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">✨ Fitur Unggulan</div>
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Fitur Unggulan</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
-<div style="font-size:.78rem;color:#888;"><span style="color:#22c55e;">✅</span> All-in-One Downloader</div>
-<div style="font-size:.78rem;color:#888;"><span style="color:#22c55e;">✅</span> AI Chat (GPT, Gemini)</div>
-<div style="font-size:.78rem;color:#888;"><span style="color:#22c55e;">✅</span> Brat &amp; BratVid Stiker</div>
-<div style="font-size:.78rem;color:#888;"><span style="color:#22c55e;">✅</span> Anti-Link &amp; Anti-Spam</div>
-<div style="font-size:.78rem;color:#888;"><span style="color:#22c55e;">✅</span> RPG Economy &amp; Quest</div>
-<div style="font-size:.78rem;color:#888;"><span style="color:#22c55e;">✅</span> Auto-Reply Cepat</div>
-<div style="font-size:.78rem;color:#888;"><span style="color:#22c55e;">✅</span> Welcome &amp; Goodbye</div>
-<div style="font-size:.78rem;color:#888;"><span style="color:#22c55e;">✅</span> Admin Tools Lengkap</div>
+<div style="font-size:.78rem;color:#888;">All-in-One Downloader</div>
+<div style="font-size:.78rem;color:#888;">AI Chat (GPT, Gemini)</div>
+<div style="font-size:.78rem;color:#888;">Brat &amp; BratVid Stiker</div>
+<div style="font-size:.78rem;color:#888;">Anti-Link &amp; Anti-Spam</div>
+<div style="font-size:.78rem;color:#888;">RPG Economy &amp; Quest</div>
+<div style="font-size:.78rem;color:#888;">Auto-Reply Cepat</div>
+<div style="font-size:.78rem;color:#888;">Welcome &amp; Goodbye</div>
+<div style="font-size:.78rem;color:#888;">Admin Tools Lengkap</div>
 </div>
 </div>
 </div>
@@ -746,7 +657,7 @@
 
     <!-- ✨ Fitur Bot Group -->
     <div style="padding:0 16px 16px;">
-      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">✨ Fitur Bot Group:</div>
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">Fitur Bot Group:</div>
       <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
         <li style="font-size:.9rem;color:#ccc;">Game seru (tebak gambar, quiz, dll)</li>
         <li style="font-size:.9rem;color:#ccc;">Fun command &amp; hiburan</li>
@@ -765,7 +676,7 @@
 
     <!-- 🔧 Fungsi Admin -->
     <div style="padding:0 16px 16px;">
-      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">🔧 Fungsi Admin:</div>
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">Fungsi Admin:</div>
       <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
         <li style="font-size:.9rem;color:#ccc;">Kick / add member (jika bot admin)</li>
         <li style="font-size:.9rem;color:#ccc;">Close / open grup</li>
@@ -778,7 +689,7 @@
 
     <!-- 🎯 Cocok Untuk -->
     <div style="padding:0 16px 16px;">
-      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">🎯 Cocok Untuk:</div>
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">Cocok Untuk:</div>
       <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
         <li style="font-size:.9rem;color:#ccc;">Grup komunitas</li>
         <li style="font-size:.9rem;color:#ccc;">Grup tongkrongan</li>
@@ -790,7 +701,7 @@
 
     <!-- 📦 Ketentuan Sewa -->
     <div style="padding:0 16px 16px;">
-      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">📦 Ketentuan Sewa:</div>
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">Ketentuan Sewa:</div>
       <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
         <li style="font-size:.9rem;color:#ccc;">Bot dimasukkan ke grup Anda</li>
         <li style="font-size:.9rem;color:#ccc;">Durasi sesuai paket sewa</li>
