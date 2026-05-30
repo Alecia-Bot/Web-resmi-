@@ -204,44 +204,250 @@ function closeOrder() {
   }, 350);
 }
 
-function buildOrderWa() {
+function handleBeli() {
   const nama  = document.getElementById('orderNama').value.trim();
   const nomor = document.getElementById('orderNomor').value.trim();
   const link  = document.getElementById('orderLink').value.trim();
-  const modal = document.getElementById('orderModal');
-  const pkg   = modal.dataset.pkg;
-  const total = parseInt(modal.dataset.total).toLocaleString('id');
 
   if (!nama || !nomor || !link) {
     alert('Mohon lengkapi nama, nomor WhatsApp, dan link grup!');
-    return false;
+    return;
   }
 
-  // Cek login — kalau belum login, simpan state & buka auth gate
+  // Cek login
   const user = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth().currentUser : null;
   if (!user) {
-    // Simpan pending supaya setelah login langsung kirim WA
-    window._pendingWa = { nama, nomor, link, pkg, total };
+    const modal = document.getElementById('orderModal');
+    window._pendingOrder = { name: modal.dataset.pkg, price: modal.dataset.price, duration: modal.dataset.duration };
     openAuthGate(null);
-    return false;
+    return;
   }
 
-  _sendToWa(nama, nomor, link, pkg, total);
-  return true;
+  // Buka QRIS
+  _openQrisPay();
 }
 
-function _sendToWa(nama, nomor, link, pkg, total) {
-  const msg = `Halo min, saya ingin melakukan pembelian:\n\n` +
-    `📦 *Paket:* ${pkg}\n` +
-    `👤 *Nama:* ${nama}\n` +
-    `📱 *Nomor WA:* ${nomor}\n` +
-    `🔗 *Link Grup:* ${link}\n` +
-    `💰 *Total:* Rp ${total}\n\n` +
-    `Mohon diproses ya min, terima kasih! 🙏`;
+// ===== QRIS PAYMENT =====
+const QRIS_TOKEN = 'c98176b67fbd56';
+const OWNER_WA   = '6289674097203';
 
-  const btn = document.getElementById('orderWaBtn');
-  btn.href = 'https://wa.me/6289674097203?text=' + encodeURIComponent(msg);
-  btn.click();
+window._qrisData = null;
+window._qrisTimer = null;
+
+function _openQrisPay() {
+  const modal = document.getElementById('orderModal');
+  const total = parseInt(modal.dataset.total);
+  const pkg   = modal.dataset.pkg;
+  const nama  = document.getElementById('orderNama').value.trim();
+  const nomor = document.getElementById('orderNomor').value.trim();
+  const link  = document.getElementById('orderLink').value.trim();
+
+  window._qrisOrderInfo = { pkg, nama, nomor, link, total };
+
+  // Tampilkan modal
+  const payModal = document.getElementById('qrisPayModal');
+  payModal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => {
+    document.getElementById('qrisPayBox').style.transform = 'translateY(0)';
+  }, 10);
+
+  // Reset UI
+  document.getElementById('qrisImg').style.display = 'none';
+  document.getElementById('qrisImgLoader').style.display = 'flex';
+  document.getElementById('qrisNominalAsli').textContent = '';
+  document.getElementById('qrisTotalBayar').textContent = '';
+  document.getElementById('qrisKodeUnik').textContent = '';
+  document.getElementById('qrisIdTrx').textContent = '';
+  document.getElementById('qrisTimer').textContent = '05:00';
+  document.getElementById('qrisTimerBar').style.width = '100%';
+
+  // Hit API buat QRIS
+  _createQris(total);
+}
+
+async function _createQris(nominal) {
+  // Generate user ID unik dari timestamp
+  const userId = 'USR' + Date.now().toString(36).toUpperCase();
+  const url = `https://qris.zakki.store/create?token=${QRIS_TOKEN}&nominal=${nominal}&id_user=${userId}`;
+
+  try {
+    const res  = await fetch(url);
+    const data = await res.json();
+
+    if (data.code !== 201 || data.status !== 'success') {
+      alert('Gagal membuat QRIS: ' + (data.message || 'Unknown error'));
+      closeQrisPay();
+      return;
+    }
+
+    const d = data.data;
+    window._qrisData = d;
+
+    // Isi nominal
+    document.getElementById('qrisNominalAsli').textContent =
+      'Rp ' + d.rincian.nominal_request.toLocaleString('id');
+    document.getElementById('qrisTotalBayar').textContent =
+      'Rp ' + d.rincian.total_bayar.toLocaleString('id');
+    document.getElementById('qrisKodeUnik').textContent = '+' + d.rincian.kode_unik;
+    document.getElementById('qrisIdTrx').textContent = d.id_transaksi;
+
+    // Load gambar QRIS
+    const img = document.getElementById('qrisImg');
+    img.onload = () => {
+      document.getElementById('qrisImgLoader').style.display = 'none';
+      img.style.display = 'block';
+    };
+    img.onerror = () => {
+      document.getElementById('qrisImgLoader').innerHTML =
+        '<i class="fas fa-exclamation-triangle" style="color:#f97316;font-size:2rem;"></i><span style="color:#f97316;font-size:.8rem;">Gagal load QR</span>';
+    };
+    img.src = d.qris_image;
+
+    // Mulai timer 5 menit
+    _startQrisTimer(300);
+
+  } catch (err) {
+    alert('Error koneksi ke server QRIS. Coba lagi.');
+    closeQrisPay();
+  }
+}
+
+function _startQrisTimer(seconds) {
+  clearInterval(window._qrisTimer);
+  let sisa = seconds;
+  const timerEl = document.getElementById('qrisTimer');
+  const barEl   = document.getElementById('qrisTimerBar');
+
+  window._qrisTimer = setInterval(() => {
+    sisa--;
+    const m = String(Math.floor(sisa / 60)).padStart(2, '0');
+    const s = String(sisa % 60).padStart(2, '0');
+    timerEl.textContent = `${m}:${s}`;
+    barEl.style.width = (sisa / seconds * 100) + '%';
+
+    // Warna timer merah jika < 60 detik
+    timerEl.style.color = sisa < 60 ? '#ef4444' : '#f97316';
+
+    if (sisa <= 0) {
+      clearInterval(window._qrisTimer);
+      timerEl.textContent = 'EXPIRED';
+      timerEl.style.color = '#ef4444';
+      document.getElementById('qrisImg').style.opacity = '0.3';
+      document.getElementById('btnCekStatus').disabled = true;
+    }
+  }, 1000);
+}
+
+function closeQrisPay() {
+  clearInterval(window._qrisTimer);
+  const box = document.getElementById('qrisPayBox');
+  box.style.transform = 'translateY(100%)';
+  setTimeout(() => {
+    document.getElementById('qrisPayModal').style.display = 'none';
+    document.body.style.overflow = '';
+  }, 400);
+}
+
+function copyIdTrx() {
+  const id = document.getElementById('qrisIdTrx').textContent;
+  navigator.clipboard.writeText(id).then(() => {
+    const btn = event.currentTarget;
+    btn.innerHTML = '<i class="fas fa-check"></i>';
+    setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i>'; }, 1500);
+  });
+}
+
+async function cekStatusQris() {
+  if (!window._qrisData) return;
+
+  const idTrx = window._qrisData.id_transaksi;
+  // Ambil kode pendek dari ID (bagian setelah "topup-XXXX-")
+  const parts = idTrx.split('-');
+  const idShort = parts[1] || idTrx;
+
+  // Tampil overlay checking
+  const overlay = document.getElementById('qrisStatusOverlay');
+  overlay.style.display = 'flex';
+  _showStatusState('checking');
+
+  try {
+    const url = `https://qris.zakki.store/cektopup?idtopup=${idShort}`;
+    const res  = await fetch(url);
+    const data = await res.json();
+
+    if (data.status === 'found' && data.kategori_status === 'SUCCESS') {
+      // Sukses!
+      _showStatusState('success');
+      const d = data.data;
+      document.getElementById('statusSuccessMsg').textContent =
+        `Pembayaran Rp ${(d.nominal_total || 0).toLocaleString('id')} telah diterima.`;
+
+      if (d.reward && d.reward.message) {
+        const rewardBox = document.getElementById('statusRewardBox');
+        rewardBox.style.display = 'block';
+        document.getElementById('statusRewardMsg').textContent = '🎁 ' + d.reward.message;
+      }
+
+      clearInterval(window._qrisTimer);
+
+    } else if (data.kategori_status === 'PENDING' || data.status === 'found') {
+      _showStatusState('pending');
+    } else {
+      _showStatusState('failed');
+      document.getElementById('statusFailedMsg').textContent =
+        data.message || 'Transaksi tidak ditemukan. Pastikan sudah membayar.';
+    }
+  } catch (err) {
+    _showStatusState('failed');
+    document.getElementById('statusFailedMsg').textContent = 'Gagal terhubung ke server. Coba lagi.';
+  }
+}
+
+function _showStatusState(state) {
+  ['statusChecking','statusSuccess','statusPending','statusFailed'].forEach(id => {
+    const el = document.getElementById(id);
+    el.style.display = 'none';
+  });
+  const target = document.getElementById('status' + state.charAt(0).toUpperCase() + state.slice(1));
+  if (target) target.style.display = 'flex';
+}
+
+function closeStatusOverlay() {
+  document.getElementById('qrisStatusOverlay').style.display = 'none';
+}
+
+function onPaymentSuccess() {
+  closeStatusOverlay();
+  closeQrisPay();
+
+  // Kirim ke WA owner
+  const info = window._qrisOrderInfo || {};
+  const d    = window._qrisData || {};
+  const total = d.rincian ? d.rincian.total_bayar.toLocaleString('id') : '';
+  const idTrx = d.id_transaksi || '-';
+
+  const msg =
+    `✅ *PEMBAYARAN BERHASIL*\n\n` +
+    `📦 *Paket:* ${info.pkg || '-'}\n` +
+    `👤 *Nama:* ${info.nama || '-'}\n` +
+    `📱 *Nomor WA:* ${info.nomor || '-'}\n` +
+    `🔗 *Link Grup:* ${info.link || '-'}\n` +
+    `💰 *Total Dibayar:* Rp ${total}\n` +
+    `🧾 *ID Transaksi:* ${idTrx}\n\n` +
+    `Mohon segera diproses ya min 🙏`;
+
+  window.open('https://wa.me/' + OWNER_WA + '?text=' + encodeURIComponent(msg), '_blank');
+}
+
+async function cancelQris() {
+  if (!window._qrisData) { closeQrisPay(); return; }
+  const idTrx = window._qrisData.id_transaksi;
+  try {
+    await fetch(`https://qris.zakki.store/cancel?token=${QRIS_TOKEN}&id_transaksi=${idTrx}`);
+  } catch(e) {}
+  clearInterval(window._qrisTimer);
+  closeQrisPay();
 }
 
 /* ===== PRICING FILTER TABS ===== */
