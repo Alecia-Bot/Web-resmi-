@@ -25,20 +25,21 @@
 </head>
 <body>
 
-<!-- ===== AUTH GATE ===== -->
-<div id="authGate">
+<!-- ===== AUTH MODAL (opsional - hanya muncul saat beli) ===== -->
+<div id="authGate" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
 
   <!-- LOGIN SCREEN -->
   <div id="loginScreen" class="auth-screen active">
     <div class="auth-bg-grid"></div>
     <div class="auth-card">
+      <button onclick="closeAuthGate()" style="position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:7px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);color:#666;cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
       <div class="auth-logo">
         <span class="auth-logo-dot"></span>
         <span class="auth-logo-name">Astrobot</span>
         <svg width="13" height="18" viewBox="0 0 13 18" fill="none"><defs><linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e9d5ff"/><stop offset="40%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><path d="M8.5 1L1 10.2H6.2L4.5 17L12 7.5H6.8L8.5 1Z" fill="url(#bg2)" stroke="#a78bfa" stroke-width="0.3" stroke-linejoin="round"/></svg>
       </div>
-      <h1 class="auth-title">Selamat Datang</h1>
-      <p class="auth-sub">Login untuk melakukan pembelian</p>
+      <h1 class="auth-title">Login Diperlukan</h1>
+      <p class="auth-sub">Silakan login untuk melanjutkan pembelian</p>
       <button id="btnGoogleLogin" class="auth-google-btn">
         <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
         Masuk dengan Google
@@ -64,7 +65,7 @@
   </div>
 
   <!-- LOADING SCREEN -->
-  <div id="loadingScreen" class="auth-screen active" style="display:flex">
+  <div id="loadingScreen" class="auth-screen" style="display:none">
     <div class="auth-bg-grid"></div>
     <div class="auth-spinner-wrap">
       <div class="auth-spinner"></div>
@@ -73,10 +74,10 @@
   </div>
 
 </div>
-<!-- ===== END AUTH GATE ===== -->
+<!-- ===== END AUTH MODAL ===== -->
 
-<!-- MAIN CONTENT (hidden until logged in) -->
-<div id="mainContent" style="display:none">
+<!-- MAIN CONTENT (selalu tampil) -->
+<div id="mainContent">
 
 <div id="bar"></div>
 <!-- QRIS MODAL -->
@@ -104,7 +105,16 @@
 <!-- MENU PANEL -->
 <div class="panel" id="pn">
 <div class="panel-head">
-<h3>Menu Navigasi</h3>
+<div id="panelUserInfo" style="display:none;align-items:center;gap:10px;flex:1;min-width:0">
+  <div id="panelUserAv" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#fff;font-weight:700;overflow:hidden;flex-shrink:0"></div>
+  <div style="min-width:0;flex:1">
+    <div id="panelUserName" style="font-size:.82rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+    <div id="panelUserEmail" style="font-size:.68rem;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+  </div>
+</div>
+<div id="panelNoUser" style="flex:1">
+  <h3>Menu Navigasi</h3>
+</div>
 <button class="panel-close" onclick="closeMenu()"><i class="fas fa-times"></i></button>
 </div>
 <nav class="panel-nav">
@@ -117,6 +127,18 @@
 <i class="fas fa-qrcode"></i> QRIS Pembayaran
       <span style="margin-left:auto;font-size:.63rem;background:#dcfce7;color:#16a34a;padding:2px 7px;border-radius:99px">Baru</span>
 </button>
+<div id="panelLoginWrap" style="padding:6px 10px 0">
+  <button class="plink" onclick="openAuthGate(null);closeMenu();" style="width:100%;border-radius:9px;background:rgba(124,58,237,0.12);color:#c4b5fd;border:1px solid rgba(124,58,237,0.3);">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+    Login / Masuk
+  </button>
+</div>
+<div id="panelLogoutWrap" style="display:none;padding:6px 10px 0">
+  <button class="plink" id="panelLogoutBtn" style="width:100%;border-radius:9px;background:rgba(248,113,113,0.08);color:#f87171;border:1px solid rgba(248,113,113,0.2)" onclick="doLogout();closeMenu()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:#f87171"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    Keluar (Logout)
+  </button>
+</div>
 </nav>
 <div class="panel-foot">© 2025 Astrobot · All rights reserved</div>
 </div>
@@ -141,10 +163,7 @@
 </svg></span></span>
 </a>
 <div class="hdr-right">
-<div class="live-pill">
-<span class="live-dot"></span>
-<span><span id="lc">127</span> online</span>
-</div>
+<div id="headerUserBadge" style="display:none"></div>
 <button class="menu-btn" onclick="openMenu()"><i class="fas fa-bars"></i></button>
 </div>
 </div>
@@ -776,18 +795,9 @@
 
         <!-- Ringkasan harga -->
         <div style="background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:12px 14px;margin-bottom:16px;">
-          <div style="display:flex;justify-content:space-between;font-size:.8rem;color:#666;margin-bottom:6px;">
-            <span>Harga Produk</span>
-            <span id="orderHarga" style="color:#ccc;font-weight:600;">Rp 5.000</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:.8rem;color:#666;margin-bottom:8px;">
-            <span>Biaya Penanganan</span>
-            <span style="color:#ccc;font-weight:600;">Rp 75</span>
-          </div>
-          <div style="height:1px;background:#1e1e1e;margin-bottom:8px;"></div>
           <div style="display:flex;justify-content:space-between;font-size:.9rem;color:#fff;font-weight:800;">
             <span>Total</span>
-            <span id="orderTotal">Rp 5.075</span>
+            <span id="orderTotal">Rp 5.000</span>
           </div>
         </div>
 
@@ -799,7 +809,7 @@
         <!-- Tombol -->
         <div style="display:flex;gap:10px;">
           <a id="orderWaBtn" href="#" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:#25d366;color:#fff;padding:14px;border-radius:12px;font-weight:700;font-size:.9rem;text-decoration:none;transition:.2s;" onclick="return buildOrderWa()">
-            <i class="fab fa-whatsapp"></i> Beli via WhatsApp
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Pesan Sekarang
           </a>
         </div>
       </div>
@@ -813,5 +823,24 @@
 
 <script src="script.js"></script>
 <script src="auth.js"></script>
+<script>
+// Auth state listener: update panel user info & handle authGate
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof firebase !== 'undefined' && firebase.auth) {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // Logged in: update panel, close gate if open, handle pending order
+        updatePanelUser(user);
+        const gate = document.getElementById('authGate');
+        if (gate && gate.style.display === 'flex') {
+          onLoginSuccess(user);
+        }
+      } else {
+        updatePanelUser(null);
+      }
+    });
+  }
+});
+</script>
 </body>
 </html>

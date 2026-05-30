@@ -1,4 +1,4 @@
-/* ===== Inline Script ===== */
+/* ===== script.js ===== */
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('yr').textContent = new Date().getFullYear();
@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
   }, { threshold: 0.08 });
   document.querySelectorAll('.rv').forEach(el => obs.observe(el));
-  // Langsung reveal elemen yang udah keliatan pas halaman dibuka
   setTimeout(() => {
     document.querySelectorAll('.rv:not(.on)').forEach(el => {
       const r = el.getBoundingClientRect();
@@ -35,13 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const d = document.documentElement;
     document.getElementById('bar').style.width = (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
   });
-
-  setInterval(() => {
-    const el = document.getElementById('lc');
-    el.textContent = Math.max(110, parseInt(el.textContent) + Math.floor(Math.random() * 5) - 2);
-  }, 4000);
 });
 
+/* ===== Menu ===== */
 function openMenu() {
   document.getElementById('pn').classList.add('on');
   document.getElementById('ov').classList.add('on');
@@ -54,7 +49,7 @@ function closeMenu() {
 }
 function openQ() { document.getElementById('qm').classList.add('on'); document.body.style.overflow = 'hidden'; }
 function closeQ() { document.getElementById('qm').classList.remove('on'); document.body.style.overflow = ''; }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeQ(); closeMenu(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeQ(); closeMenu(); closeAuthGate(); } });
 
 function toggleFaq(btn) {
   const body = btn.nextElementSibling;
@@ -64,7 +59,7 @@ function toggleFaq(btn) {
   if (!isOpen) { body.classList.add('open'); btn.classList.add('open'); }
 }
 
-// Logo text alternating: Astrobot ↔ Digital
+// Logo text alternating
 ;(function(){
   const el = document.getElementById('logoName')
   if (!el) return
@@ -79,42 +74,121 @@ function toggleFaq(btn) {
   }, CYCLE)
 })()
 
-
-/* ===== Inline Script ===== */
-
+/* ===== Script Modal ===== */
 function openScriptModal() { document.getElementById('scriptSaleModal').style.display='block'; document.body.style.overflow='hidden'; }
 function closeScriptModal() { document.getElementById('scriptSaleModal').style.display='none'; document.body.style.overflow=''; }
 
+/* ===== AUTH GATE (modal opsional - hanya muncul saat beli) ===== */
+// Pending order data saat user belum login
+window._pendingOrder = null;
+
+function openAuthGate(pendingOrderData) {
+  if (pendingOrderData) window._pendingOrder = pendingOrderData;
+  const gate = document.getElementById('authGate');
+  gate.style.display = 'flex';
+  gate.classList.add('visible');
+  document.body.style.overflow = 'hidden';
+  // Reset to login screen
+  document.getElementById('loginScreen').classList.add('active');
+  document.getElementById('usernameScreen').classList.remove('active');
+  document.getElementById('loadingScreen').style.display = 'none';
+}
+
+function closeAuthGate() {
+  const gate = document.getElementById('authGate');
+  gate.style.display = 'none';
+  gate.classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+// Dipanggil dari auth.js saat login berhasil
+function onLoginSuccess(user) {
+  closeAuthGate();
+  // Update panel user info
+  updatePanelUser(user);
+  // Jika ada pending order, langsung buka
+  if (window._pendingOrder) {
+    const p = window._pendingOrder;
+    window._pendingOrder = null;
+    _doOpenOrder(p.name, p.price, p.duration);
+  }
+}
+
+function updatePanelUser(user) {
+  if (!user) {
+    document.getElementById('panelUserInfo').style.display = 'none';
+    document.getElementById('panelNoUser').style.display = 'block';
+    document.getElementById('panelLogoutWrap').style.display = 'none';
+    document.getElementById('panelLoginWrap').style.display = 'block';
+    return;
+  }
+  // Show user info in panel
+  const panelInfo = document.getElementById('panelUserInfo');
+  panelInfo.style.display = 'flex';
+  document.getElementById('panelNoUser').style.display = 'none';
+  document.getElementById('panelLogoutWrap').style.display = 'block';
+  document.getElementById('panelLoginWrap').style.display = 'none';
+
+  // Name
+  const displayName = user.displayName || user.username || 'User';
+  document.getElementById('panelUserName').textContent = displayName;
+  document.getElementById('panelUserEmail').textContent = user.email || '';
+
+  // Avatar
+  const av = document.getElementById('panelUserAv');
+  if (user.photoURL) {
+    av.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" referrerpolicy="no-referrer">`;
+  } else {
+    av.textContent = displayName.charAt(0).toUpperCase();
+  }
+}
+
+function doLogout() {
+  if (typeof firebase !== 'undefined' && firebase.auth) {
+    firebase.auth().signOut().then(() => {
+      updatePanelUser(null);
+    });
+  }
+}
+
 /* ===== ORDER MODAL ===== */
 const priceMap = {
-  '5K':  { rp: 5000,  total: 5075  },
-  '10K': { rp: 10000, total: 10075 },
-  '18K': { rp: 18000, total: 18075 },
-  '25K': { rp: 25000, total: 25075 },
+  '5K':  { rp: 5000,  total: 5000  },
+  '10K': { rp: 10000, total: 10000 },
+  '18K': { rp: 18000, total: 18000 },
+  '25K': { rp: 25000, total: 25000 },
 };
 
+// openOrder: cek login dulu
 function openOrder(name, price, duration) {
+  // Cek apakah user sudah login via Firebase
+  const user = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth().currentUser : null;
+  if (!user) {
+    // Simpan pending order, tampilkan login modal
+    openAuthGate({ name, price, duration });
+    return;
+  }
+  _doOpenOrder(name, price, duration);
+}
+
+function _doOpenOrder(name, price, duration) {
   document.getElementById('orderTitle').textContent = name;
   document.getElementById('orderDuration').textContent = duration;
 
   const p = priceMap[price] || { rp: 0, total: 0 };
-  document.getElementById('orderHarga').textContent = 'Rp ' + p.rp.toLocaleString('id');
   document.getElementById('orderTotal').textContent = 'Rp ' + p.total.toLocaleString('id');
 
-  // Store current package for WA message
   document.getElementById('orderModal').dataset.pkg = name;
   document.getElementById('orderModal').dataset.price = price;
   document.getElementById('orderModal').dataset.duration = duration;
   document.getElementById('orderModal').dataset.total = p.total;
 
-  // Clear inputs
   document.getElementById('orderNama').value = '';
   document.getElementById('orderNomor').value = '';
   document.getElementById('orderLink').value = '';
 
   document.getElementById('orderModal').style.display = 'block';
   document.body.style.overflow = 'hidden';
-  // Scroll to top of modal
   document.getElementById('orderModal').scrollTop = 0;
 }
 
