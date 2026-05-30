@@ -292,6 +292,17 @@ async function _createQris(nominal) {
     document.getElementById('qrisKodeUnik').textContent = '+' + d.rincian.kode_unik;
     document.getElementById('qrisIdTrx').textContent = d.id_transaksi;
 
+    // Isi data pembelian
+    const info = window._qrisOrderInfo;
+    const setPaket = document.getElementById('qrisPaket');
+    const setNama  = document.getElementById('qrisNamaPembeli');
+    const setNomor = document.getElementById('qrisNomorPembeli');
+    const setLink  = document.getElementById('qrisLinkPembeli');
+    if (setPaket) setPaket.textContent = info.pkg || '-';
+    if (setNama)  setNama.textContent  = info.nama || '-';
+    if (setNomor) setNomor.textContent = info.nomor || '-';
+    if (setLink)  setLink.textContent  = info.link || '-';
+
     // Render QR dari qris_content (tidak bergantung pixhost)
     const canvasWrap = document.getElementById('qrisCanvasWrap');
     canvasWrap.innerHTML = '';
@@ -380,18 +391,10 @@ async function cekStatusQris() {
     const data = await res.json();
 
     if (data.status === 'found' && data.kategori_status === 'SUCCESS') {
-      // Sukses!
       _showStatusState('success');
-      const d = data.data;
-      document.getElementById('statusSuccessMsg').textContent =
-        `Pembayaran Rp ${(d.nominal_total || 0).toLocaleString('id')} telah diterima.`;
-
-      if (d.reward && d.reward.message) {
-        const rewardBox = document.getElementById('statusRewardBox');
-        rewardBox.style.display = 'block';
-        document.getElementById('statusRewardMsg').textContent = '🎁 ' + d.reward.message;
-      }
-
+      // Set link WA di kartu success
+      const waLink = document.getElementById('successWaLink');
+      if (waLink) waLink.href = _buildSuccessWaLink();
       clearInterval(window._qrisTimer);
 
     } else if (data.kategori_status === 'PENDING' || data.status === 'found') {
@@ -421,26 +424,27 @@ function closeStatusOverlay() {
 }
 
 function onPaymentSuccess() {
-  closeStatusOverlay();
-  closeQrisPay();
+  // dipanggil setelah status success confirm, buka WA
+  const el = document.getElementById('successWaLink');
+  if (el) window.open(el.href, '_blank');
+}
 
-  // Kirim ke WA owner
+function _buildSuccessWaLink() {
   const info = window._qrisOrderInfo || {};
   const d    = window._qrisData || {};
   const total = d.rincian ? d.rincian.total_bayar.toLocaleString('id') : '';
   const idTrx = d.id_transaksi || '-';
 
   const msg =
-    `✅ *PEMBAYARAN BERHASIL*\n\n` +
-    `📦 *Paket:* ${info.pkg || '-'}\n` +
-    `👤 *Nama:* ${info.nama || '-'}\n` +
-    `📱 *Nomor WA:* ${info.nomor || '-'}\n` +
-    `🔗 *Link Grup:* ${info.link || '-'}\n` +
-    `💰 *Total Dibayar:* Rp ${total}\n` +
-    `🧾 *ID Transaksi:* ${idTrx}\n\n` +
-    `Mohon segera diproses ya min 🙏`;
+    `Saya sudah melakukan pembayaran mohon untuk segera diproses min\n\n` +
+    `Paket: ${info.pkg || '-'}\n` +
+    `Nama: ${info.nama || '-'}\n` +
+    `Nomor WA: ${info.nomor || '-'}\n` +
+    `Link Grup: ${info.link || '-'}\n` +
+    `Total Dibayar: Rp ${total}\n` +
+    `ID Transaksi: ${idTrx}`;
 
-  window.open('https://wa.me/' + OWNER_WA + '?text=' + encodeURIComponent(msg), '_blank');
+  return 'https://wa.me/' + OWNER_WA + '?text=' + encodeURIComponent(msg);
 }
 
 async function cancelQris() {
