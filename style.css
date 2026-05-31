@@ -2,16 +2,13 @@
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;scroll-padding-top:64px}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:#000000;color:#ffffff;overflow-x:hidden;padding-bottom:0;line-height:1.6}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#0a0a0a;color:#ffffff;overflow-x:hidden;padding-bottom:0;line-height:1.6}
 
 /* GRID BG */
 body::after{
   content:'';
   position:fixed;inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.09) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.09) 1px, transparent 1px);
-  background-size:40px 40px;
+  background:transparent;
   pointer-events:none;
   z-index:0;
 }
@@ -140,7 +137,7 @@ header{position:fixed;top:0;left:0;right:0;height:60px;background:#0a0a0a;backdr
 .sec-title span{color:#ffffff}
 
 /* WHY */
-.why-sec{background:transparent;border-top:1px solid rgba(255,255,255,0.1);border-bottom:1px solid rgba(255,255,255,0.1)}
+.why-sec{background:#080808;border-top:1px solid rgba(255,255,255,0.1);border-bottom:1px solid rgba(255,255,255,0.1)}
 .why-grid{display:grid;grid-template-columns:1fr;gap:10px}
 @media(min-width:600px){.why-grid{grid-template-columns:repeat(3,1fr)}}
 .why-card{
@@ -226,7 +223,7 @@ a.pchip{cursor:pointer}
 .pay-note i{color:#22c55e}
 
 /* TESTIMONIALS */
-.testi-sec{background:transparent;border-top:1px solid rgba(255,255,255,0.1);border-bottom:1px solid rgba(255,255,255,0.1)}
+.testi-sec{background:#080808;border-top:1px solid rgba(255,255,255,0.1);border-bottom:1px solid rgba(255,255,255,0.1)}
 .tcard{background:#000000;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px;height:100%;box-shadow:inset 0 1px 0 rgba(255,255,255,0.05)}
 .t-stars{color:#ffcc00;font-size:.8rem;margin-bottom:8px;letter-spacing:1px}
 .t-text{font-size:.8rem;color:#aaaaaa;line-height:1.7;font-style:italic;margin-bottom:12px}
@@ -245,7 +242,7 @@ a.pchip{cursor:pointer}
 .cta-note strong{color:#dddddd;display:block;margin-bottom:3px;font-size:.8rem}
 
 /* FAQ */
-.faq-sec{background:transparent;border-top:1px solid rgba(255,255,255,0.1);border-bottom:1px solid rgba(255,255,255,0.1)}
+.faq-sec{background:#080808;border-top:1px solid rgba(255,255,255,0.1);border-bottom:1px solid rgba(255,255,255,0.1)}
 .faq-item{background:#000000;border:1px solid rgba(255,255,255,0.15);border-radius:14px;margin-bottom:8px;overflow:hidden;transition:border-color .25s}
 .faq-btn{width:100%;padding:15px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:none;border:none;font-family:inherit;font-size:.85rem;font-weight:600;color:#ffffff;cursor:pointer;text-align:left;transition:.15s}
 .faq-btn:hover{color:#cccccc}
@@ -259,13 +256,13 @@ a.pchip{cursor:pointer}
 .faq-inner li::before{content:'→  ';color:#ffffff}
 
 /* BOTTOM CTA */
-.btm-cta{text-align:center;padding:52px 16px;background:transparent;border-top:1px solid rgba(255,255,255,0.1)}
+.btm-cta{text-align:center;padding:52px 16px;background:#050505;border-top:1px solid rgba(255,255,255,0.1)}
 .btm-cta h2{font-size:clamp(1.4rem,5vw,2.2rem);font-weight:800;color:#ffffff;letter-spacing:-.02em;margin-bottom:10px}
 .btm-cta h2 span{color:#ffffff}
 .btm-cta p{font-size:.85rem;color:#aaaaaa;max-width:400px;margin:0 auto 24px;line-height:1.7}
 
 /* FOOTER */
-footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:center;background:#000000}
+footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:center;background:#0a0a0a}
 .ft-logo{font-weight:800;font-size:.95rem;color:#ffffff;margin-bottom:10px}
 .ft-disc{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:13px 14px;font-size:.73rem;color:#999999;line-height:1.7;max-width:540px;margin:0 auto 12px;text-align:left}
 .ft-disc strong{color:#cccccc}
@@ -609,18 +606,8 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
 .auth-bg-grid {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background: transparent;
   pointer-events: none;
-}
-/* subtle radial glow center */
-.auth-bg-grid::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(124,58,237,0.12), transparent 70%);
 }
 
 .auth-card {
