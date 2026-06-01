@@ -123,13 +123,13 @@
 <a class="plink" href="#testimonials" onclick="closeMenu()"><i class="fas fa-comment"></i> Testimoni</a>
 <a class="plink" href="#faq" onclick="closeMenu()"><i class="fas fa-question-circle"></i> FAQ</a>
 <a class="plink" href="https://wa.me/6289674097203" target="_blank"><i class="fab fa-whatsapp"></i> Hubungi Admin</a>
-<button id="panelHistoryBtn" class="plink" style="display:none;" onclick="openHistoryPage();closeMenu()">
-  <i class="fas fa-receipt" style="color:#a78bfa;"></i> Riwayat Pembelian
-  <span id="historyNavBadge" style="margin-left:auto;font-size:.63rem;background:#1a1230;color:#a78bfa;padding:2px 7px;border-radius:99px;border:1px solid #3b1f8c;display:none;">0</span>
-</button>
 <button class="plink special" onclick="openQ();closeMenu()">
 <i class="fas fa-qrcode"></i> QRIS Pembayaran
       <span style="margin-left:auto;font-size:.63rem;background:#dcfce7;color:#16a34a;padding:2px 7px;border-radius:99px">Baru</span>
+</button>
+<button id="panelHistoryBtn" class="plink" style="display:none;" onclick="openHistoryPage();closeMenu()">
+  <i class="fas fa-receipt" style="color:#a78bfa;"></i> Riwayat Pembelian
+  <span id="historyNavBadge" style="margin-left:auto;font-size:.63rem;background:#1a1230;color:#a78bfa;padding:2px 7px;border-radius:99px;border:1px solid #3b1f8c;">0</span>
 </button>
 <div id="panelLoginWrap" style="padding:6px 10px 0">
   <button class="plink" onclick="openAuthGate(null);closeMenu();" style="width:100%;border-radius:9px;background:rgba(124,58,237,0.12);color:#c4b5fd;border:1px solid rgba(124,58,237,0.3);">
@@ -149,14 +149,11 @@
 <!-- HEADER -->
 <header>
 <div class="hdr">
-<a class="logo" href="#" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
-  <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#7c3aed,#4f46e5);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
-  </div>
-  <span style="font-size:1.05rem;font-weight:800;color:#fff;letter-spacing:-.01em;">Astrobot</span>
+<a class="logo" href="#" style="display:flex;align-items:center;gap:6px;text-decoration:none;">
+<span style="font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:-.01em;">• Astrobot</span>
 </a>
-<div class="hdr-right" style="display:flex;align-items:center;gap:8px;">
-  <button class="menu-btn" onclick="openMenu()"><i class="fas fa-bars"></i></button>
+<div class="hdr-right">
+<button class="menu-btn" onclick="openMenu()"><i class="fas fa-bars"></i></button>
 </div>
 </div>
 </header>
@@ -182,9 +179,9 @@
 <p class="hero-desc">Bot WhatsApp untuk manajemen grup, download media, game seru, dan AI chat. Stabil seharian, gampang dipake, harga ga bikin kantong jebol.</p>
 <div class="hero-btns">
 <a class="btn-purple" href="#pricing"><i class="fas fa-tags" style="font-size:.8rem"></i> Lihat Harga</a>
-<button id="historyHeroBtn" onclick="openHistoryPage()" style="display:none;position:relative;align-items:center;gap:7px;padding:12px 18px;border-radius:10px;background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;font-weight:700;font-size:.88rem;cursor:pointer;font-family:inherit;transition:.2s;">
-  <i class="fas fa-receipt" style="color:#a78bfa;font-size:.85rem;"></i> Riwayat
-  <span id="historyBadge" style="display:none;position:absolute;top:-5px;right:-5px;min-width:16px;height:16px;border-radius:99px;background:#7c3aed;font-size:.58rem;color:#fff;font-weight:800;align-items:center;justify-content:center;padding:0 4px;">0</span>
+<button id="historyHeroBtn" onclick="openHistoryPage()" style="display:none;position:relative;align-items:center;gap:7px;" class="btn-outline">
+  <i class="fas fa-receipt" style="font-size:.85rem"></i> Riwayat
+  <span id="historyBadge" style="display:none;position:absolute;top:-6px;right:-6px;min-width:16px;height:16px;border-radius:99px;background:#7c3aed;font-size:.55rem;color:#fff;font-weight:800;align-items:center;justify-content:center;padding:0 4px;line-height:16px;">0</span>
 </button>
 <a class="btn-outline" href="https://wa.me/6289674097203" target="_blank"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:.9rem"></i> Hubungi Admin</a>
 </div>
@@ -873,30 +870,19 @@
         <div style="font-size:.98rem;font-weight:800;color:#fff;">Riwayat Pembelian</div>
         <div style="font-size:.7rem;color:#444;margin-top:1px;">Semua transaksi tersimpan di sini</div>
       </div>
-      <button onclick="clearHistory()" style="padding:6px 11px;border-radius:8px;background:transparent;border:1px solid #222;color:#444;font-size:.7rem;cursor:pointer;font-family:inherit;">
-        Hapus Semua
-      </button>
+      <button onclick="clearHistory()" style="padding:6px 11px;border-radius:8px;background:transparent;border:1px solid #222;color:#444;font-size:.7rem;cursor:pointer;font-family:inherit;">Hapus Semua</button>
     </div>
   </div>
-
   <div style="padding:16px 16px 100px;">
-
-    <!-- Empty state -->
     <div id="historyEmpty" style="display:none;flex-direction:column;align-items:center;padding:56px 20px;text-align:center;">
       <div style="width:68px;height:68px;border-radius:18px;background:#111;border:1px solid #1a1a1a;display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
         <i class="fas fa-receipt" style="font-size:1.7rem;color:#222;"></i>
       </div>
       <div style="font-size:.92rem;font-weight:700;color:#333;margin-bottom:6px;">Belum Ada Transaksi</div>
       <div style="font-size:.78rem;color:#2a2a2a;line-height:1.6;">Setelah melakukan pembelian,<br>riwayat akan muncul di sini.</div>
-      <button onclick="closeHistoryPage()" style="margin-top:18px;padding:11px 22px;border-radius:10px;background:#7c3aed;border:none;color:#fff;font-weight:700;font-size:.84rem;cursor:pointer;font-family:inherit;">
-        Lihat Paket
-      </button>
+      <button onclick="closeHistoryPage()" style="margin-top:18px;padding:11px 22px;border-radius:10px;background:#7c3aed;border:none;color:#fff;font-weight:700;font-size:.84rem;cursor:pointer;font-family:inherit;">Lihat Paket</button>
     </div>
-
-    <!-- List transaksi -->
     <div id="historyList" style="display:flex;flex-direction:column;gap:10px;"></div>
-
-    <!-- Panduan -->
     <div style="margin-top:20px;background:#0d0d0d;border-radius:14px;border:1px solid #161616;overflow:hidden;">
       <div style="padding:14px 16px 10px;border-bottom:1px solid #161616;">
         <div style="font-size:.8rem;font-weight:800;color:#a78bfa;display:flex;align-items:center;gap:7px;"><i class="fas fa-book-open"></i> Panduan Setelah Pembayaran</div>
@@ -916,38 +902,28 @@
         </div>
       </div>
     </div>
-
-    <!-- Kontak Owner -->
     <div style="margin-top:10px;background:#0d0d0d;border-radius:14px;border:1px solid #161616;overflow:hidden;">
       <div style="padding:14px 16px 10px;border-bottom:1px solid #161616;">
         <div style="font-size:.8rem;font-weight:800;color:#ccc;display:flex;align-items:center;gap:7px;"><i class="fas fa-headset" style="color:#a78bfa;"></i> Butuh Bantuan?</div>
-        <div style="font-size:.72rem;color:#333;margin-top:3px;">Hubungi owner langsung melalui:</div>
       </div>
       <div style="padding:10px 16px;display:flex;flex-direction:column;gap:7px;">
         <a href="https://wa.me/6289674097203" target="_blank" style="display:flex;align-items:center;gap:11px;padding:10px 12px;background:#111;border-radius:10px;border:1px solid #1a1a1a;text-decoration:none;">
-          <div style="width:30px;height:30px;border-radius:8px;background:#dcfce7;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="#16a34a"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-          </div>
+          <div style="width:30px;height:30px;border-radius:8px;background:#dcfce7;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="#16a34a"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></div>
           <div><div style="font-size:.8rem;font-weight:700;color:#fff;">WhatsApp</div><div style="font-size:.68rem;color:#444;">+62 896-7409-7203</div></div>
           <i class="fas fa-chevron-right" style="color:#222;margin-left:auto;font-size:.7rem;"></i>
         </a>
         <a href="https://t.me/myrexzastrobot" target="_blank" style="display:flex;align-items:center;gap:11px;padding:10px 12px;background:#111;border-radius:10px;border:1px solid #1a1a1a;text-decoration:none;">
-          <div style="width:30px;height:30px;border-radius:8px;background:#dbeafe;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <i class="fab fa-telegram" style="color:#2563eb;font-size:.95rem;"></i>
-          </div>
+          <div style="width:30px;height:30px;border-radius:8px;background:#dbeafe;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fab fa-telegram" style="color:#2563eb;font-size:.95rem;"></i></div>
           <div><div style="font-size:.8rem;font-weight:700;color:#fff;">Telegram</div><div style="font-size:.68rem;color:#444;">@myrexzastrobot</div></div>
           <i class="fas fa-chevron-right" style="color:#222;margin-left:auto;font-size:.7rem;"></i>
         </a>
         <a href="https://instagram.com/astrobot.digital" target="_blank" style="display:flex;align-items:center;gap:11px;padding:10px 12px;background:#111;border-radius:10px;border:1px solid #1a1a1a;text-decoration:none;">
-          <div style="width:30px;height:30px;border-radius:8px;background:#fce7f3;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <i class="fab fa-instagram" style="color:#db2777;font-size:.95rem;"></i>
-          </div>
+          <div style="width:30px;height:30px;border-radius:8px;background:#fce7f3;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fab fa-instagram" style="color:#db2777;font-size:.95rem;"></i></div>
           <div><div style="font-size:.8rem;font-weight:700;color:#fff;">Instagram</div><div style="font-size:.68rem;color:#444;">@astrobot.digital</div></div>
           <i class="fas fa-chevron-right" style="color:#222;margin-left:auto;font-size:.7rem;"></i>
         </a>
       </div>
     </div>
-
   </div>
 </div>
 <!-- ===== END HISTORY PAGE ===== -->

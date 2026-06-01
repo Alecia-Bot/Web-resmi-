@@ -107,26 +107,23 @@ function updatePanelUser(user) {
     document.getElementById('panelNoUser').style.display = 'block';
     document.getElementById('panelLogoutWrap').style.display = 'none';
     document.getElementById('panelLoginWrap').style.display = 'block';
-    // Sembunyikan history saat logout
+    // Sembunyikan tombol history saat logout
     const heroBtn = document.getElementById('historyHeroBtn');
     const navBtn  = document.getElementById('panelHistoryBtn');
     if (heroBtn) heroBtn.style.display = 'none';
     if (navBtn)  navBtn.style.display = 'none';
     return;
   }
-  // Show user info in panel
   const panelInfo = document.getElementById('panelUserInfo');
   panelInfo.style.display = 'flex';
   document.getElementById('panelNoUser').style.display = 'none';
   document.getElementById('panelLogoutWrap').style.display = 'block';
   document.getElementById('panelLoginWrap').style.display = 'none';
 
-  // Name
   const displayName = user.displayName || user.username || 'User';
   document.getElementById('panelUserName').textContent = displayName;
   document.getElementById('panelUserEmail').textContent = user.email || '';
 
-  // Avatar
   const av = document.getElementById('panelUserAv');
   if (user.photoURL) {
     av.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" referrerpolicy="no-referrer">`;
@@ -134,7 +131,7 @@ function updatePanelUser(user) {
     av.textContent = displayName.charAt(0).toUpperCase();
   }
 
-  // Tampilkan history badge setelah login
+  // Tampilkan history badge otomatis setelah login
   setTimeout(_updateHistoryBadge, 100);
 }
 
@@ -424,22 +421,54 @@ function onPaymentSuccess() {
   if (el) window.open(el.href, '_blank');
 }
 
+function _buildSuccessWaLink() {
+  const info  = window._qrisOrderInfo || {};
+  const d     = window._qrisData || {};
+  const total = d.rincian ? d.rincian.total_bayar.toLocaleString('id') : '';
+  const idTrx = d.id_transaksi || '-';
+
+  const msg =
+    `Saya sudah melakukan pembayaran mohon untuk segera diproses min\n\n` +
+    `Paket: ${info.pkg || '-'}\n` +
+    `Nama: ${info.nama || '-'}\n` +
+    `Nomor WA: ${info.nomor || '-'}\n` +
+    `Link Grup: ${info.link || '-'}\n` +
+    `Total Dibayar: Rp ${total}\n` +
+    `ID Transaksi: ${idTrx}`;
+
+  return 'https://wa.me/' + OWNER_WA + '?text=' + encodeURIComponent(msg);
+}
+
 // ===== HISTORY =====
 const HISTORY_KEY = 'astrobot_history';
 
 function _saveToHistory() {
-  const info = window._qrisOrderInfo || {};
-  const d    = window._qrisData || {};
+  const info  = window._qrisOrderInfo || {};
+  const d     = window._qrisData || {};
+  const total = d.rincian ? d.rincian.total_bayar.toLocaleString('id') : '';
+  const idTrx = d.id_transaksi || '-';
+
+  // Simpan teks WA lengkap biar bisa kirim ulang kapan aja
+  const waMsg =
+    `Saya sudah melakukan pembayaran mohon untuk segera diproses min\n\n` +
+    `Paket: ${info.pkg || '-'}\n` +
+    `Nama: ${info.nama || '-'}\n` +
+    `Nomor WA: ${info.nomor || '-'}\n` +
+    `Link Grup: ${info.link || '-'}\n` +
+    `Total Dibayar: Rp ${total}\n` +
+    `ID Transaksi: ${idTrx}`;
+
   const entry = {
-    id:      d.id_transaksi || '-',
-    pkg:     info.pkg || '-',
-    nama:    info.nama || '-',
-    nomor:   info.nomor || '-',
-    link:    info.link || '-',
-    total:   d.rincian ? d.rincian.total_bayar : 0,
-    waktu:   new Date().toISOString(),
-    status:  'SUCCESS'
+    id:     idTrx,
+    pkg:    info.pkg || '-',
+    nama:   info.nama || '-',
+    nomor:  info.nomor || '-',
+    link:   info.link || '-',
+    total:  d.rincian ? d.rincian.total_bayar : 0,
+    waktu:  new Date().toISOString(),
+    waMsg:  waMsg   // <-- teks lengkap tersimpan
   };
+
   let list = _getHistory();
   list.unshift(entry);
   if (list.length > 50) list = list.slice(0, 50);
@@ -453,26 +482,20 @@ function _getHistory() {
 }
 
 function _updateHistoryBadge() {
-  const list   = _getHistory();
+  const list    = _getHistory();
   const heroBtn = document.getElementById('historyHeroBtn');
   const badge   = document.getElementById('historyBadge');
   const navBtn  = document.getElementById('panelHistoryBtn');
   const navBadge= document.getElementById('historyNavBadge');
   const count   = list.length;
   const label   = count > 9 ? '9+' : count;
-
-  // Hanya tampil kalau user sudah login
   const loggedIn = !!(typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser);
 
   if (loggedIn && count > 0) {
-    if (heroBtn) { heroBtn.style.display = 'flex'; }
-    if (badge)   { badge.style.display = 'flex'; badge.textContent = label; }
-    if (navBtn)  { navBtn.style.display = 'flex'; }
-    if (navBadge){ navBadge.style.display = 'inline'; navBadge.textContent = label; }
-  } else if (loggedIn) {
-    // login tapi belum ada history
-    if (heroBtn) heroBtn.style.display = 'none';
-    if (navBtn)  navBtn.style.display = 'none';
+    if (heroBtn)  { heroBtn.style.display = 'flex'; }
+    if (badge)    { badge.style.display = 'flex'; badge.textContent = label; }
+    if (navBtn)   { navBtn.style.display = 'flex'; }
+    if (navBadge) { navBadge.textContent = label; }
   } else {
     if (heroBtn) heroBtn.style.display = 'none';
     if (navBtn)  navBtn.style.display = 'none';
@@ -498,9 +521,9 @@ function clearHistory() {
 }
 
 function _renderHistory() {
-  const list   = _getHistory();
-  const listEl = document.getElementById('historyList');
-  const emptyEl= document.getElementById('historyEmpty');
+  const list    = _getHistory();
+  const listEl  = document.getElementById('historyList');
+  const emptyEl = document.getElementById('historyEmpty');
   if (!listEl) return;
 
   if (list.length === 0) {
@@ -514,7 +537,8 @@ function _renderHistory() {
     const tgl    = new Date(e.waktu);
     const tglStr = tgl.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
     const jamStr = tgl.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
-    const waMsg  = encodeURIComponent(`Halo min, saya ingin konfirmasi pesanan saya\n\nPaket: ${e.pkg}\nNama: ${e.nama}\nID Transaksi: ${e.id}`);
+    const waUrl  = 'https://wa.me/' + OWNER_WA + '?text=' + encodeURIComponent(e.waMsg || '');
+
     return `
     <div style="background:#0d0d0d;border-radius:14px;border:1px solid #161616;overflow:hidden;">
       <div style="padding:11px 14px 9px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #111;">
@@ -528,46 +552,29 @@ function _renderHistory() {
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
           <div>
             <div style="font-size:.88rem;font-weight:800;color:#fff;">${e.pkg}</div>
-            <div style="font-size:.7rem;color:#444;margin-top:2px;">Pembelian #${i+1}</div>
+            <div style="font-size:.7rem;color:#444;margin-top:2px;">Pembelian #${i + 1}</div>
           </div>
           <div style="text-align:right;flex-shrink:0;">
-            <div style="font-size:.9rem;font-weight:800;color:#22c55e;">Rp ${(e.total||0).toLocaleString('id')}</div>
+            <div style="font-size:.9rem;font-weight:800;color:#22c55e;">Rp ${(e.total || 0).toLocaleString('id')}</div>
             <div style="font-size:.66rem;color:#333;">Total dibayar</div>
           </div>
         </div>
-        <div style="background:#111;border-radius:9px;padding:10px 12px;display:flex;flex-direction:column;gap:5px;">
-          <div style="display:flex;justify-content:space-between;"><span style="font-size:.74rem;color:#444;">Nama</span><span style="font-size:.74rem;color:#bbb;font-weight:600;">${e.nama}</span></div>
-          <div style="display:flex;justify-content:space-between;"><span style="font-size:.74rem;color:#444;">Nomor WA</span><span style="font-size:.74rem;color:#bbb;font-weight:600;">${e.nomor}</span></div>
-          <div style="display:flex;justify-content:space-between;gap:8px;"><span style="font-size:.74rem;color:#444;flex-shrink:0;">Link Grup</span><span style="font-size:.74rem;color:#bbb;font-weight:600;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:55%;">${e.link}</span></div>
-          <div style="height:1px;background:#1a1a1a;margin:2px 0;"></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:.7rem;color:#333;">ID Transaksi</span><span style="font-size:.68rem;color:#555;font-family:'JetBrains Mono',monospace;">${e.id}</span></div>
+
+        <!-- Teks WA yang tersimpan -->
+        <div style="background:#111;border-radius:9px;padding:10px 12px;border:1px solid #1a1a1a;">
+          <div style="font-size:.68rem;color:#444;font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;">Teks Pesan</div>
+          <pre style="font-size:.75rem;color:#888;line-height:1.6;white-space:pre-wrap;word-break:break-word;margin:0;font-family:inherit;">${e.waMsg || '-'}</pre>
         </div>
-        <a href="https://wa.me/6289674097203?text=${waMsg}" target="_blank"
-          style="display:flex;align-items:center;justify-content:center;gap:7px;padding:10px;border-radius:9px;background:#0a1f0a;border:1px solid #1a3a1a;text-decoration:none;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="#22c55e"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-          <span style="font-size:.76rem;font-weight:700;color:#22c55e;">Hubungi Admin</span>
+
+        <!-- Tombol kirim ulang ke WA -->
+        <a href="${waUrl}" target="_blank"
+          style="display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border-radius:10px;background:#0a1f0a;border:1px solid #1a3a1a;text-decoration:none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#22c55e"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          <span style="font-size:.8rem;font-weight:800;color:#22c55e;">Kirim Ulang ke Admin</span>
         </a>
       </div>
     </div>`;
   }).join('');
-}
-
-function _buildSuccessWaLink() {
-  const info = window._qrisOrderInfo || {};
-  const d    = window._qrisData || {};
-  const total = d.rincian ? d.rincian.total_bayar.toLocaleString('id') : '';
-  const idTrx = d.id_transaksi || '-';
-
-  const msg =
-    `Saya sudah melakukan pembayaran mohon untuk segera diproses min\n\n` +
-    `Paket: ${info.pkg || '-'}\n` +
-    `Nama: ${info.nama || '-'}\n` +
-    `Nomor WA: ${info.nomor || '-'}\n` +
-    `Link Grup: ${info.link || '-'}\n` +
-    `Total Dibayar: Rp ${total}\n` +
-    `ID Transaksi: ${idTrx}`;
-
-  return 'https://wa.me/' + OWNER_WA + '?text=' + encodeURIComponent(msg);
 }
 
 async function cancelQris() {
