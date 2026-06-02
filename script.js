@@ -45,16 +45,11 @@ function openMenu() {
 function closeMenu() {
   document.getElementById('pn').classList.remove('on');
   document.getElementById('ov').classList.remove('on');
-  
-  // Also close product details & history if they are open so navigation works visually
-  if (window.closeOrder) closeOrder();
-  if (window.closeHistoryPage) closeHistoryPage();
-  
   document.body.style.overflow = '';
 }
 function openQ() { document.getElementById('qm').classList.add('on'); document.body.style.overflow = 'hidden'; }
 function closeQ() { document.getElementById('qm').classList.remove('on'); document.body.style.overflow = ''; }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeQ(); closeMenu(); closeAuthGate(); closeOrder(); closeHistoryPage(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeQ(); closeMenu(); closeAuthGate(); } });
 
 function toggleFaq(btn) {
   const body = btn.nextElementSibling;
@@ -64,11 +59,14 @@ function toggleFaq(btn) {
   if (!isOpen) { body.classList.add('open'); btn.classList.add('open'); }
 }
 
+
+
 /* ===== Script Modal ===== */
 function openScriptModal() { document.getElementById('scriptSaleModal').style.display='block'; document.body.style.overflow='hidden'; }
 function closeScriptModal() { document.getElementById('scriptSaleModal').style.display='none'; document.body.style.overflow=''; }
 
-/* ===== AUTH GATE ===== */
+/* ===== AUTH GATE (modal opsional - hanya muncul saat beli) ===== */
+// Pending order data saat user belum login
 window._pendingOrder = null;
 
 function openAuthGate(pendingOrderData) {
@@ -85,15 +83,17 @@ function openAuthGate(pendingOrderData) {
 
 function closeAuthGate() {
   const gate = document.getElementById('authGate');
-  if(gate) {
-    gate.style.display = 'none';
-    gate.classList.remove('visible');
-  }
+  gate.style.display = 'none';
+  gate.classList.remove('visible');
+  document.body.style.overflow = '';
 }
 
+// Dipanggil dari auth.js saat login berhasil
 function onLoginSuccess(user) {
   closeAuthGate();
+  // Update panel user info
   updatePanelUser(user);
+  // Jika ada pending order, langsung buka
   if (window._pendingOrder) {
     const p = window._pendingOrder;
     window._pendingOrder = null;
@@ -103,10 +103,10 @@ function onLoginSuccess(user) {
 
 function updatePanelUser(user) {
   if (!user) {
-    if(document.getElementById('panelUserInfo')) document.getElementById('panelUserInfo').style.display = 'none';
-    if(document.getElementById('panelNoUser')) document.getElementById('panelNoUser').style.display = 'block';
-    if(document.getElementById('panelLogoutWrap')) document.getElementById('panelLogoutWrap').style.display = 'none';
-    if(document.getElementById('panelLoginWrap')) document.getElementById('panelLoginWrap').style.display = 'block';
+    document.getElementById('panelUserInfo').style.display = 'none';
+    document.getElementById('panelNoUser').style.display = 'block';
+    document.getElementById('panelLogoutWrap').style.display = 'none';
+    document.getElementById('panelLoginWrap').style.display = 'block';
     // Sembunyikan tombol history saat logout
     const heroBtn = document.getElementById('historyHeroBtn');
     const navBtn  = document.getElementById('panelHistoryBtn');
@@ -115,22 +115,20 @@ function updatePanelUser(user) {
     return;
   }
   const panelInfo = document.getElementById('panelUserInfo');
-  if(panelInfo) panelInfo.style.display = 'flex';
-  if(document.getElementById('panelNoUser')) document.getElementById('panelNoUser').style.display = 'none';
-  if(document.getElementById('panelLogoutWrap')) document.getElementById('panelLogoutWrap').style.display = 'block';
-  if(document.getElementById('panelLoginWrap')) document.getElementById('panelLoginWrap').style.display = 'none';
+  panelInfo.style.display = 'flex';
+  document.getElementById('panelNoUser').style.display = 'none';
+  document.getElementById('panelLogoutWrap').style.display = 'block';
+  document.getElementById('panelLoginWrap').style.display = 'none';
 
   const displayName = user.displayName || user.username || 'User';
-  if(document.getElementById('panelUserName')) document.getElementById('panelUserName').textContent = displayName;
-  if(document.getElementById('panelUserEmail')) document.getElementById('panelUserEmail').textContent = user.email || '';
+  document.getElementById('panelUserName').textContent = displayName;
+  document.getElementById('panelUserEmail').textContent = user.email || '';
 
   const av = document.getElementById('panelUserAv');
-  if (av) {
-    if (user.photoURL) {
-      av.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" referrerpolicy="no-referrer">`;
-    } else {
-      av.textContent = displayName.charAt(0).toUpperCase();
-    }
+  if (user.photoURL) {
+    av.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" referrerpolicy="no-referrer">`;
+  } else {
+    av.textContent = displayName.charAt(0).toUpperCase();
   }
 
   // Tampilkan history badge otomatis setelah login
@@ -153,6 +151,7 @@ const priceMap = {
   '25K': { rp: 25000, total: 25000 },
 };
 
+// openOrder: langsung buka, login dicek saat pencet Beli
 function openOrder(name, price, duration) {
   _doOpenOrder(name, price, duration);
 }
@@ -176,26 +175,25 @@ function _doOpenOrder(name, price, duration) {
   if ($('orderNama'))    $('orderNama').value    = '';
   if ($('orderNomor'))   $('orderNomor').value   = '';
   if ($('orderLink'))    $('orderLink').value    = '';
+  if ($('orderCatatan')) $('orderCatatan').value = '';
 
+  // Slide-in animation
   modal.style.display = 'block';
   modal.style.transform = 'translateX(100%)';
   document.body.style.overflow = 'hidden';
-  modal.offsetHeight; // force reflow
+  // force reflow then animate
+  modal.offsetHeight;
   modal.style.transform = 'translateX(0)';
   modal.scrollTop = 0;
 }
 
 function closeOrder() {
   const modal = document.getElementById('orderModal');
-  if(modal && modal.style.display !== 'none') {
-    modal.style.transform = 'translateX(100%)';
-    setTimeout(() => {
-      modal.style.display = 'none';
-      if(!document.getElementById('pn').classList.contains('on')){
-        document.body.style.overflow = '';
-      }
-    }, 350);
-  }
+  modal.style.transform = 'translateX(100%)';
+  setTimeout(() => {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }, 350);
 }
 
 function handleBeli() {
@@ -208,6 +206,7 @@ function handleBeli() {
     return;
   }
 
+  // Cek login
   const user = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth().currentUser : null;
   if (!user) {
     const modal = document.getElementById('orderModal');
@@ -216,10 +215,11 @@ function handleBeli() {
     return;
   }
 
+  // Buka QRIS
   _openQrisPay();
 }
 
-/* ===== QRIS PAYMENT ===== */
+// ===== QRIS PAYMENT =====
 const QRIS_TOKEN = 'c98176b67fbd56';
 const OWNER_WA   = '6289674097203';
 
@@ -236,6 +236,7 @@ function _openQrisPay() {
 
   window._qrisOrderInfo = { pkg, nama, nomor, link, total };
 
+  // Tampilkan modal
   const payModal = document.getElementById('qrisPayModal');
   payModal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -243,8 +244,8 @@ function _openQrisPay() {
     document.getElementById('qrisPayBox').style.transform = 'translateY(0)';
   }, 10);
 
+  // Reset UI
   document.getElementById('qrisImg').style.display = 'none';
-  document.getElementById('qrisCanvasWrap').style.display = 'none';
   document.getElementById('qrisImgLoader').style.display = 'flex';
   document.getElementById('qrisNominalAsli').textContent = '';
   document.getElementById('qrisTotalBayar').textContent = '';
@@ -252,12 +253,13 @@ function _openQrisPay() {
   document.getElementById('qrisIdTrx').textContent = '';
   document.getElementById('qrisTimer').textContent = '05:00';
   document.getElementById('qrisTimerBar').style.width = '100%';
-  document.getElementById('btnCekStatus').disabled = false;
 
+  // Hit API buat QRIS
   _createQris(total);
 }
 
 async function _createQris(nominal) {
+  // Generate user ID unik dari timestamp
   const userId = 'USR' + Date.now().toString(36).toUpperCase();
   const url = `https://qris.zakki.store/topup?token=${QRIS_TOKEN}&nominal=${nominal}&id_user=${userId}`;
 
@@ -274,17 +276,26 @@ async function _createQris(nominal) {
     const d = data.data;
     window._qrisData = d;
 
-    document.getElementById('qrisNominalAsli').textContent = 'Rp ' + d.rincian.nominal_request.toLocaleString('id');
-    document.getElementById('qrisTotalBayar').textContent = 'Rp ' + d.rincian.total_bayar.toLocaleString('id');
+    // Isi nominal
+    document.getElementById('qrisNominalAsli').textContent =
+      'Rp ' + d.rincian.nominal_request.toLocaleString('id');
+    document.getElementById('qrisTotalBayar').textContent =
+      'Rp ' + d.rincian.total_bayar.toLocaleString('id');
     document.getElementById('qrisKodeUnik').textContent = '+' + d.rincian.kode_unik;
     document.getElementById('qrisIdTrx').textContent = d.id_transaksi;
 
+    // Isi data pembelian
     const info = window._qrisOrderInfo;
-    if(document.getElementById('qrisPaket')) document.getElementById('qrisPaket').textContent = info.pkg || '-';
-    if(document.getElementById('qrisNamaPembeli')) document.getElementById('qrisNamaPembeli').textContent = info.nama || '-';
-    if(document.getElementById('qrisNomorPembeli')) document.getElementById('qrisNomorPembeli').textContent = info.nomor || '-';
-    if(document.getElementById('qrisLinkPembeli')) document.getElementById('qrisLinkPembeli').textContent = info.link || '-';
+    const setPaket = document.getElementById('qrisPaket');
+    const setNama  = document.getElementById('qrisNamaPembeli');
+    const setNomor = document.getElementById('qrisNomorPembeli');
+    const setLink  = document.getElementById('qrisLinkPembeli');
+    if (setPaket) setPaket.textContent = info.pkg || '-';
+    if (setNama)  setNama.textContent  = info.nama || '-';
+    if (setNomor) setNomor.textContent = info.nomor || '-';
+    if (setLink)  setLink.textContent  = info.link || '-';
 
+    // Render QR dari qris_content (tidak bergantung pixhost)
     const canvasWrap = document.getElementById('qrisCanvasWrap');
     canvasWrap.innerHTML = '';
     canvasWrap.style.display = 'block';
@@ -299,6 +310,7 @@ async function _createQris(nominal) {
       correctLevel: QRCode.CorrectLevel.M
     });
 
+    // Mulai timer 5 menit
     _startQrisTimer(300);
 
   } catch (err) {
@@ -319,13 +331,15 @@ function _startQrisTimer(seconds) {
     const s = String(sisa % 60).padStart(2, '0');
     timerEl.textContent = `${m}:${s}`;
     barEl.style.width = (sisa / seconds * 100) + '%';
+
+    // Warna timer merah jika < 60 detik
     timerEl.style.color = sisa < 60 ? '#ef4444' : '#f97316';
 
     if (sisa <= 0) {
       clearInterval(window._qrisTimer);
       timerEl.textContent = 'EXPIRED';
       timerEl.style.color = '#ef4444';
-      document.getElementById('qrisCanvasWrap').style.opacity = '0.3';
+      document.getElementById('qrisImg').style.opacity = '0.3';
       document.getElementById('btnCekStatus').disabled = true;
     }
   }, 1000);
@@ -334,13 +348,11 @@ function _startQrisTimer(seconds) {
 function closeQrisPay() {
   clearInterval(window._qrisTimer);
   const box = document.getElementById('qrisPayBox');
-  if(box) {
-    box.style.transform = 'translateY(100%)';
-    setTimeout(() => {
-      document.getElementById('qrisPayModal').style.display = 'none';
-      if(!document.getElementById('pn').classList.contains('on')) document.body.style.overflow = '';
-    }, 400);
-  }
+  box.style.transform = 'translateY(100%)';
+  setTimeout(() => {
+    document.getElementById('qrisPayModal').style.display = 'none';
+    document.body.style.overflow = '';
+  }, 400);
 }
 
 function copyIdTrx() {
@@ -352,29 +364,18 @@ function copyIdTrx() {
   });
 }
 
-function kembaliKeDashboard() {
-  closeStatusOverlay();
-  closeQrisPay();
-  closeOrder();
-}
-
 async function cekStatusQris() {
   if (!window._qrisData) return;
 
   const idTrx = window._qrisData.id_transaksi;
+  // Format: "topup-68714058-WGmI" → ambil "topup-68714058-WGmI" langsung (full ID)
+  // API cektopup menerima full id_transaksi
   const idForCek = idTrx;
 
+  // Tampil overlay checking
   const overlay = document.getElementById('qrisStatusOverlay');
   overlay.style.display = 'flex';
   _showStatusState('checking');
-  
-  const btn = document.getElementById('btnCekStatus');
-  const originalHtml = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Mengecek...`;
-
-  // Simulate loading UX so user knows it's working
-  await new Promise(r => setTimeout(r, 1500));
 
   try {
     const url = `https://qris.zakki.store/cektopup?idtopup=${idForCek}`;
@@ -383,10 +384,10 @@ async function cekStatusQris() {
 
     if (data.status === 'found' && data.kategori_status === 'SUCCESS') {
       _showStatusState('success');
+      // Set link WA di kartu success
       const waLink = document.getElementById('successWaLink');
       if (waLink) waLink.href = _buildSuccessWaLink();
       clearInterval(window._qrisTimer);
-      _saveToHistory();
 
     } else if (data.kategori_status === 'PENDING' || data.status === 'found') {
       _showStatusState('pending');
@@ -398,16 +399,13 @@ async function cekStatusQris() {
   } catch (err) {
     _showStatusState('failed');
     document.getElementById('statusFailedMsg').textContent = 'Gagal terhubung ke server. Coba lagi.';
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = originalHtml;
   }
 }
 
 function _showStatusState(state) {
   ['statusChecking','statusSuccess','statusPending','statusFailed'].forEach(id => {
     const el = document.getElementById(id);
-    if(el) el.style.display = 'none';
+    el.style.display = 'none';
   });
   const target = document.getElementById('status' + state.charAt(0).toUpperCase() + state.slice(1));
   if (target) target.style.display = 'flex';
@@ -415,6 +413,12 @@ function _showStatusState(state) {
 
 function closeStatusOverlay() {
   document.getElementById('qrisStatusOverlay').style.display = 'none';
+}
+
+function onPaymentSuccess() {
+  _saveToHistory();
+  const el = document.getElementById('successWaLink');
+  if (el) window.open(el.href, '_blank');
 }
 
 function _buildSuccessWaLink() {
@@ -435,19 +439,16 @@ function _buildSuccessWaLink() {
   return 'https://wa.me/' + OWNER_WA + '?text=' + encodeURIComponent(msg);
 }
 
-/* ===== HISTORY ===== */
+// ===== HISTORY =====
 const HISTORY_KEY = 'astrobot_history';
 
 function _saveToHistory() {
-  const list = _getHistory();
-  const idTrx = window._qrisData?.id_transaksi || '-';
-  // Avoid duplicate saving
-  if (list.find(x => x.id === idTrx)) return;
-
   const info  = window._qrisOrderInfo || {};
   const d     = window._qrisData || {};
   const total = d.rincian ? d.rincian.total_bayar.toLocaleString('id') : '';
+  const idTrx = d.id_transaksi || '-';
 
+  // Simpan teks WA lengkap biar bisa kirim ulang kapan aja
   const waMsg =
     `Saya sudah melakukan pembayaran mohon untuk segera diproses min\n\n` +
     `Paket: ${info.pkg || '-'}\n` +
@@ -465,11 +466,12 @@ function _saveToHistory() {
     link:   info.link || '-',
     total:  d.rincian ? d.rincian.total_bayar : 0,
     waktu:  new Date().toISOString(),
-    waMsg:  waMsg
+    waMsg:  waMsg   // <-- teks lengkap tersimpan
   };
 
+  let list = _getHistory();
   list.unshift(entry);
-  if (list.length > 50) list.length = 50;
+  if (list.length > 50) list = list.slice(0, 50);
   localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
   _updateHistoryBadge();
 }
@@ -481,14 +483,13 @@ function _getHistory() {
 
 function _updateHistoryBadge() {
   const list    = _getHistory();
-  const count   = list.length;
-  const label   = count > 9 ? '9+' : count;
-  const loggedIn = !!(typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser);
-
   const heroBtn = document.getElementById('historyHeroBtn');
   const badge   = document.getElementById('historyBadge');
   const navBtn  = document.getElementById('panelHistoryBtn');
   const navBadge= document.getElementById('historyNavBadge');
+  const count   = list.length;
+  const label   = count > 9 ? '9+' : count;
+  const loggedIn = !!(typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser);
 
   if (loggedIn && count > 0) {
     if (heroBtn)  { heroBtn.style.display = 'flex'; }
@@ -508,13 +509,8 @@ function openHistoryPage() {
 }
 
 function closeHistoryPage() {
-  const hp = document.getElementById('historyPage');
-  if(hp && hp.style.display !== 'none') {
-    hp.style.display = 'none';
-    if(!document.getElementById('pn').classList.contains('on') && (!document.getElementById('orderModal') || document.getElementById('orderModal').style.display === 'none')) {
-      document.body.style.overflow = '';
-    }
-  }
+  document.getElementById('historyPage').style.display = 'none';
+  document.body.style.overflow = '';
 }
 
 function clearHistory() {
@@ -528,7 +524,7 @@ function _renderHistory() {
   const list    = _getHistory();
   const listEl  = document.getElementById('historyList');
   const emptyEl = document.getElementById('historyEmpty');
-  if (!listEl || !emptyEl) return;
+  if (!listEl) return;
 
   if (list.length === 0) {
     listEl.innerHTML = '';
@@ -543,39 +539,41 @@ function _renderHistory() {
     const jamStr = tgl.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
     const waUrl  = 'https://wa.me/' + OWNER_WA + '?text=' + encodeURIComponent(e.waMsg || '');
 
-    return \`
+    return `
     <div style="background:#0d0d0d;border-radius:14px;border:1px solid #161616;overflow:hidden;">
       <div style="padding:11px 14px 9px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #111;">
         <div style="display:flex;align-items:center;gap:6px;">
           <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block;flex-shrink:0;"></span>
           <span style="font-size:.7rem;font-weight:700;color:#22c55e;">SUKSES</span>
         </div>
-        <span style="font-size:.68rem;color:#333;">\${tglStr} · \${jamStr}</span>
+        <span style="font-size:.68rem;color:#333;">${tglStr} · ${jamStr}</span>
       </div>
       <div style="padding:12px 14px;display:flex;flex-direction:column;gap:8px;">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
           <div>
-            <div style="font-size:.88rem;font-weight:800;color:#fff;">\${e.pkg}</div>
-            <div style="font-size:.7rem;color:#444;margin-top:2px;">Pembelian #\${list.length - i}</div>
+            <div style="font-size:.88rem;font-weight:800;color:#fff;">${e.pkg}</div>
+            <div style="font-size:.7rem;color:#444;margin-top:2px;">Pembelian #${i + 1}</div>
           </div>
           <div style="text-align:right;flex-shrink:0;">
-            <div style="font-size:.9rem;font-weight:800;color:#22c55e;">Rp \${(e.total || 0).toLocaleString('id')}</div>
+            <div style="font-size:.9rem;font-weight:800;color:#22c55e;">Rp ${(e.total || 0).toLocaleString('id')}</div>
             <div style="font-size:.66rem;color:#333;">Total dibayar</div>
           </div>
         </div>
 
+        <!-- Teks WA yang tersimpan -->
         <div style="background:#111;border-radius:9px;padding:10px 12px;border:1px solid #1a1a1a;">
           <div style="font-size:.68rem;color:#444;font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;">Teks Pesan</div>
-          <pre style="font-size:.75rem;color:#888;line-height:1.6;white-space:pre-wrap;word-break:break-word;margin:0;font-family:inherit;">\${e.waMsg || '-'}</pre>
+          <pre style="font-size:.75rem;color:#888;line-height:1.6;white-space:pre-wrap;word-break:break-word;margin:0;font-family:inherit;">${e.waMsg || '-'}</pre>
         </div>
 
-        <a href="\${waUrl}" target="_blank"
+        <!-- Tombol kirim ulang ke WA -->
+        <a href="${waUrl}" target="_blank"
           style="display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border-radius:10px;background:#0a1f0a;border:1px solid #1a3a1a;text-decoration:none;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="#22c55e"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
           <span style="font-size:.8rem;font-weight:800;color:#22c55e;">Kirim Ulang ke Admin</span>
         </a>
       </div>
-    </div>\`;
+    </div>`;
   }).join('');
 }
 
@@ -583,17 +581,24 @@ async function cancelQris() {
   if (!window._qrisData) { closeQrisPay(); return; }
   const idTrx = window._qrisData.id_transaksi;
   try {
-    fetch(\`https://qris.zakki.store/cancel?token=\${QRIS_TOKEN}&id_transaksi=\${idTrx}\`);
+    await fetch(`https://qris.zakki.store/cancel?token=${QRIS_TOKEN}&id_transaksi=${idTrx}`);
   } catch(e) {}
   clearInterval(window._qrisTimer);
   closeQrisPay();
 }
 
+/* ===== PRICING FILTER TABS ===== */
 function filterPricing(tab) {
   ['group','premium','jadibot'].forEach(t => {
     const el = document.getElementById('pricing-' + t);
     const btn = document.getElementById('tab-' + t);
     if (el) el.style.display = t === tab ? 'block' : 'none';
-    if (btn) btn.classList.toggle('active-tab', t === tab);
+    if (btn) {
+      btn.classList.toggle('active-tab', t === tab);
+    }
   });
 }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeOrder();
+});
