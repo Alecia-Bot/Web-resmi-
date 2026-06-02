@@ -61,46 +61,49 @@ auth.onAuthStateChanged(async (user) => {
       _onFullyLoggedIn(user, userDoc.data());
     } else {
       // Belum set username — tapi hanya tampilkan setup KALAU auth gate lagi terbuka
-      if (authGate.style.display === 'flex') {
+      if (authGate && authGate.style.display === 'flex') {
         prepareUsernameScreen(user);
         showScreen('username');
       } else {
         // Login dari luar gate (misal redirect) — tetap tunjukkan username setup
-        authGate.style.display = 'flex';
-        prepareUsernameScreen(user);
-        showScreen('username');
-        document.body.style.overflow = 'hidden';
+        if (authGate) {
+          authGate.style.display = 'flex';
+          prepareUsernameScreen(user);
+          showScreen('username');
+          document.body.style.overflow = 'hidden';
+        }
       }
     }
   } catch (e) {
     console.error('Auth check error:', e);
     // Gagal cek — tutup gate, biarkan user tetap browse
-    closeAuthGate();
+    if (typeof closeAuthGate === 'function') closeAuthGate();
   }
 });
 
 // Dipanggil saat user sudah fully logged in (ada username)
 function _onFullyLoggedIn(user, userData) {
-  closeAuthGate();
-  updatePanelUser(user);
+  if (typeof closeAuthGate === 'function') closeAuthGate();
+  if (typeof updatePanelUser === 'function') updatePanelUser(user);
   injectUserBadge(user, userData);
 
   // Kalau ada pending order buka, lanjutkan
   if (window._pendingOrder) {
     const p = window._pendingOrder;
     window._pendingOrder = null;
-    _doOpenOrder(p.name, p.price, p.duration);
+    if (typeof _doOpenOrder === 'function') _doOpenOrder(p.name, p.price, p.duration);
   }
 
   // Kalau ada pending WA (pencet Beli sebelum login), langsung kirim
   if (window._pendingWa) {
     const w = window._pendingWa;
     window._pendingWa = null;
-    _sendToWa(w.nama, w.nomor, w.link, w.pkg, w.total);
+    if (typeof _sendToWa === 'function') _sendToWa(w.nama, w.nomor, w.link, w.pkg, w.total);
   }
 }
 
 // ─── GOOGLE LOGIN ─────────────────────────────────────────────────────────
+if (btnGoogleLogin) {
 btnGoogleLogin.addEventListener('click', async () => {
   btnGoogleLogin.disabled = true;
   btnGoogleLogin.innerHTML = `
@@ -119,19 +122,22 @@ btnGoogleLogin.addEventListener('click', async () => {
       Masuk dengan Google`;
   }
 });
+}
 
 // ─── USERNAME SCREEN PREP ─────────────────────────────────────────────────
 function prepareUsernameScreen(user) {
-  setupName.textContent = user.displayName ? user.displayName.split(' ')[0] : 'Kamu';
+  if (setupName) setupName.textContent = user.displayName ? user.displayName.split(' ')[0] : 'Kamu';
 
-  if (user.photoURL) {
-    setupAvatar.innerHTML = `<img src="${user.photoURL}" alt="avatar" referrerpolicy="no-referrer">`;
-  } else {
-    const initials = (user.displayName || 'U').split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
-    setupAvatar.textContent = initials;
+  if (setupAvatar) {
+    if (user.photoURL) {
+      setupAvatar.innerHTML = `<img src="${user.photoURL}" alt="avatar" referrerpolicy="no-referrer">`;
+    } else {
+      const initials = (user.displayName || 'U').split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
+      setupAvatar.textContent = initials;
+    }
   }
 
-  if (user.displayName) {
+  if (usernameInput && user.displayName) {
     const suggested = user.displayName.toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 20);
     usernameInput.value = suggested;
     validateUsername(suggested);
@@ -142,15 +148,17 @@ function prepareUsernameScreen(user) {
 const usernameRegex = /^[a-z0-9_]{3,20}$/;
 let checkTimeout = null;
 
+if (usernameInput) {
 usernameInput.addEventListener('input', () => {
   const val = usernameInput.value.toLowerCase().replace(/[^a-z0-9_]/g, '');
   usernameInput.value = val;
   clearTimeout(checkTimeout);
   validateUsername(val);
 });
+}
 
 function validateUsername(val) {
-  btnSaveUsername.disabled = true;
+  if (btnSaveUsername) btnSaveUsername.disabled = true;
   if (val.length < 3) { setHint('3–20 karakter, huruf/angka/underscore saja', ''); return; }
   if (!usernameRegex.test(val)) { setHint('Hanya boleh huruf kecil, angka, dan underscore (_)', 'error'); return; }
   setHint('Mengecek ketersediaan...', '');
@@ -161,7 +169,7 @@ function validateUsername(val) {
         setHint('Username sudah dipakai, coba yang lain', 'error');
       } else {
         setHint('✓ Username tersedia!', 'success');
-        btnSaveUsername.disabled = false;
+        if (btnSaveUsername) btnSaveUsername.disabled = false;
       }
     } catch {
       setHint('Gagal mengecek, coba lagi', 'error');
@@ -170,11 +178,13 @@ function validateUsername(val) {
 }
 
 function setHint(text, type) {
+  if (!usernameHint) return;
   usernameHint.textContent = text;
   usernameHint.className = 'auth-input-hint' + (type ? ` ${type}` : '');
 }
 
 // ─── SAVE USERNAME ────────────────────────────────────────────────────────
+if (btnSaveUsername) {
 btnSaveUsername.addEventListener('click', async () => {
   const username = usernameInput.value.trim();
   if (!usernameRegex.test(username)) return;
@@ -207,6 +217,7 @@ btnSaveUsername.addEventListener('click', async () => {
     setHint('Gagal menyimpan, coba lagi', 'error');
   }
 });
+}
 
 // ─── USER BADGE IN HEADER ────────────────────────────────────────────────
 let _badgeInjected = false;

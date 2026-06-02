@@ -22,7 +22,6 @@ header{position:fixed;top:0;left:0;right:0;height:60px;background:#0a0a0a;backdr
 .hdr{width:100%;max-width:1100px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .logo{display:flex;align-items:center;text-decoration:none;}
 
-
 @keyframes logoSlide{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:translateX(0)}}
 
 @keyframes logoFade{
@@ -156,7 +155,6 @@ header{position:fixed;top:0;left:0;right:0;height:60px;background:#0a0a0a;backdr
 
 /* ── PRICING CARDS ── */
 .pricing-wrap{display:grid;grid-template-columns:1fr;gap:14px}
-
 
 .pc{
   background:#0d0d0d;
@@ -370,55 +368,10 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
 .nc-cta{display:block;width:100%;padding:14px;border-radius:14px;border:none;font-family:inherit;font-size:.9rem;font-weight:800;text-align:center;text-decoration:none;cursor:pointer;transition:.2s;background:#ffffff;color:#000000;letter-spacing:.02em}
 .nc-cta:hover{background:#e0e0e0;box-shadow:0 4px 20px rgba(255,255,255,.35);transform:translateY(-1px)}
 
-
 .om-close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.06);border:none;color:#64748b;font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
 .om-close:hover{background:rgba(255,255,255,0.12);color:#f1f5f9}
-/* ── SATURDAY PROMO BANNER ── */
-
-
-.sp-banner{
-  background:linear-gradient(135deg,#0f2a1a 0%,#0a1a2e 50%,#1a0a2e 100%);
-  border-bottom:2px solid #22c55e;
-  padding:14px 16px;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.sp-banner::before{
-  content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(
-    45deg,
-    transparent,transparent 8px,
-    rgba(34,197,94,0.04) 8px,rgba(34,197,94,0.04) 9px
-  );
-}
-.sp-banner-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px}
-.sp-banner-icon{font-size:1.4rem;animation:spbounce .8s infinite alternate}
-@keyframes spbounce{from{transform:scale(1)}to{transform:scale(1.2)}}
-.sp-banner-text{font-size:.88rem;font-weight:800;color:#f1f5f9;letter-spacing:.03em}
-.sp-banner-text span{color:#4ade80}
-.sp-banner-badge{
-  display:inline-flex;align-items:center;gap:5px;
-  background:rgba(34,197,94,0.15);border:1px solid #22c55e;
-  border-radius:99px;padding:4px 12px;
-  font-size:.72rem;font-weight:700;color:#4ade80;
-  font-family:'JetBrains Mono',monospace;
-}
-.sp-banner-countdown{
-  font-family:'JetBrains Mono',monospace;font-size:.75rem;
-  color:#94a3b8;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:4px
-}
-.sp-banner-countdown span{color:#4ade80;font-weight:700}
-/* neon scanline effect */
-.sp-banner::after{
-  content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(34,197,94,0.06),transparent);
-  animation:spshine 3s infinite;
-}
-@keyframes spshine{to{left:200%}}
 
 /* ── GLOW EFFECTS ON CARDS ── */
-/* Permanen card pulse glow */
 .nc-perm-glow{
   animation:permglow 2.5s ease-in-out infinite;
 }
@@ -429,7 +382,6 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
 .nc-perm-glow::before{
   background:linear-gradient(90deg,#d97706,#fbbf24) !important;
 }
-/* shimmer sweep on perm card */
 .nc-perm-glow .nc-shimmer{
   position:absolute;top:0;left:-80%;width:60%;height:100%;
   background:linear-gradient(90deg,transparent,rgba(251,191,36,0.07),transparent);
@@ -438,38 +390,16 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
 }
 @keyframes permshine{0%{left:-80%}100%{left:180%}}
 
-/* general card glow on all nc cards on hover */
 .nc:hover{
   box-shadow:0 0 0 1px rgba(124,58,237,0.3),0 0 30px rgba(124,58,237,.25),0 16px 40px rgba(0,0,0,.5) !important;
 }
-/* Saturday promo: all cards get extra glow */
-
-
-
 
 @keyframes cardpulse{
   0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,0.03),inset 0 1px 0 rgba(255,255,255,0.05)}
   50%{box-shadow:0 0 20px rgba(124,58,237,0.15),0 0 0 1px rgba(124,58,237,0.15),inset 0 1px 0 rgba(255,255,255,0.05)}
 }
-
-
-  50%{box-shadow:0 0 60px rgba(251,191,36,0.6),0 0 100px rgba(251,191,36,0.2),0 0 0 1px rgba(251,191,36,0.5)}
-}
 @keyframes badgepop{from{transform:scale(0)}to{transform:scale(1)}}
-
-
-/* harga coret + harga promo */
-
-
 @keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-
-
-
-/* jb-card + sp-card glow */
-
-@keyframes jbglow{0%,100%{box-shadow:0 0 0 1px rgba(250,204,21,0.2)}50%{box-shadow:0 0 30px rgba(250,204,21,0.25),0 0 0 1px rgba(250,204,21,0.3)}}
-
-@keyframes spglow{0%,100%{box-shadow:0 0 0 1px rgba(34,197,94,0.2)}50%{box-shadow:0 0 30px rgba(34,197,94,0.25),0 0 0 1px rgba(34,197,94,0.3)}}
 
 /* SEWA PRIBADI MURAH CARD */
 .sp-card{
@@ -536,7 +466,6 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
 .faq-item:nth-child(4){animation-delay:.15s}
 .faq-item:nth-child(5){animation-delay:.2s}
 
-/* premium card glow + shimmer - sama kayak permanen */
 @keyframes premglow{
   0%,100%{box-shadow:0 0 20px rgba(6,182,212,0.2),0 0 0 2px rgba(6,182,212,0.2)}
   50%{box-shadow:0 0 40px rgba(6,182,212,0.4),0 0 80px rgba(6,182,212,0.1),0 0 0 2px rgba(103,232,249,0.35)}
@@ -571,11 +500,6 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
   pointer-events:none;
   z-index:1;
 }
-
-
-/* ===== From <style> tag ===== */
-
-@keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 
 /* ===========================
    AUTH GATE STYLES
@@ -702,7 +626,6 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
   line-height: 1.6;
 }
 
-/* Username screen */
 .auth-avatar {
   width: 64px; height: 64px;
   border-radius: 50%;
@@ -788,7 +711,6 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
   transform: none;
 }
 
-/* Loading spinner */
 .auth-spinner-wrap {
   position: relative;
   z-index: 1;
@@ -803,9 +725,7 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
   border-radius: 50%;
   animation: spin .8s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
 
-/* User badge in header */
 .user-badge {
   display: flex;
   align-items: center;
@@ -836,7 +756,6 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
 }
 .user-badge-av img { width:100%; height:100%; object-fit:cover; }
 
-/* Logout dropdown */
 .user-dropdown {
   position: absolute;
   top: calc(100% + 8px);
@@ -877,7 +796,6 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
 .user-dropdown-item.danger:hover { background: rgba(248,113,113,0.1); color: #f87171; }
 .user-dropdown-item i { width: 14px; font-size: .8rem; }
 
-/* ===== PRICING TABS ===== */
 .pricing-tab {
   display: inline-flex;
   align-items: center;
@@ -906,7 +824,6 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
   font-weight: 700;
 }
 
-/* ===== ORDER MODAL SLIDE ANIMATION ===== */
 #orderModal {
   display: none;
   transform: translateX(100%);
