@@ -368,9 +368,14 @@ async function cekStatusQris() {
   if (!window._qrisData) return;
 
   const idTrx = window._qrisData.id_transaksi;
-  // Format: "topup-68714058-WGmI" → ambil "topup-68714058-WGmI" langsung (full ID)
-  // API cektopup menerima full id_transaksi
   const idForCek = idTrx;
+
+  // Loading state pada tombol
+  const btn = document.getElementById('btnCekStatus');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<svg style="animation:spin .8s linear infinite;width:18px;height:18px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Mengecek...';
+  }
 
   // Tampil overlay checking
   const overlay = document.getElementById('qrisStatusOverlay');
@@ -399,6 +404,13 @@ async function cekStatusQris() {
   } catch (err) {
     _showStatusState('failed');
     document.getElementById('statusFailedMsg').textContent = 'Gagal terhubung ke server. Coba lagi.';
+  } finally {
+    // Reset tombol setelah cek selesai
+    const btn2 = document.getElementById('btnCekStatus');
+    if (btn2) {
+      btn2.disabled = false;
+      btn2.innerHTML = '<i class="fas fa-search"></i> Cek Status Pembayaran';
+    }
   }
 }
 
@@ -491,13 +503,15 @@ function _updateHistoryBadge() {
   const label   = count > 9 ? '9+' : count;
   const loggedIn = !!(typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser);
 
-  if (loggedIn && count > 0) {
-    if (heroBtn)  { heroBtn.style.display = 'flex'; }
+  // Selalu tampilkan tombol history di hero
+  if (heroBtn) heroBtn.style.display = 'flex';
+
+  if (count > 0) {
     if (badge)    { badge.style.display = 'flex'; badge.textContent = label; }
     if (navBtn)   { navBtn.style.display = 'flex'; }
     if (navBadge) { navBadge.textContent = label; }
   } else {
-    if (heroBtn) heroBtn.style.display = 'none';
+    if (badge)   badge.style.display = 'none';
     if (navBtn)  navBtn.style.display = 'none';
   }
 }
