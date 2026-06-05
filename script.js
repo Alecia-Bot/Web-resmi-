@@ -368,7 +368,6 @@ async function cekStatusQris() {
   if (!window._qrisData) return;
 
   const idTrx = window._qrisData.id_transaksi;
-  const idForCek = idTrx;
 
   // Loading state pada tombol
   const btn = document.getElementById('btnCekStatus');
@@ -377,35 +376,43 @@ async function cekStatusQris() {
     btn.innerHTML = '<svg style="animation:spin .8s linear infinite;width:18px;height:18px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Mengecek...';
   }
 
-  // Tampil overlay checking
+  // Tampil overlay checking — minimum tampil 1.5 detik biar terasa prosesnya
   const overlay = document.getElementById('qrisStatusOverlay');
   overlay.style.display = 'flex';
   _showStatusState('checking');
 
+  const minDelay = new Promise(r => setTimeout(r, 1500));
+
   try {
-    const url = `https://qris.zakki.store/cektopup?idtopup=${idForCek}`;
-    const res  = await fetch(url);
+    const url = `https://qris.zakki.store/cektopup?idtopup=${idTrx}`;
+    const [res] = await Promise.all([fetch(url), minDelay]);
     const data = await res.json();
 
     if (data.status === 'found' && data.kategori_status === 'SUCCESS') {
-      _showStatusState('success');
-      // Set link WA di kartu success
+      // Simpan ke riwayat OTOMATIS
+      _saveToHistory();
+      // Bangun link WA
+      const waHref = _buildSuccessWaLink();
       const waLink = document.getElementById('successWaLink');
-      if (waLink) waLink.href = _buildSuccessWaLink();
+      if (waLink) waLink.href = waHref;
+      _showStatusState('success');
       clearInterval(window._qrisTimer);
+      // Buka WA otomatis
+      setTimeout(() => { window.open(waHref, '_blank'); }, 600);
 
     } else if (data.kategori_status === 'PENDING' || data.status === 'found') {
       _showStatusState('pending');
     } else {
       _showStatusState('failed');
-      document.getElementById('statusFailedMsg').textContent =
-        data.message || 'Transaksi tidak ditemukan. Pastikan sudah membayar.';
+      const msg = document.getElementById('statusFailedMsg');
+      if (msg) msg.textContent = data.message || 'Transaksi tidak ditemukan. Pastikan sudah membayar.';
     }
   } catch (err) {
+    await minDelay;
     _showStatusState('failed');
-    document.getElementById('statusFailedMsg').textContent = 'Gagal terhubung ke server. Coba lagi.';
+    const msg = document.getElementById('statusFailedMsg');
+    if (msg) msg.textContent = 'Gagal terhubung ke server. Coba lagi.';
   } finally {
-    // Reset tombol setelah cek selesai
     const btn2 = document.getElementById('btnCekStatus');
     if (btn2) {
       btn2.disabled = false;
@@ -455,33 +462,44 @@ function _buildSuccessWaLink() {
 const HISTORY_KEY = 'astrobot_history';
 
 function _saveToHistory() {
-  const info  = window._qrisOrderInfo || {};
   const d     = window._qrisData || {};
-  const total = d.rincian ? d.rincian.total_bayar.toLocaleString('id') : '';
-  const idTrx = d.id_transaksi || '-';
+  const info  = window._qrisOrderInfo || {};
+  const idTrx = d.id_transaksi || ('manual-' + Date.now());
+  const totalBayar = d.rincian ? d.rincian.total_bayar : (info.total || 0);
+  const totalStr = totalBayar.toLocaleString('id');
 
-  // Simpan teks WA lengkap biar bisa kirim ulang kapan aja
+  // Jangan simpan duplikat
+  const existing = _getHistory();
+  if (existing.find(e => e.id === idTrx)) return;
+
   const waMsg =
-    `Saya sudah melakukan pembayaran mohon untuk segera diproses min\n\n` +
-    `Paket: ${info.pkg || '-'}\n` +
-    `Nama: ${info.nama || '-'}\n` +
-    `Nomor WA: ${info.nomor || '-'}\n` +
-    `Link Grup: ${info.link || '-'}\n` +
-    `Total Dibayar: Rp ${total}\n` +
+    `Saya sudah melakukan pembayaran mohon untuk segera diproses min
+
+` +
+    `Paket: ${info.pkg || '-'}
+` +
+    `Nama: ${info.nama || '-'}
+` +
+    `Nomor WA: ${info.nomor || '-'}
+` +
+    `Link Grup: ${info.link || '-'}
+` +
+    `Total Dibayar: Rp ${totalStr}
+` +
     `ID Transaksi: ${idTrx}`;
 
   const entry = {
-    id:     idTrx,
-    pkg:    info.pkg || '-',
-    nama:   info.nama || '-',
-    nomor:  info.nomor || '-',
-    link:   info.link || '-',
-    total:  d.rincian ? d.rincian.total_bayar : 0,
-    waktu:  new Date().toISOString(),
-    waMsg:  waMsg   // <-- teks lengkap tersimpan
+    id:    idTrx,
+    pkg:   info.pkg   || '-',
+    nama:  info.nama  || '-',
+    nomor: info.nomor || '-',
+    link:  info.link  || '-',
+    total: totalBayar,
+    waktu: new Date().toISOString(),
+    waMsg: waMsg
   };
 
-  let list = _getHistory();
+  let list = existing;
   list.unshift(entry);
   if (list.length > 50) list = list.slice(0, 50);
   localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
