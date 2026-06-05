@@ -258,3 +258,19 @@ window.logoutUser = async function() {
   await auth.signOut();
   location.reload();
 };
+
+/* ===== CATATAN FIRESTORE RULES =====
+   Tambahkan rules ini di Firebase Console → Firestore → Rules:
+
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /users/{userId}/{document=**} {
+         allow read, write: if request.auth != null && request.auth.uid == userId;
+       }
+     }
+   }
+
+   Rules ini memastikan user HANYA bisa baca/tulis data milik UID-nya sendiri.
+   User Google lain sama sekali tidak bisa akses history orang lain.
+===================================== */

@@ -458,19 +458,29 @@ function _buildSuccessWaLink() {
   return 'https://wa.me/' + OWNER_WA + '?text=' + encodeURIComponent(msg);
 }
 
-// ===== HISTORY =====
-const HISTORY_KEY = 'astrobot_history';
+// ===== HISTORY — Firestore per UID (private per akun Google) =====
+// localStorage hanya sebagai cache sementara, source of truth = Firestore
 
-function _saveToHistory() {
-  const d     = window._qrisData || {};
-  const info  = window._qrisOrderInfo || {};
+function _getCurrentUid() {
+  try {
+    const u = firebase.auth().currentUser;
+    return u ? u.uid : null;
+  } catch { return null; }
+}
+
+function _localKey() {
+  const uid = _getCurrentUid();
+  return uid ? `astrobot_history_${uid}` : null;
+}
+
+// Simpan ke Firestore + cache localStorage
+async function _saveToHistory() {
+  const uid = _getCurrentUid();
+  const d    = window._qrisData || {};
+  const info = window._qrisOrderInfo || {};
   const idTrx = d.id_transaksi || ('manual-' + Date.now());
   const totalBayar = d.rincian ? d.rincian.total_bayar : (info.total || 0);
   const totalStr = totalBayar.toLocaleString('id');
-
-  // Jangan simpan duplikat
-  const existing = _getHistory();
-  if (existing.find(e => e.id === idTrx)) return;
 
   const waMsg =
     `Saya sudah melakukan pembayaran mohon untuk segera diproses min
@@ -499,20 +509,57 @@ function _saveToHistory() {
     waMsg: waMsg
   };
 
-  let list = existing;
-  list.unshift(entry);
-  if (list.length > 50) list = list.slice(0, 50);
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
+  // Simpan ke Firestore kalau sudah login
+  if (uid) {
+    try {
+      const dbFs = firebase.firestore();
+      const ref  = dbFs.collection('users').doc(uid)
+                       .collection('history').doc(idTrx);
+      const snap = await ref.get();
+      if (!snap.exists) {
+        await ref.set({ ...entry, savedAt: firebase.firestore.FieldValue.serverTimestamp() });
+      }
+    } catch (e) { console.warn('Firestore save error:', e); }
+  }
+
+  // Cache lokal juga (sebagai fallback / speed)
+  const key = _localKey() || 'astrobot_history_guest';
+  try {
+    let list = JSON.parse(localStorage.getItem(key) || '[]');
+    if (!list.find(e => e.id === idTrx)) {
+      list.unshift(entry);
+      if (list.length > 50) list = list.slice(0, 50);
+      localStorage.setItem(key, JSON.stringify(list));
+    }
+  } catch {}
+
   _updateHistoryBadge();
 }
 
-function _getHistory() {
-  try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+// Ambil dari Firestore (kalau login) atau localStorage cache
+async function _getHistory() {
+  const uid = _getCurrentUid();
+  if (uid) {
+    try {
+      const dbFs = firebase.firestore();
+      const snap = await dbFs.collection('users').doc(uid)
+                             .collection('history')
+                             .orderBy('savedAt', 'desc')
+                             .limit(50)
+                             .get();
+      if (!snap.empty) {
+        return snap.docs.map(d => d.data());
+      }
+    } catch (e) { console.warn('Firestore get error:', e); }
+  }
+  // Fallback: localStorage dengan key per UID
+  const key = _localKey() || 'astrobot_history_guest';
+  try { return JSON.parse(localStorage.getItem(key) || '[]'); }
   catch { return []; }
 }
 
-function _updateHistoryBadge() {
-  const list    = _getHistory();
+async function _updateHistoryBadge() {
+  const list    = await _getHistory();
   const heroBtn = document.getElementById('historyHeroBtn');
   const badge   = document.getElementById('historyBadge');
   const navBtn  = document.getElementById('panelHistoryBtn');
@@ -538,6 +585,11 @@ function openHistoryPage() {
   document.getElementById('historyPage').style.display = 'block';
   document.body.style.overflow = 'hidden';
   _renderHistory();
+  // Tampilkan loading spinner sementara data dimuat
+  const listEl  = document.getElementById('historyList');
+  const emptyEl = document.getElementById('historyEmpty');
+  if (listEl) listEl.innerHTML = '<div style="padding:40px;text-align:center;color:#444;font-size:.85rem;">Memuat riwayat...</div>';
+  if (emptyEl) emptyEl.style.display = 'none';
 }
 
 function closeHistoryPage() {
@@ -545,25 +597,38 @@ function closeHistoryPage() {
   document.body.style.overflow = '';
 }
 
-function clearHistory() {
+async function clearHistory() {
   if (!confirm('Hapus semua riwayat pembelian?')) return;
-  localStorage.removeItem(HISTORY_KEY);
+  const uid = _getCurrentUid();
+  // Hapus dari Firestore
+  if (uid) {
+    try {
+      const dbFs = firebase.firestore();
+      const snap = await dbFs.collection('users').doc(uid).collection('history').get();
+      const batch = dbFs.batch();
+      snap.docs.forEach(d => batch.delete(d.ref));
+      await batch.commit();
+    } catch(e) { console.warn('Clear Firestore error:', e); }
+  }
+  // Hapus cache lokal
+  const key = _localKey() || 'astrobot_history_guest';
+  localStorage.removeItem(key);
   _updateHistoryBadge();
   _renderHistory();
 }
 
-function _renderHistory() {
-  const list    = _getHistory();
+async function _renderHistory() {
+  const list    = await _getHistory();
   const listEl  = document.getElementById('historyList');
   const emptyEl = document.getElementById('historyEmpty');
   if (!listEl) return;
 
   if (list.length === 0) {
     listEl.innerHTML = '';
-    emptyEl.style.display = 'flex';
+    if (emptyEl) emptyEl.style.display = 'flex';
     return;
   }
-  emptyEl.style.display = 'none';
+  if (emptyEl) emptyEl.style.display = 'none';
 
   listEl.innerHTML = list.map((e, i) => {
     const tgl    = new Date(e.waktu);
