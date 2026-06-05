@@ -1038,17 +1038,29 @@
 <!-- ===== STATUS OVERLAY ===== -->
 <div id="qrisStatusOverlay" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:24px;">
   
-  <!-- Checking animation -->
-  <div id="statusChecking" style="display:flex;flex-direction:column;align-items:center;gap:16px;">
-    <div style="position:relative;width:72px;height:72px;">
-      <svg viewBox="0 0 80 80" style="position:absolute;inset:0;animation:spin 1.5s linear infinite;">
-        <circle cx="40" cy="40" r="34" fill="none" stroke="#7c3aed" stroke-width="3" stroke-dasharray="60 150" stroke-linecap="round"/>
+  <!-- Checking animation — polling terus sampai SUCCESS -->
+  <div id="statusChecking" style="display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;">
+    <div style="position:relative;width:80px;height:80px;">
+      <!-- Ring luar -->
+      <svg viewBox="0 0 80 80" style="position:absolute;inset:0;animation:spin 1.2s linear infinite;">
+        <circle cx="40" cy="40" r="34" fill="none" stroke="#7c3aed" stroke-width="3" stroke-dasharray="70 140" stroke-linecap="round"/>
+      </svg>
+      <!-- Ring dalam -->
+      <svg viewBox="0 0 80 80" style="position:absolute;inset:8px;animation:spin 1.8s linear infinite reverse;">
+        <circle cx="32" cy="32" r="26" fill="none" stroke="#4f46e5" stroke-width="2" stroke-dasharray="40 120" stroke-linecap="round"/>
       </svg>
       <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-        <i class="fas fa-search" style="color:#a78bfa;font-size:1.3rem;"></i>
+        <i class="fas fa-clock" style="color:#a78bfa;font-size:1.4rem;"></i>
       </div>
     </div>
-    <div style="color:#fff;font-weight:700;font-size:.95rem;">Mengecek status...</div>
+    <div>
+      <div style="color:#fff;font-weight:800;font-size:1rem;margin-bottom:6px;">Memproses Pembayaran</div>
+      <div id="statusLoadingTxt" style="color:#666;font-size:.82rem;">Menunggu konfirmasi...</div>
+      <div style="color:#3a3a3a;font-size:.72rem;margin-top:8px;line-height:1.6;">Jangan tutup halaman ini.<br>Otomatis terkonfirmasi saat pembayaran diterima.</div>
+    </div>
+    <button onclick="stopPolling()" style="background:none;border:1px solid #2a2a2a;border-radius:8px;color:#444;font-size:.75rem;padding:7px 16px;cursor:pointer;font-family:inherit;margin-top:4px;">
+      Batal
+    </button>
   </div>
 
   <!-- Success state - kartu kecil -->
@@ -1108,19 +1120,8 @@
     </div>
   </div>
 
-  <!-- Pending state -->
-  <div id="statusPending" style="display:none;flex-direction:column;align-items:center;gap:0;width:100%;max-width:320px;">
-    <div style="background:#111;border-radius:20px;padding:28px 24px;width:100%;text-align:center;border:1px solid #1e1e1e;">
-      <div style="width:72px;height:72px;border-radius:50%;background:#f97316;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-        <i class="fas fa-clock" style="color:#fff;font-size:1.8rem;"></i>
-      </div>
-      <div style="color:#f97316;font-weight:900;font-size:1.1rem;margin-bottom:8px;">Belum Diterima</div>
-      <div style="color:#666;font-size:.82rem;margin-bottom:20px;line-height:1.5;">Pastikan sudah transfer sesuai total termasuk biaya admin.</div>
-      <button onclick="closeStatusOverlay()" style="width:100%;padding:13px;border-radius:12px;background:#1e1e1e;border:1px solid #2a2a2a;color:#ccc;font-weight:700;font-size:.88rem;cursor:pointer;font-family:inherit;">
-        Kembali
-      </button>
-    </div>
-  </div>
+  <!-- Pending: tidak dipakai lagi, polling terus di background -->
+  <div id="statusPending" style="display:none;"></div>
 
   <!-- Failed -->
   <div id="statusFailed" style="display:none;flex-direction:column;align-items:center;gap:0;width:100%;max-width:320px;">

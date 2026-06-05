@@ -364,61 +364,88 @@ function copyIdTrx() {
   });
 }
 
+// Polling state
+window._pollingActive = false;
+
 async function cekStatusQris() {
   if (!window._qrisData) return;
+  if (window._pollingActive) return; // Sudah polling, jangan dobel
 
-  const idTrx = window._qrisData.id_transaksi;
-
-  // Loading state pada tombol
+  // Nonaktifkan tombol selama polling
   const btn = document.getElementById('btnCekStatus');
   if (btn) {
     btn.disabled = true;
-    btn.innerHTML = '<svg style="animation:spin .8s linear infinite;width:18px;height:18px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Mengecek...';
+    btn.innerHTML = '<svg style="animation:spin .8s linear infinite;width:18px;height:18px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Menunggu...';
   }
 
-  // Tampil overlay checking — minimum tampil 1.5 detik biar terasa prosesnya
+  // Tampil overlay loading — tetap muncul sampai SUCCESS
   const overlay = document.getElementById('qrisStatusOverlay');
   overlay.style.display = 'flex';
   _showStatusState('checking');
 
-  const minDelay = new Promise(r => setTimeout(r, 1500));
+  window._pollingActive = true;
+  _pollStatus();
+}
+
+async function _pollStatus() {
+  if (!window._pollingActive || !window._qrisData) return;
+
+  const idTrx = window._qrisData.id_transaksi;
+  const url   = `https://qris.zakki.store/cektopup?idtopup=${idTrx}`;
+
+  // Update teks loading tiap poll
+  const loadingTxt = document.getElementById('statusLoadingTxt');
+  const dots = ['Menunggu konfirmasi.', 'Menunggu konfirmasi..', 'Menunggu konfirmasi...'];
+  let dotIdx = 0;
+  const dotTimer = setInterval(() => {
+    if (loadingTxt) loadingTxt.textContent = dots[dotIdx % 3];
+    dotIdx++;
+  }, 600);
 
   try {
-    const url = `https://qris.zakki.store/cektopup?idtopup=${idTrx}`;
-    const [res] = await Promise.all([fetch(url), minDelay]);
+    const res  = await fetch(url);
     const data = await res.json();
 
+    clearInterval(dotTimer);
+
     if (data.status === 'found' && data.kategori_status === 'SUCCESS') {
-      // Simpan ke riwayat OTOMATIS
-      _saveToHistory();
-      // Bangun link WA
+      // ✅ SUKSES — simpan history, buka WA, tampil success card
+      window._pollingActive = false;
+      await _saveToHistory();
       const waHref = _buildSuccessWaLink();
       const waLink = document.getElementById('successWaLink');
       if (waLink) waLink.href = waHref;
-      _showStatusState('success');
       clearInterval(window._qrisTimer);
-      // Buka WA otomatis
-      setTimeout(() => { window.open(waHref, '_blank'); }, 600);
+      _showStatusState('success');
+      // Reset tombol
+      const btn = document.getElementById('btnCekStatus');
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-search"></i> Cek Status Pembayaran'; }
+      // Buka WA otomatis setelah 800ms
+      setTimeout(() => window.open(waHref, '_blank'), 800);
 
-    } else if (data.kategori_status === 'PENDING' || data.status === 'found') {
-      _showStatusState('pending');
     } else {
-      _showStatusState('failed');
-      const msg = document.getElementById('statusFailedMsg');
-      if (msg) msg.textContent = data.message || 'Transaksi tidak ditemukan. Pastikan sudah membayar.';
+      // Masih PENDING — poll lagi 3 detik kemudian, overlay tetap tampil
+      if (window._pollingActive) {
+        setTimeout(_pollStatus, 3000);
+      }
     }
+
   } catch (err) {
-    await minDelay;
-    _showStatusState('failed');
-    const msg = document.getElementById('statusFailedMsg');
-    if (msg) msg.textContent = 'Gagal terhubung ke server. Coba lagi.';
-  } finally {
-    const btn2 = document.getElementById('btnCekStatus');
-    if (btn2) {
-      btn2.disabled = false;
-      btn2.innerHTML = '<i class="fas fa-search"></i> Cek Status Pembayaran';
+    clearInterval(dotTimer);
+    // Network error — coba lagi 5 detik kemudian
+    if (window._pollingActive) {
+      if (loadingTxt) loadingTxt.textContent = 'Koneksi terputus, mencoba lagi...';
+      setTimeout(_pollStatus, 5000);
     }
   }
+}
+
+function stopPolling() {
+  window._pollingActive = false;
+  const overlay = document.getElementById('qrisStatusOverlay');
+  if (overlay) overlay.style.display = 'none';
+  const btn = document.getElementById('btnCekStatus');
+  if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-search"></i> Cek Status Pembayaran'; }
 }
 
 function _showStatusState(state) {
@@ -431,7 +458,10 @@ function _showStatusState(state) {
 }
 
 function closeStatusOverlay() {
+  window._pollingActive = false;
   document.getElementById('qrisStatusOverlay').style.display = 'none';
+  const btn = document.getElementById('btnCekStatus');
+  if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-search"></i> Cek Status Pembayaran'; }
 }
 
 function onPaymentSuccess() {
@@ -458,108 +488,50 @@ function _buildSuccessWaLink() {
   return 'https://wa.me/' + OWNER_WA + '?text=' + encodeURIComponent(msg);
 }
 
-// ===== HISTORY — Firestore per UID (private per akun Google) =====
-// localStorage hanya sebagai cache sementara, source of truth = Firestore
+// ===== HISTORY =====
+const HISTORY_KEY = 'astrobot_history';
 
-function _getCurrentUid() {
-  try {
-    const u = firebase.auth().currentUser;
-    return u ? u.uid : null;
-  } catch { return null; }
-}
+function _saveToHistory() {
+  const info  = window._qrisOrderInfo || {};
+  const d     = window._qrisData || {};
+  const total = d.rincian ? d.rincian.total_bayar.toLocaleString('id') : '';
+  const idTrx = d.id_transaksi || '-';
 
-function _localKey() {
-  const uid = _getCurrentUid();
-  return uid ? `astrobot_history_${uid}` : null;
-}
-
-// Simpan ke Firestore + cache localStorage
-async function _saveToHistory() {
-  const uid = _getCurrentUid();
-  const d    = window._qrisData || {};
-  const info = window._qrisOrderInfo || {};
-  const idTrx = d.id_transaksi || ('manual-' + Date.now());
-  const totalBayar = d.rincian ? d.rincian.total_bayar : (info.total || 0);
-  const totalStr = totalBayar.toLocaleString('id');
-
+  // Simpan teks WA lengkap biar bisa kirim ulang kapan aja
   const waMsg =
-    `Saya sudah melakukan pembayaran mohon untuk segera diproses min
-
-` +
-    `Paket: ${info.pkg || '-'}
-` +
-    `Nama: ${info.nama || '-'}
-` +
-    `Nomor WA: ${info.nomor || '-'}
-` +
-    `Link Grup: ${info.link || '-'}
-` +
-    `Total Dibayar: Rp ${totalStr}
-` +
+    `Saya sudah melakukan pembayaran mohon untuk segera diproses min\n\n` +
+    `Paket: ${info.pkg || '-'}\n` +
+    `Nama: ${info.nama || '-'}\n` +
+    `Nomor WA: ${info.nomor || '-'}\n` +
+    `Link Grup: ${info.link || '-'}\n` +
+    `Total Dibayar: Rp ${total}\n` +
     `ID Transaksi: ${idTrx}`;
 
   const entry = {
-    id:    idTrx,
-    pkg:   info.pkg   || '-',
-    nama:  info.nama  || '-',
-    nomor: info.nomor || '-',
-    link:  info.link  || '-',
-    total: totalBayar,
-    waktu: new Date().toISOString(),
-    waMsg: waMsg
+    id:     idTrx,
+    pkg:    info.pkg || '-',
+    nama:   info.nama || '-',
+    nomor:  info.nomor || '-',
+    link:   info.link || '-',
+    total:  d.rincian ? d.rincian.total_bayar : 0,
+    waktu:  new Date().toISOString(),
+    waMsg:  waMsg   // <-- teks lengkap tersimpan
   };
 
-  // Simpan ke Firestore kalau sudah login
-  if (uid) {
-    try {
-      const dbFs = firebase.firestore();
-      const ref  = dbFs.collection('users').doc(uid)
-                       .collection('history').doc(idTrx);
-      const snap = await ref.get();
-      if (!snap.exists) {
-        await ref.set({ ...entry, savedAt: firebase.firestore.FieldValue.serverTimestamp() });
-      }
-    } catch (e) { console.warn('Firestore save error:', e); }
-  }
-
-  // Cache lokal juga (sebagai fallback / speed)
-  const key = _localKey() || 'astrobot_history_guest';
-  try {
-    let list = JSON.parse(localStorage.getItem(key) || '[]');
-    if (!list.find(e => e.id === idTrx)) {
-      list.unshift(entry);
-      if (list.length > 50) list = list.slice(0, 50);
-      localStorage.setItem(key, JSON.stringify(list));
-    }
-  } catch {}
-
+  let list = _getHistory();
+  list.unshift(entry);
+  if (list.length > 50) list = list.slice(0, 50);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
   _updateHistoryBadge();
 }
 
-// Ambil dari Firestore (kalau login) atau localStorage cache
-async function _getHistory() {
-  const uid = _getCurrentUid();
-  if (uid) {
-    try {
-      const dbFs = firebase.firestore();
-      const snap = await dbFs.collection('users').doc(uid)
-                             .collection('history')
-                             .orderBy('savedAt', 'desc')
-                             .limit(50)
-                             .get();
-      if (!snap.empty) {
-        return snap.docs.map(d => d.data());
-      }
-    } catch (e) { console.warn('Firestore get error:', e); }
-  }
-  // Fallback: localStorage dengan key per UID
-  const key = _localKey() || 'astrobot_history_guest';
-  try { return JSON.parse(localStorage.getItem(key) || '[]'); }
+function _getHistory() {
+  try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
   catch { return []; }
 }
 
-async function _updateHistoryBadge() {
-  const list    = await _getHistory();
+function _updateHistoryBadge() {
+  const list    = _getHistory();
   const heroBtn = document.getElementById('historyHeroBtn');
   const badge   = document.getElementById('historyBadge');
   const navBtn  = document.getElementById('panelHistoryBtn');
@@ -585,11 +557,6 @@ function openHistoryPage() {
   document.getElementById('historyPage').style.display = 'block';
   document.body.style.overflow = 'hidden';
   _renderHistory();
-  // Tampilkan loading spinner sementara data dimuat
-  const listEl  = document.getElementById('historyList');
-  const emptyEl = document.getElementById('historyEmpty');
-  if (listEl) listEl.innerHTML = '<div style="padding:40px;text-align:center;color:#444;font-size:.85rem;">Memuat riwayat...</div>';
-  if (emptyEl) emptyEl.style.display = 'none';
 }
 
 function closeHistoryPage() {
@@ -597,38 +564,25 @@ function closeHistoryPage() {
   document.body.style.overflow = '';
 }
 
-async function clearHistory() {
+function clearHistory() {
   if (!confirm('Hapus semua riwayat pembelian?')) return;
-  const uid = _getCurrentUid();
-  // Hapus dari Firestore
-  if (uid) {
-    try {
-      const dbFs = firebase.firestore();
-      const snap = await dbFs.collection('users').doc(uid).collection('history').get();
-      const batch = dbFs.batch();
-      snap.docs.forEach(d => batch.delete(d.ref));
-      await batch.commit();
-    } catch(e) { console.warn('Clear Firestore error:', e); }
-  }
-  // Hapus cache lokal
-  const key = _localKey() || 'astrobot_history_guest';
-  localStorage.removeItem(key);
+  localStorage.removeItem(HISTORY_KEY);
   _updateHistoryBadge();
   _renderHistory();
 }
 
-async function _renderHistory() {
-  const list    = await _getHistory();
+function _renderHistory() {
+  const list    = _getHistory();
   const listEl  = document.getElementById('historyList');
   const emptyEl = document.getElementById('historyEmpty');
   if (!listEl) return;
 
   if (list.length === 0) {
     listEl.innerHTML = '';
-    if (emptyEl) emptyEl.style.display = 'flex';
+    emptyEl.style.display = 'flex';
     return;
   }
-  if (emptyEl) emptyEl.style.display = 'none';
+  emptyEl.style.display = 'none';
 
   listEl.innerHTML = list.map((e, i) => {
     const tgl    = new Date(e.waktu);
