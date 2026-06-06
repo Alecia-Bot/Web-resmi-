@@ -160,7 +160,11 @@ function _doOpenOrder(name, price, duration) {
   if ($('orderTotal'))      $('orderTotal').textContent      = formatted;
   window._orderInfo = { name, price, duration, raw };
   const modal = $('orderModal');
-  if (modal) { modal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+  if (modal) {
+    modal.style.display = 'flex';
+    modal.style.transform = 'translateX(0)';
+    document.body.style.overflow = 'hidden';
+  }
   if ($('orderNama'))    $('orderNama').value    = '';
   if ($('orderNomor'))   $('orderNomor').value   = '';
   if ($('orderLink'))    $('orderLink').value    = '';
@@ -169,7 +173,11 @@ function _doOpenOrder(name, price, duration) {
 
 function closeOrder() {
   const modal = document.getElementById('orderModal');
-  if (modal) { modal.style.display = 'none'; document.body.style.overflow = ''; }
+  if (modal) {
+    modal.style.transform = 'translateX(100%)';
+    setTimeout(() => { modal.style.display = 'none'; }, 350);
+    document.body.style.overflow = '';
+  }
 }
 
 function submitOrder() {
@@ -371,7 +379,10 @@ function closeHistoryPage() {
   if (!page) return;
   page.classList.remove('hp-visible');
   setTimeout(() => { page.style.display = 'none'; }, 280);
-  document.body.style.overflow = '';
+  // Jangan reset overflow jika ada modal lain yang masih terbuka
+  const orderOpen = document.getElementById('orderModal')?.style.display !== 'none';
+  const qrisOpen  = document.getElementById('qrisPayOverlay')?.style.display !== 'none';
+  if (!orderOpen && !qrisOpen) document.body.style.overflow = '';
 }
 
 function clearHistory() {
