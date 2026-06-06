@@ -1,6 +1,7 @@
 /* ===== From <style> tag ===== */
 
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
+a,button,input,select,textarea{outline:none;}
 html{scroll-behavior:smooth;scroll-padding-top:64px}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:#0a0a0a;color:#ffffff;overflow-x:hidden;padding-bottom:0;line-height:1.6}
 
@@ -915,4 +916,63 @@ footer{border-top:1px solid rgba(255,255,255,0.1);padding:28px 16px;text-align:c
 #orderModal.order-open {
   display: block !important;
   transform: translateX(0) !important;
+}
+
+/* ===== HISTORY PAGE ANIMATION ===== */
+#historyPage {
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform .35s cubic-bezier(.4,0,.2,1), opacity .3s ease;
+  will-change: transform, opacity;
+}
+#historyPage.hp-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* History card styles */
+.hist-card {
+  background: #0d0d0d;
+  border: 1px solid #161616;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color .2s, box-shadow .2s;
+}
+.hist-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: #0a1f0a;
+  border: 1px solid #1a3a1a;
+}
+.hist-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+}
+.hist-wa-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 11px;
+  background: #0a1f0a;
+  border: 1px solid #1a3a1a;
+  text-decoration: none;
+  transition: background .2s, border-color .2s;
+}
+.hist-wa-btn:active {
+  background: #0d2a0d;
+}
+@keyframes histCardIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hist-card-anim {
+  animation: histCardIn .28s cubic-bezier(.4,0,.2,1) both;
 }
