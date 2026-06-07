@@ -120,13 +120,14 @@ function updatePanelUser(user) {
   document.getElementById('panelLogoutWrap').style.display = 'block';
   document.getElementById('panelLoginWrap').style.display = 'none';
 
-  const displayName = user.displayName || user.username || 'User';
+  const displayName = user.displayName || user.name || user.username || 'User';
   document.getElementById('panelUserName').textContent = displayName;
   document.getElementById('panelUserEmail').textContent = user.email || '';
 
   const av = document.getElementById('panelUserAv');
-  if (user.photoURL) {
-    av.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" referrerpolicy="no-referrer">`;
+  const photoUrl = user.photoURL || user.picture || '';
+  if (photoUrl) {
+    av.innerHTML = `<img src="${photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" referrerpolicy="no-referrer">`;
   } else {
     av.textContent = displayName.charAt(0).toUpperCase();
   }
@@ -136,11 +137,9 @@ function updatePanelUser(user) {
 }
 
 function doLogout() {
-  if (typeof firebase !== 'undefined' && firebase.auth) {
-    firebase.auth().signOut().then(() => {
-      updatePanelUser(null);
-    });
-  }
+  if (!confirm('Yakin mau keluar dari Astrobot?')) return;
+  localStorage.removeItem('astrobot_session');
+  location.reload();
 }
 
 /* ===== ORDER MODAL ===== */
