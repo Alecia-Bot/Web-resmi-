@@ -18,16 +18,8 @@
 <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
 
 <link href="style.css" rel="stylesheet"/>
+<!-- Firebase -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script>
-// Disable Google One Tap / FedCM popup otomatis
-window.addEventListener('load', () => {
-  if (window.google && google.accounts && google.accounts.id) {
-    google.accounts.id.cancel();
-    google.accounts.id.disableAutoSelect();
-  }
-});
-</script>
 </head>
 <body>
 
@@ -156,7 +148,7 @@ window.addEventListener('load', () => {
 <header>
 <div class="hdr">
 <a class="logo" href="#" style="display:flex;align-items:center;gap:6px;text-decoration:none;">
-<span style="font-size:.78rem;font-weight:700;color:#fff;letter-spacing:.01em;display:flex;align-items:center;gap:5px;">Astrobot<svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;vertical-align:middle;"><circle cx="12" cy="12" r="12" fill="#1d9bf0"/><path d="M6.5 12.5l3.5 3.5 7.5-8" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+<span style="font-size:.78rem;font-weight:700;color:#fff;letter-spacing:.01em;">Astrobot</span>
 </a>
 <div class="hdr-right">
 <button class="menu-btn" onclick="openMenu()"><i class="fas fa-bars"></i></button>
@@ -1157,22 +1149,21 @@ window.addEventListener('load', () => {
 <script src="script.js"></script>
 <script src="auth.js"></script>
 <script>
-// GSI session check — no Firebase
+// Auth state listener: update panel user info & handle authGate
 document.addEventListener('DOMContentLoaded', () => {
-  // Disable Google One Tap popup otomatis
-  if (window.google && google.accounts && google.accounts.id) {
-    google.accounts.id.cancel();
-  }
-  // Restore session dari localStorage
-  try {
-    const session = JSON.parse(localStorage.getItem('astrobot_session') || 'null');
-    if (session && session.uid) {
-      updatePanelUser(session);
-    } else {
-      updatePanelUser(null);
-    }
-  } catch (e) {
-    updatePanelUser(null);
+  if (typeof firebase !== 'undefined' && firebase.auth) {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // Logged in: update panel, close gate if open, handle pending order
+        updatePanelUser(user);
+        const gate = document.getElementById('authGate');
+        if (gate && gate.style.display === 'flex') {
+          onLoginSuccess(user);
+        }
+      } else {
+        updatePanelUser(null);
+      }
+    });
   }
 });
 </script>

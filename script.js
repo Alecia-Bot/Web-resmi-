@@ -107,29 +107,26 @@ function updatePanelUser(user) {
     document.getElementById('panelNoUser').style.display = 'block';
     document.getElementById('panelLogoutWrap').style.display = 'none';
     document.getElementById('panelLoginWrap').style.display = 'block';
+    // Sembunyikan tombol history saat logout
     const heroBtn = document.getElementById('historyHeroBtn');
     const navBtn  = document.getElementById('panelHistoryBtn');
     if (heroBtn) heroBtn.style.display = 'none';
     if (navBtn)  navBtn.style.display = 'none';
     return;
   }
-  // Normalize field: support format GSI session (name/picture) maupun Firebase (displayName/photoURL)
-  const displayName = user.displayName || user.name || user.username || 'User';
-  const photoURL    = user.photoURL    || user.picture || null;
-  const email       = user.email       || '';
-
   const panelInfo = document.getElementById('panelUserInfo');
   panelInfo.style.display = 'flex';
   document.getElementById('panelNoUser').style.display = 'none';
   document.getElementById('panelLogoutWrap').style.display = 'block';
   document.getElementById('panelLoginWrap').style.display = 'none';
 
-  document.getElementById('panelUserName').textContent  = displayName;
-  document.getElementById('panelUserEmail').textContent = email;
+  const displayName = user.displayName || user.username || 'User';
+  document.getElementById('panelUserName').textContent = displayName;
+  document.getElementById('panelUserEmail').textContent = user.email || '';
 
   const av = document.getElementById('panelUserAv');
-  if (photoURL) {
-    av.innerHTML = `<img src="${photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" referrerpolicy="no-referrer">`;
+  if (user.photoURL) {
+    av.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" referrerpolicy="no-referrer">`;
   } else {
     av.textContent = displayName.charAt(0).toUpperCase();
   }
@@ -207,11 +204,10 @@ function handleBeli() {
     return;
   }
 
-  // Cek login via GSI session
-  const session = _getGSISession();
+  // Cek login
+  const session = (function(){ try { return JSON.parse(localStorage.getItem('astrobot_session') || 'null'); } catch { return null; } })();
   if (!session || !session.uid) {
     const modal = document.getElementById('orderModal');
-    window._pendingWa = null; // clear pending wa dulu
     window._pendingOrder = { name: modal.dataset.pkg, price: modal.dataset.price, duration: modal.dataset.duration };
     openAuthGate(null);
     return;
@@ -219,11 +215,6 @@ function handleBeli() {
 
   // Buka QRIS
   _openQrisPay();
-}
-
-// ─── Helper: baca GSI session dari localStorage ───────────────────────────
-function _getGSISession() {
-  try { return JSON.parse(localStorage.getItem('astrobot_session') || 'null'); } catch { return null; }
 }
 
 // ===== QRIS PAYMENT =====
@@ -282,6 +273,8 @@ async function _createQris(nominal) {
 
     const d = data.data;
     window._qrisData = d;
+    // Simpan ke history sebagai PENDING saat QRIS dibuat
+    _savePendingToHistory(d);
 
     // Isi nominal
     document.getElementById('qrisNominalAsli').textContent =
@@ -416,9 +409,9 @@ async function _pollStatus() {
     clearInterval(dotTimer);
 
     if (data.status === 'found' && data.kategori_status === 'SUCCESS') {
-      // ✅ SUKSES — simpan history, buka WA, tampil success card
+      // ✅ SUKSES — update history jadi sukses, buka WA, tampil success card
       window._pollingActive = false;
-      await _saveToHistory();
+      _updateHistoryStatus(window._qrisData?.id_transaksi, 'sukses');
       const waHref = _buildSuccessWaLink();
       const waLink = document.getElementById('successWaLink');
       if (waLink) waLink.href = waHref;
@@ -556,6 +549,52 @@ async function _sendFonnteNotif(info, d) {
 // ===== HISTORY =====
 const HISTORY_KEY = 'astrobot_history';
 
+function _savePendingToHistory(d) {
+  const info  = window._qrisOrderInfo || {};
+  const idTrx = d?.id_transaksi || ('TRX-' + Date.now());
+  const waMsg =
+    `Saya sudah melakukan pembayaran mohon untuk segera diproses min\n\n` +
+    `Paket: ${info.pkg || '-'}\n` +
+    `Nama: ${info.nama || '-'}\n` +
+    `Nomor WA: ${info.nomor || '-'}\n` +
+    `Link Grup: ${info.link || '-'}\n` +
+    `Total Dibayar: Rp ${d?.rincian?.total_bayar?.toLocaleString('id') || info.total || '-'}\n` +
+    `ID Transaksi: ${idTrx}`;
+
+  // Cek kalau ID transaksi sudah ada, jangan duplikat
+  let list = _getHistory();
+  if (list.some(e => e.id === idTrx)) return;
+
+  const entry = {
+    id:     idTrx,
+    pkg:    info.pkg   || '-',
+    nama:   info.nama  || '-',
+    nomor:  info.nomor || '-',
+    link:   info.link  || '-',
+    total:  d?.rincian?.total_bayar || info.total || 0,
+    waktu:  new Date().toISOString(),
+    status: 'pending', // ← PENDING dulu
+    waMsg
+  };
+
+  list.unshift(entry);
+  if (list.length > 50) list = list.slice(0, 50);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
+  _updateHistoryBadge();
+}
+
+function _updateHistoryStatus(idTrx, status) {
+  if (!idTrx) return;
+  let list = _getHistory();
+  const idx = list.findIndex(e => e.id === idTrx);
+  if (idx !== -1) {
+    list[idx].status = status;
+    list[idx].waktuSukses = status === 'sukses' ? new Date().toISOString() : null;
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
+    _updateHistoryBadge();
+  }
+}
+
 function _saveToHistory() {
   const info  = window._qrisOrderInfo || {};
   const d     = window._qrisData || {};
@@ -671,9 +710,9 @@ function _renderHistory() {
     <div class="hist-card hist-card-anim" style="animation-delay:${delay}s;">
       <!-- Header kartu -->
       <div style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #111111;">
-        <div class="hist-status-badge">
-          <span class="hist-dot"></span>
-          <span style="font-size:.65rem;font-weight:800;color:#22c55e;letter-spacing:.04em;">SUKSES</span>
+        <div class="hist-status-badge" style="${e.status === 'pending' ? 'background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.2);' : ''}">
+          <span class="hist-dot" style="${e.status === 'pending' ? 'background:#eab308;box-shadow:0 0 0 3px rgba(234,179,8,0.15);animation:none;' : ''}"></span>
+          <span style="font-size:.65rem;font-weight:800;color:${e.status === 'pending' ? '#eab308' : '#22c55e'};letter-spacing:.04em;">${e.status === 'pending' ? 'PENDING' : 'SUKSES'}</span>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;">
           <span style="font-size:.68rem;color:#3a3a3a;font-weight:600;">${tglStr}</span>
