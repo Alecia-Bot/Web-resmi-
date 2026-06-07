@@ -120,14 +120,13 @@ function updatePanelUser(user) {
   document.getElementById('panelLogoutWrap').style.display = 'block';
   document.getElementById('panelLoginWrap').style.display = 'none';
 
-  const displayName = user.displayName || user.name || user.username || 'User';
+  const displayName = user.displayName || user.username || 'User';
   document.getElementById('panelUserName').textContent = displayName;
   document.getElementById('panelUserEmail').textContent = user.email || '';
 
   const av = document.getElementById('panelUserAv');
-  const photoUrl = user.photoURL || user.picture || '';
-  if (photoUrl) {
-    av.innerHTML = `<img src="${photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" referrerpolicy="no-referrer">`;
+  if (user.photoURL) {
+    av.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" referrerpolicy="no-referrer">`;
   } else {
     av.textContent = displayName.charAt(0).toUpperCase();
   }
@@ -206,8 +205,8 @@ function handleBeli() {
   }
 
   // Cek login
-  const user = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth().currentUser : null;
-  if (!user) {
+  const session = (function(){ try { return JSON.parse(localStorage.getItem('astrobot_session') || 'null'); } catch { return null; } })();
+  if (!session || !session.uid) {
     const modal = document.getElementById('orderModal');
     window._pendingOrder = { name: modal.dataset.pkg, price: modal.dataset.price, duration: modal.dataset.duration };
     openAuthGate(null);
@@ -595,7 +594,7 @@ function _updateHistoryBadge() {
   const navBadge= document.getElementById('historyNavBadge');
   const count   = list.length;
   const label   = count > 9 ? '9+' : count;
-  const loggedIn = !!(typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser);
+  const loggedIn = !!(function(){ try { return JSON.parse(localStorage.getItem('astrobot_session') || 'null'); } catch { return null; } })();
 
   // Selalu tampilkan tombol history di hero
   if (heroBtn) heroBtn.style.display = 'flex';
