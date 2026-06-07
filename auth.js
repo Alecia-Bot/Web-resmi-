@@ -52,6 +52,12 @@ function showScreen(name) {
 
 // ─── INIT — cek session tersimpan ────────────────────────────────────────
 (function initAuth() {
+  // Pastikan Google One Tap tidak auto-muncul
+  if (window.google && google.accounts && google.accounts.id) {
+    google.accounts.id.cancel();
+    google.accounts.id.disableAutoSelect();
+  }
+
   const session = _getSession();
   if (session && session.uid) {
     const userData = _getUsers()[session.uid];
@@ -126,7 +132,17 @@ function _resetLoginBtn() {
 // ─── FULLY LOGGED IN ──────────────────────────────────────────────────────
 function _onFullyLoggedIn(session, userData) {
   closeAuthGate();
-  updatePanelUser(session);
+  // Merge session + userData supaya updatePanelUser dapat semua field (name/displayName, picture/photoURL, username)
+  const merged = {
+    uid:         session.uid,
+    name:        session.name,
+    displayName: userData.displayName || session.name,
+    email:       session.email        || userData.email,
+    photoURL:    userData.photoURL    || session.picture,
+    picture:     session.picture      || userData.photoURL,
+    username:    userData.username    || ''
+  };
+  updatePanelUser(merged);
 
   if (window._pendingOrder) {
     const p = window._pendingOrder;

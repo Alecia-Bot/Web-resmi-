@@ -18,8 +18,16 @@
 <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
 
 <link href="style.css" rel="stylesheet"/>
-<!-- Firebase -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+// Disable Google One Tap / FedCM popup otomatis
+window.addEventListener('load', () => {
+  if (window.google && google.accounts && google.accounts.id) {
+    google.accounts.id.cancel();
+    google.accounts.id.disableAutoSelect();
+  }
+});
+</script>
 </head>
 <body>
 
@@ -1149,21 +1157,22 @@
 <script src="script.js"></script>
 <script src="auth.js"></script>
 <script>
-// Auth state listener: update panel user info & handle authGate
+// GSI session check — no Firebase
 document.addEventListener('DOMContentLoaded', () => {
-  if (typeof firebase !== 'undefined' && firebase.auth) {
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        // Logged in: update panel, close gate if open, handle pending order
-        updatePanelUser(user);
-        const gate = document.getElementById('authGate');
-        if (gate && gate.style.display === 'flex') {
-          onLoginSuccess(user);
-        }
-      } else {
-        updatePanelUser(null);
-      }
-    });
+  // Disable Google One Tap popup otomatis
+  if (window.google && google.accounts && google.accounts.id) {
+    google.accounts.id.cancel();
+  }
+  // Restore session dari localStorage
+  try {
+    const session = JSON.parse(localStorage.getItem('astrobot_session') || 'null');
+    if (session && session.uid) {
+      updatePanelUser(session);
+    } else {
+      updatePanelUser(null);
+    }
+  } catch (e) {
+    updatePanelUser(null);
   }
 });
 </script>
