@@ -310,9 +310,6 @@ async function _createQris(nominal) {
       correctLevel: QRCode.CorrectLevel.M
     });
 
-    // Simpan ke riwayat sebagai PENDING segera setelah QRIS dibuat
-    _savePendingHistory();
-
     // Mulai timer 5 menit
     _startQrisTimer(300);
 
@@ -412,9 +409,9 @@ async function _pollStatus() {
     clearInterval(dotTimer);
 
     if (data.status === 'found' && data.kategori_status === 'SUCCESS') {
-      // ✅ SUKSES — update history dari pending → sukses
+      // ✅ SUKSES — simpan history, buka WA, tampil success card
       window._pollingActive = false;
-      await _saveToHistory('sukses');
+      await _saveToHistory();
       const waHref = _buildSuccessWaLink();
       const waLink = document.getElementById('successWaLink');
       if (waLink) waLink.href = waHref;
@@ -468,7 +465,7 @@ function closeStatusOverlay() {
 }
 
 function onPaymentSuccess() {
-  _saveToHistory('sukses');
+  _saveToHistory();
   const el = document.getElementById('successWaLink');
   if (el) window.open(el.href, '_blank');
 }
@@ -491,15 +488,74 @@ function _buildSuccessWaLink() {
   return 'https://wa.me/' + OWNER_WA + '?text=' + encodeURIComponent(msg);
 }
 
+
+// ===== FONNTE NOTIF =====
+async function _sendFonnteNotif(info, d) {
+  const FONNTE_TOKEN = 'V8N4FJuJmKr1Kspx7enx';
+  const total = d.rincian ? d.rincian.total_bayar.toLocaleString('id') : '0';
+  const idTrx = d.id_transaksi || '-';
+  const waktu = new Date().toLocaleString('id-ID', {
+    day:'2-digit', month:'2-digit', year:'numeric',
+    hour:'2-digit', minute:'2-digit'
+  });
+
+  const msg =
+    `*Transaksi Berhasil* ✅\n\n` +
+    `> Paket: ${info.pkg || '-'}\n` +
+    `> Nama: ${info.nama || '-'}\n` +
+    `> Nomor WA: ${info.nomor || '-'}\n` +
+    `> Total Dibayar: Rp ${total}\n` +
+    `> ID Transaksi: ${idTrx}\n` +
+    `> Waktu: ${waktu}\n\n` +
+    `> Thank you for the transaction 🙏`;
+
+  try {
+    // Kirim ke pembeli
+    await fetch('https://api.fonnte.com/send', {
+      method: 'POST',
+      headers: { 'Authorization': FONNTE_TOKEN },
+      body: new URLSearchParams({
+        target: info.nomor,
+        message: msg,
+        countryCode: '62'
+      })
+    });
+
+    // Kirim ke owner
+    await fetch('https://api.fonnte.com/send', {
+      method: 'POST',
+      headers: { 'Authorization': FONNTE_TOKEN },
+      body: new URLSearchParams({
+        target: OWNER_WA,
+        message: msg,
+        countryCode: '62'
+      })
+    });
+
+    // Kirim ke Channel WhatsApp
+    await fetch('https://api.fonnte.com/send', {
+      method: 'POST',
+      headers: { 'Authorization': FONNTE_TOKEN },
+      body: new URLSearchParams({
+        target: '120363420910613920@newsletter',
+        message: msg
+      })
+    });
+  } catch (e) {
+    console.error('Fonnte error:', e);
+  }
+}
+
 // ===== HISTORY =====
 const HISTORY_KEY = 'astrobot_history';
 
-function _saveToHistory(status = 'sukses') {
+function _saveToHistory() {
   const info  = window._qrisOrderInfo || {};
   const d     = window._qrisData || {};
   const total = d.rincian ? d.rincian.total_bayar.toLocaleString('id') : '';
   const idTrx = d.id_transaksi || '-';
 
+  // Simpan teks WA lengkap biar bisa kirim ulang kapan aja
   const waMsg =
     `Saya sudah melakukan pembayaran mohon untuk segera diproses min\n\n` +
     `Paket: ${info.pkg || '-'}\n` +
@@ -517,26 +573,14 @@ function _saveToHistory(status = 'sukses') {
     link:   info.link || '-',
     total:  d.rincian ? d.rincian.total_bayar : 0,
     waktu:  new Date().toISOString(),
-    status: status,  // 'pending' atau 'sukses'
-    waMsg:  waMsg
+    waMsg:  waMsg   // <-- teks lengkap tersimpan
   };
 
   let list = _getHistory();
-  // Kalau sudah ada entry dengan id yang sama, update statusnya
-  const existingIdx = list.findIndex(e => e.id === idTrx);
-  if (existingIdx !== -1) {
-    list[existingIdx] = { ...list[existingIdx], status: status, waktu: new Date().toISOString() };
-  } else {
-    list.unshift(entry);
-    if (list.length > 50) list = list.slice(0, 50);
-  }
+  list.unshift(entry);
+  if (list.length > 50) list = list.slice(0, 50);
   localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
   _updateHistoryBadge();
-}
-
-// Simpan PENDING segera setelah QRIS dibuat (dipanggil di _createQris setelah dapat response)
-function _savePendingHistory() {
-  _saveToHistory('pending');
 }
 
 function _getHistory() {
@@ -608,24 +652,21 @@ function _renderHistory() {
   }
   emptyEl.style.display = 'none';
 
-  listEl.innerHTML = list.slice().map((e, i) => {
+  listEl.innerHTML = list.slice().reverse().map((e, i) => {
+    const realIdx = list.length - 1 - i;
     const tgl    = new Date(e.waktu);
     const tglStr = tgl.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
     const jamStr = tgl.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
     const waUrl  = 'https://wa.me/' + OWNER_WA + '?text=' + encodeURIComponent(e.waMsg || '');
     const delay  = i * 0.06;
-    const isPending = e.status === 'pending';
-    const statusColor = isPending ? '#f97316' : '#22c55e';
-    const statusLabel = isPending ? 'PENDING' : 'SUKSES';
-    const dotAnim = isPending ? 'animation:pulse 1.2s infinite;' : '';
 
     return `
     <div class="hist-card hist-card-anim" style="animation-delay:${delay}s;">
       <!-- Header kartu -->
       <div style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #111111;">
-        <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;background:${isPending ? '#1f1000' : '#0a1f0a'};border:1px solid ${isPending ? '#3a2000' : '#1a3a1a'};">
-          <span style="width:5px;height:5px;border-radius:50%;background:${statusColor};flex-shrink:0;display:inline-block;${dotAnim}"></span>
-          <span style="font-size:.65rem;font-weight:800;color:${statusColor};letter-spacing:.04em;">${statusLabel}</span>
+        <div class="hist-status-badge">
+          <span class="hist-dot"></span>
+          <span style="font-size:.65rem;font-weight:800;color:#22c55e;letter-spacing:.04em;">SUKSES</span>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;">
           <span style="font-size:.68rem;color:#3a3a3a;font-weight:600;">${tglStr}</span>
@@ -640,7 +681,7 @@ function _renderHistory() {
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
           <div style="flex:1;min-width:0;">
             <div style="font-size:.92rem;font-weight:800;color:#fff;line-height:1.3;">${e.pkg}</div>
-            <div style="font-size:.68rem;color:#333;margin-top:3px;font-weight:600;">Transaksi #${list.length - i}${isPending ? ' · ⏳ Menunggu konfirmasi' : ''}</div>
+            <div style="font-size:.68rem;color:#333;margin-top:3px;font-weight:600;">Transaksi #${list.length - i}</div>
           </div>
           <div style="text-align:right;flex-shrink:0;">
             <div style="font-size:.95rem;font-weight:900;color:#22c55e;">Rp ${(e.total || 0).toLocaleString('id')}</div>
