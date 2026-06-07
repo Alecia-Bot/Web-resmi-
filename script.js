@@ -143,10 +143,10 @@ function doLogout() {
 
 /* ===== ORDER MODAL ===== */
 const priceMap = {
-  '5K':  { rp: 5000,  total: 5000  },
-  '10K': { rp: 10000, total: 10000 },
-  '18K': { rp: 18000, total: 18000 },
-  '25K': { rp: 25000, total: 25000 },
+  '5K':  { rp: 6000,  total: 6000  },
+  '10K': { rp: 12000, total: 12000 },
+  '18K': { rp: 20000, total: 20000 },
+  '25K': { rp: 29000, total: 29000 },
 };
 
 // openOrder: langsung buka, login dicek saat pencet Beli
@@ -754,14 +754,79 @@ function _renderHistory() {
           </div>` : ''}
         </div>
 
-        <!-- Tombol kirim ulang ke WA -->
-        <a href="${waUrl}" target="_blank" class="hist-wa-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#22c55e"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-          <span style="font-size:.8rem;font-weight:800;color:#22c55e;">Kirim Ulang ke Admin</span>
-        </a>
+        <!-- Tombol aksi: PENDING blokir & arahkan bayar, SUKSES buka WA -->
+        ${e.status === 'pending'
+          ? `<button onclick="_histPendingAction('${e.pkg}', ${e.total})" class="hist-wa-btn" style="background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.25);cursor:pointer;width:100%;font-family:inherit;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span style="font-size:.8rem;font-weight:800;color:#eab308;">Selesaikan Pembayaran</span>
+            </button>`
+          : `<a href="${waUrl}" target="_blank" class="hist-wa-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#22c55e"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+              <span style="font-size:.8rem;font-weight:800;color:#22c55e;">Kirim Ulang ke Admin</span>
+            </a>`
+        }
       </div>
     </div>`;
   }).join('');
+}
+
+// Dipanggil saat user pencet tombol di history PENDING
+function _histPendingAction(pkg, total) {
+  // Cari price key dari total
+  const priceKey = Object.keys(priceMap).find(k => priceMap[k].total === total);
+
+  // Tampilkan toast / notif dulu
+  _showHistToast(
+    `⚠️ Selesaikan transaksi terlebih dahulu`,
+    `Kamu masih punya pesanan <b>${pkg}</b> yang belum dibayar.`,
+    () => {
+      // Setelah toast ditutup → tutup history → buka order modal langsung
+      closeHistoryPage();
+      if (priceKey) {
+        // Cari durasi dari nama paket
+        const durMap = {
+          '5K': '15 hari', '10K': '30 hari',
+          '18K': '60 hari', '25K': '365 hari'
+        };
+        setTimeout(() => {
+          openOrder(pkg, priceKey, durMap[priceKey] || '');
+        }, 400);
+      }
+    }
+  );
+}
+
+// Toast notifikasi history
+function _showHistToast(title, msg, onClose) {
+  // Hapus toast lama kalau ada
+  const old = document.getElementById('histToast');
+  if (old) old.remove();
+
+  const el = document.createElement('div');
+  el.id = 'histToast';
+  el.style.cssText = `
+    position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+    z-index:99999;background:#1a1a1a;border:1px solid rgba(234,179,8,0.3);
+    border-radius:14px;padding:14px 18px;max-width:320px;width:90%;
+    box-shadow:0 8px 32px rgba(0,0,0,0.6);opacity:0;
+    transition:opacity .25s,transform .25s;text-align:center;
+  `;
+  el.innerHTML = `
+    <div style="font-size:.85rem;font-weight:800;color:#eab308;margin-bottom:5px;">${title}</div>
+    <div style="font-size:.78rem;color:#888;line-height:1.5;margin-bottom:12px;">${msg}</div>
+    <button onclick="document.getElementById('histToast').remove();${onClose ? '('+onClose.toString()+')()' : ''}"
+      style="background:linear-gradient(135deg,#7c3aed,#4f46e5);border:none;color:#fff;
+      padding:8px 20px;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;">
+      Bayar Sekarang
+    </button>
+  `;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => {
+    el.style.opacity = '1';
+    el.style.transform = 'translateX(-50%) translateY(0)';
+  });
+  // Auto close 8 detik
+  setTimeout(() => { if (el.parentNode) { el.style.opacity='0'; setTimeout(()=>el.remove(),300); } }, 8000);
 }
 
 async function cancelQris() {
