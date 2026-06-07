@@ -1,40 +1,47 @@
 /* ===========================
    AUTH.JS — Astrobot Login
-   Firebase Google Sign-In + Username Setup
+   Google Identity Services (GSI) — Tanpa Firebase
    ===========================
-
    Auth gate HANYA muncul saat user pencet "Sewa Sekarang" dan belum login.
    Main content selalu tampil — tidak perlu login untuk browsing.
 */
 
-// ─── FIREBASE CONFIG ───────────────────────────────────────────────────────
-const firebaseConfig = {
-  apiKey:            "AIzaSyBsoZ8DizsO2DBqqq4kP6GYV8EJXX6rV2U",
-  authDomain:        "astrobot-f248f.firebaseapp.com",
-  projectId:         "astrobot-f248f",
-  storageBucket:     "astrobot-f248f.firebasestorage.app",
-  messagingSenderId: "119300956122",
-  appId:             "1:119300956122:web:cd072a0d4c433a9351eae3"
-};
-// ───────────────────────────────────────────────────────────────────────────
-
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db   = firebase.firestore();
+const GOOGLE_CLIENT_ID = '659348325698-dkmt115eklqolj268mgcq32fcsim0ukj.apps.googleusercontent.com';
+const USERS_KEY = 'astrobot_users';
+const SESSION_KEY = 'astrobot_session';
 
 // DOM refs
-const authGate       = document.getElementById('authGate');
-const loginScreen    = document.getElementById('loginScreen');
-const usernameScreen = document.getElementById('usernameScreen');
-const loadingScreen  = document.getElementById('loadingScreen');
-const btnGoogleLogin = document.getElementById('btnGoogleLogin');
-const btnSaveUsername= document.getElementById('btnSaveUsername');
-const usernameInput  = document.getElementById('usernameInput');
-const usernameHint   = document.getElementById('usernameHint');
-const setupAvatar    = document.getElementById('setupAvatar');
-const setupName      = document.getElementById('setupName');
+const authGate        = document.getElementById('authGate');
+const loginScreen     = document.getElementById('loginScreen');
+const usernameScreen  = document.getElementById('usernameScreen');
+const loadingScreen   = document.getElementById('loadingScreen');
+const btnGoogleLogin  = document.getElementById('btnGoogleLogin');
+const btnSaveUsername = document.getElementById('btnSaveUsername');
+const usernameInput   = document.getElementById('usernameInput');
+const usernameHint    = document.getElementById('usernameHint');
+const setupAvatar     = document.getElementById('setupAvatar');
+const setupName       = document.getElementById('setupName');
 
-// ─── SHOW HELPERS ──────────────────────────────────────────────────────────
+// ─── LOCAL STORAGE HELPERS ────────────────────────────────────────────────
+function _getUsers() {
+  try { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}'); } catch { return {}; }
+}
+function _saveUser(uid, data) {
+  const users = _getUsers();
+  users[uid] = { ...users[uid], ...data };
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+}
+function _getSession() {
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch { return null; }
+}
+function _saveSession(data) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify(data));
+}
+function _clearSession() {
+  localStorage.removeItem(SESSION_KEY);
+}
+
+// ─── SHOW HELPERS ─────────────────────────────────────────────────────────
 function showScreen(name) {
   [loginScreen, usernameScreen, loadingScreen].forEach(s => {
     s.classList.remove('active');
@@ -45,54 +52,101 @@ function showScreen(name) {
   if (el) { el.style.display = 'flex'; el.classList.add('active'); }
 }
 
-// ─── AUTH STATE — hanya update UI, JANGAN sembunyikan main content ─────────
-auth.onAuthStateChanged(async (user) => {
-  if (!user) {
-    // Tidak login: update panel saja, main content tetap tampil
+// ─── INIT — cek session tersimpan ────────────────────────────────────────
+(function initAuth() {
+  const session = _getSession();
+  if (session && session.uid) {
+    const users = _getUsers();
+    const userData = users[session.uid];
+    if (userData && userData.username) {
+      _onFullyLoggedIn(session, userData);
+    }
+  } else {
     updatePanelUser(null);
-    return;
   }
+})();
 
-  try {
-    const userDoc = await db.collection('users').doc(user.uid).get();
+// ─── GOOGLE LOGIN — pakai GSI One Tap / popup ────────────────────────────
+btnGoogleLogin.addEventListener('click', () => {
+  btnGoogleLogin.disabled = true;
+  btnGoogleLogin.innerHTML = `
+    <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
+    Menghubungkan...`;
 
-    if (userDoc.exists && userDoc.data().username) {
-      // Sudah punya username
-      _onFullyLoggedIn(user, userDoc.data());
-    } else {
-      // Belum set username — tapi hanya tampilkan setup KALAU auth gate lagi terbuka
-      if (authGate.style.display === 'flex') {
-        prepareUsernameScreen(user);
-        showScreen('username');
-      } else {
-        // Login dari luar gate (misal redirect) — tetap tunjukkan username setup
-        authGate.style.display = 'flex';
-        prepareUsernameScreen(user);
-        showScreen('username');
-        document.body.style.overflow = 'hidden';
+  // Gunakan GSI popup
+  google.accounts.oauth2.initTokenClient({
+    client_id: GOOGLE_CLIENT_ID,
+    scope: 'openid email profile',
+    callback: async (tokenResponse) => {
+      if (tokenResponse.error) {
+        _resetLoginBtn();
+        return;
+      }
+      try {
+        // Ambil info user dari Google
+        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+        });
+        const profile = await res.json();
+        await _handleGoogleProfile(profile);
+      } catch (e) {
+        console.error('Google login error:', e);
+        _resetLoginBtn();
       }
     }
-  } catch (e) {
-    console.error('Auth check error:', e);
-    // Gagal cek — tutup gate, biarkan user tetap browse
-    closeAuthGate();
-  }
+  }).requestAccessToken();
 });
 
-// Dipanggil saat user sudah fully logged in (ada username)
-function _onFullyLoggedIn(user, userData) {
-  closeAuthGate();
-  updatePanelUser(user);
-  injectUserBadge(user, userData);
+async function _handleGoogleProfile(profile) {
+  const uid = profile.sub; // Google user ID
+  const session = {
+    uid,
+    name: profile.name,
+    email: profile.email,
+    picture: profile.picture
+  };
+  _saveSession(session);
 
-  // Kalau ada pending order buka, lanjutkan
+  const users = _getUsers();
+  const existing = users[uid];
+
+  if (existing && existing.username) {
+    _onFullyLoggedIn(session, existing);
+  } else {
+    // Simpan data profile dulu
+    _saveUser(uid, {
+      displayName: profile.name,
+      email: profile.email,
+      photoURL: profile.picture
+    });
+    // Tampilkan username setup
+    if (authGate.style.display !== 'flex') {
+      authGate.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    prepareUsernameScreen(session);
+    showScreen('username');
+  }
+}
+
+function _resetLoginBtn() {
+  btnGoogleLogin.disabled = false;
+  btnGoogleLogin.innerHTML = `
+    <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
+    Masuk dengan Google`;
+}
+
+// ─── FULLY LOGGED IN ──────────────────────────────────────────────────────
+function _onFullyLoggedIn(session, userData) {
+  closeAuthGate();
+  updatePanelUser(session);
+  injectUserBadge(session, userData);
+
   if (window._pendingOrder) {
     const p = window._pendingOrder;
     window._pendingOrder = null;
     _doOpenOrder(p.name, p.price, p.duration);
   }
-
-  // Kalau ada pending WA (pencet Beli sebelum login), langsung kirim
   if (window._pendingWa) {
     const w = window._pendingWa;
     window._pendingWa = null;
@@ -100,45 +154,26 @@ function _onFullyLoggedIn(user, userData) {
   }
 }
 
-// ─── GOOGLE LOGIN ─────────────────────────────────────────────────────────
-btnGoogleLogin.addEventListener('click', async () => {
-  btnGoogleLogin.disabled = true;
-  btnGoogleLogin.innerHTML = `
-    <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
-    Menghubungkan...`;
+// ─── USERNAME SCREEN ──────────────────────────────────────────────────────
+function prepareUsernameScreen(session) {
+  const firstName = (session.name || 'Kamu').split(' ')[0];
+  setupName.textContent = firstName;
 
-  try {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    await auth.signInWithPopup(provider);
-    // onAuthStateChanged handles the rest
-  } catch (e) {
-    console.error('Google login error:', e);
-    btnGoogleLogin.disabled = false;
-    btnGoogleLogin.innerHTML = `
-      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
-      Masuk dengan Google`;
-  }
-});
-
-// ─── USERNAME SCREEN PREP ─────────────────────────────────────────────────
-function prepareUsernameScreen(user) {
-  setupName.textContent = user.displayName ? user.displayName.split(' ')[0] : 'Kamu';
-
-  if (user.photoURL) {
-    setupAvatar.innerHTML = `<img src="${user.photoURL}" alt="avatar" referrerpolicy="no-referrer">`;
+  if (session.picture) {
+    setupAvatar.innerHTML = `<img src="${session.picture}" alt="avatar" referrerpolicy="no-referrer">`;
   } else {
-    const initials = (user.displayName || 'U').split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
+    const initials = (session.name || 'U').split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
     setupAvatar.textContent = initials;
   }
 
-  if (user.displayName) {
-    const suggested = user.displayName.toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 20);
+  if (session.name) {
+    const suggested = session.name.toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 20);
     usernameInput.value = suggested;
     validateUsername(suggested);
   }
 }
 
-// ─── USERNAME VALIDATION ──────────────────────────────────────────────────
+// ─── USERNAME VALIDATION ─────────────────────────────────────────────────
 const usernameRegex = /^[a-z0-9_]{3,20}$/;
 let checkTimeout = null;
 
@@ -153,20 +188,18 @@ function validateUsername(val) {
   btnSaveUsername.disabled = true;
   if (val.length < 3) { setHint('3–20 karakter, huruf/angka/underscore saja', ''); return; }
   if (!usernameRegex.test(val)) { setHint('Hanya boleh huruf kecil, angka, dan underscore (_)', 'error'); return; }
-  setHint('Mengecek ketersediaan...', '');
-  checkTimeout = setTimeout(async () => {
-    try {
-      const snap = await db.collection('usernames').doc(val).get();
-      if (snap.exists) {
-        setHint('Username sudah dipakai, coba yang lain', 'error');
-      } else {
-        setHint('✓ Username tersedia!', 'success');
-        btnSaveUsername.disabled = false;
-      }
-    } catch {
-      setHint('Gagal mengecek, coba lagi', 'error');
+
+  // Cek username di localStorage
+  checkTimeout = setTimeout(() => {
+    const users = _getUsers();
+    const taken = Object.values(users).some(u => u.username === val);
+    if (taken) {
+      setHint('Username sudah dipakai, coba yang lain', 'error');
+    } else {
+      setHint('✓ Username tersedia!', 'success');
+      btnSaveUsername.disabled = false;
     }
-  }, 500);
+  }, 400);
 }
 
 function setHint(text, type) {
@@ -175,31 +208,25 @@ function setHint(text, type) {
 }
 
 // ─── SAVE USERNAME ────────────────────────────────────────────────────────
-btnSaveUsername.addEventListener('click', async () => {
+btnSaveUsername.addEventListener('click', () => {
   const username = usernameInput.value.trim();
   if (!usernameRegex.test(username)) return;
 
   btnSaveUsername.disabled = true;
   btnSaveUsername.textContent = 'Menyimpan...';
 
-  const user = auth.currentUser;
-  if (!user) { showScreen('login'); return; }
+  const session = _getSession();
+  if (!session) { showScreen('login'); return; }
 
   try {
-    const batch = db.batch();
-    batch.set(db.collection('usernames').doc(username), {
-      uid: user.uid,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    batch.set(db.collection('users').doc(user.uid), {
+    _saveUser(session.uid, {
       username,
-      displayName: user.displayName || '',
-      email: user.email || '',
-      photoURL: user.photoURL || '',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      displayName: session.name || '',
+      email: session.email || '',
+      photoURL: session.picture || ''
     });
-    await batch.commit();
-    _onFullyLoggedIn(user, { username, displayName: user.displayName, photoURL: user.photoURL });
+    const userData = _getUsers()[session.uid];
+    _onFullyLoggedIn(session, userData);
   } catch (e) {
     console.error('Save username error:', e);
     btnSaveUsername.disabled = false;
@@ -210,7 +237,7 @@ btnSaveUsername.addEventListener('click', async () => {
 
 // ─── USER BADGE IN HEADER ────────────────────────────────────────────────
 let _badgeInjected = false;
-function injectUserBadge(user, userData) {
+function injectUserBadge(session, userData) {
   if (_badgeInjected) return;
   _badgeInjected = true;
 
@@ -220,8 +247,8 @@ function injectUserBadge(user, userData) {
   const wrap = document.createElement('div');
   wrap.style.position = 'relative';
 
-  const avatarHtml = user.photoURL
-    ? `<div class="user-badge-av"><img src="${user.photoURL}" alt="av" referrerpolicy="no-referrer"></div>`
+  const avatarHtml = session.picture
+    ? `<div class="user-badge-av"><img src="${session.picture}" alt="av" referrerpolicy="no-referrer"></div>`
     : `<div class="user-badge-av">${(userData.username || 'U')[0].toUpperCase()}</div>`;
 
   wrap.innerHTML = `
@@ -232,7 +259,7 @@ function injectUserBadge(user, userData) {
     </button>
     <div class="user-dropdown" id="userDropdown">
       <div class="user-dropdown-item" style="pointer-events:none;opacity:.5;font-size:.72rem;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06)">
-        <i class="fas fa-user"></i> ${user.email || user.displayName}
+        <i class="fas fa-user"></i> ${session.email || session.name}
       </div>
       <button class="user-dropdown-item danger" onclick="logoutUser()">
         <i class="fas fa-sign-out-alt"></i> Keluar
@@ -253,24 +280,8 @@ window.toggleUserDropdown = function() {
   document.getElementById('userDropdown')?.classList.toggle('open');
 };
 
-window.logoutUser = async function() {
+window.logoutUser = function() {
   if (!confirm('Yakin mau keluar dari Astrobot?')) return;
-  await auth.signOut();
+  _clearSession();
   location.reload();
 };
-
-/* ===== CATATAN FIRESTORE RULES =====
-   Tambahkan rules ini di Firebase Console → Firestore → Rules:
-
-   rules_version = '2';
-   service cloud.firestore {
-     match /databases/{database}/documents {
-       match /users/{userId}/{document=**} {
-         allow read, write: if request.auth != null && request.auth.uid == userId;
-       }
-     }
-   }
-
-   Rules ini memastikan user HANYA bisa baca/tulis data milik UID-nya sendiri.
-   User Google lain sama sekali tidak bisa akses history orang lain.
-===================================== */
