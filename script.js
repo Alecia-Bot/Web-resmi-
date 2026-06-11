@@ -175,10 +175,13 @@ function _doOpenOrder(name, price, duration) {
   if ($('orderLink'))    $('orderLink').value    = '';
   if ($('orderCatatan')) $('orderCatatan').value = '';
 
-  // Slide-in animation
-  modal.style.display = 'block';
+  // Slide-in animation - pakai visibility supaya transition bekerja
+  modal.style.visibility = 'visible';
   modal.style.transform = 'translateX(100%)';
   document.body.style.overflow = 'hidden';
+  // Naikkan z-index panel supaya hamburger tetap bisa dibuka di atas orderModal
+  const panel = document.getElementById('pn');
+  if (panel) panel.style.zIndex = '10000';
   // force reflow then animate
   modal.offsetHeight;
   modal.style.transform = 'translateX(0)';
@@ -189,8 +192,11 @@ function closeOrder() {
   const modal = document.getElementById('orderModal');
   modal.style.transform = 'translateX(100%)';
   setTimeout(() => {
-    modal.style.display = 'none';
+    modal.style.visibility = 'hidden';
     document.body.style.overflow = '';
+    // Reset z-index panel
+    const panel = document.getElementById('pn');
+    if (panel) panel.style.zIndex = '';
   }, 350);
 }
 
