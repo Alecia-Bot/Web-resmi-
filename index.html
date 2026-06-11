@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="Astrobot – Layanan WhatsApp Bot Terbaik &amp; Terpercaya" property="og:title"/>
+<meta content="Astrobot Digital Bot WhatsApp , downloader, AI chat, game &amp; fitur.lengkap Stabil 24/7." property="og:description"/>
+<meta content="https://cdn.nekohime.site/file/bWENc47k.jpeg" property="og:image"/>
+<meta content="https://astrobot.my.id" property="og:url"/>
+<meta content="website" property="og:type"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="https://cdn.nekohime.site/file/bWENc47k.jpeg" name="twitter:image"/>
+<link href="https://cdn.nekohime.site/file/bWENc47k.jpeg" rel="icon" type="image/jpeg"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Astrobot – Layanan WhatsApp Bot Terbaik &amp; Terpercaya</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
+
+<link href="style.css" rel="stylesheet"/>
+<!-- Firebase -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+<!-- ===== AUTH MODAL (opsional - hanya muncul saat beli) ===== -->
+<div id="authGate" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
+
+  <!-- LOGIN SCREEN -->
+  <div id="loginScreen" class="auth-screen active">
+    <div class="auth-bg-grid"></div>
+    <div class="auth-card">
+      <button onclick="closeAuthGate()" style="position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:7px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);color:#666;cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
+      <div class="auth-logo">
+        <span class="auth-logo-dot"></span>
+        <span class="auth-logo-name">Astrobot</span>
+        <svg width="13" height="18" viewBox="0 0 13 18" fill="none"><defs><linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#666"/><stop offset="40%" stop-color="#555"/><stop offset="100%" stop-color="#333"/></linearGradient></defs><path d="M8.5 1L1 10.2H6.2L4.5 17L12 7.5H6.8L8.5 1Z" fill="url(#bg2)" stroke="#444" stroke-width="0.3" stroke-linejoin="round"/></svg>
+      </div>
+      <h1 class="auth-title">Login Diperlukan</h1>
+      <p class="auth-sub">Silakan login untuk melanjutkan pembelian</p>
+      <button id="btnGoogleLogin" class="auth-google-btn">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
+        Masuk dengan Google
+      </button>
+      <p class="auth-footer-note">Dengan masuk, kamu menyetujui syarat & ketentuan Astrobot</p>
+    </div>
+  </div>
+
+  <!-- USERNAME SETUP SCREEN -->
+  <div id="usernameScreen" class="auth-screen">
+    <div class="auth-bg-grid"></div>
+    <div class="auth-card">
+      <div class="auth-avatar" id="setupAvatar"></div>
+      <h1 class="auth-title">Atur Username</h1>
+      <p class="auth-sub">Hei <span id="setupName" style="color:#fff;font-weight:700"></span>! Pilih username unik kamu</p>
+      <div class="auth-input-wrap">
+        <span class="auth-input-prefix">@</span>
+        <input type="text" id="usernameInput" class="auth-input" placeholder="username kamu" maxlength="20" autocomplete="off" spellcheck="false"/>
+      </div>
+      <p class="auth-input-hint" id="usernameHint">3–20 karakter, huruf/angka/underscore saja</p>
+      <button id="btnSaveUsername" class="auth-save-btn" disabled>Simpan & Masuk</button>
+    </div>
+  </div>
+
+  <!-- LOADING SCREEN -->
+  <div id="loadingScreen" class="auth-screen" style="display:none">
+    <div class="auth-bg-grid"></div>
+    <div class="auth-spinner-wrap">
+      <div class="auth-spinner"></div>
+      <p style="color:#aaa;font-size:.85rem;margin-top:16px">Memuat...</p>
+    </div>
+  </div>
+
+</div>
+<!-- ===== END AUTH MODAL ===== -->
+
+<!-- MAIN CONTENT (selalu tampil) -->
+<div id="mainContent">
+
+<div id="bar"></div>
+<!-- QRIS MODAL -->
+<div class="qmodal" id="qm" onclick="if(event.target===this)closeQ()">
+<div class="qbox">
+<button class="qclose" onclick="closeQ()"><i class="fas fa-times"></i></button>
+<div class="qtitle">QRIS Pembayaran</div>
+<div class="qsub">Scan QR untuk bayar langsung &amp; aman</div>
+<div class="qimg">
+<i class="fas fa-qrcode"></i>
+<p>QR Code Astrobot</p>
+<p style="font-size:.65rem;margin-top:2px">Astrobot Payment</p>
+</div>
+<div class="qsteps">
+<b>Cara bayar:</b><br/>
+      1. Buka e-wallet / mobile banking<br/>
+      2. Pilih menu Scan QRIS<br/>
+      3. Arahkan ke QR di atas<br/>
+      4. Konfirmasi &amp; kirim bukti ke admin
+    </div>
+</div>
+</div>
+<!-- OVERLAY -->
+<div class="overlay" id="ov" onclick="closeMenu()" style="z-index:999998;"></div>
+<!-- MENU PANEL -->
+<div class="panel" id="pn" style="z-index:999999;">
+<div class="panel-head">
+<div id="panelUserInfo" style="display:none;align-items:center;gap:10px;flex:1;min-width:0">
+  <div id="panelUserAv" style="width:36px;height:36px;border-radius:50%;background:#222;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#ccc;font-weight:700;overflow:hidden;flex-shrink:0"></div>
+  <div style="min-width:0;flex:1">
+    <div id="panelUserName" style="font-size:.82rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+    <div id="panelUserEmail" style="font-size:.68rem;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+  </div>
+</div>
+<div id="panelNoUser" style="flex:1">
+  <h3>Menu Navigasi</h3>
+</div>
+<button class="panel-close" onclick="closeMenu()"><i class="fas fa-times"></i></button>
+</div>
+<nav class="panel-nav">
+<a class="plink" href="#features" onclick="closeMenu()"><i class="fas fa-star"></i> Fitur Unggulan</a>
+<a class="plink" href="#pricing" onclick="closeMenu()"><i class="fas fa-tags"></i> Paket Harga</a>
+<a class="plink" href="#testimonials" onclick="closeMenu()"><i class="fas fa-comment"></i> Testimoni</a>
+<a class="plink" href="#faq" onclick="closeMenu()"><i class="fas fa-question-circle"></i> FAQ</a>
+<a class="plink" href="https://wa.me/6289674097203" target="_blank"><i class="fab fa-whatsapp"></i> Hubungi Admin</a>
+<button class="plink special" onclick="openQ();closeMenu()">
+<i class="fas fa-qrcode"></i> QRIS Pembayaran
+      <span style="margin-left:auto;font-size:.63rem;background:#dcfce7;color:#16a34a;padding:2px 7px;border-radius:99px">Baru</span>
+</button>
+<button id="panelHistoryBtn" class="plink" style="display:none;" onclick="openHistoryPage();closeMenu()">
+  <i class="fas fa-receipt" style="color:#888;"></i> Riwayat Pembelian
+  <span id="historyNavBadge" style="margin-left:auto;font-size:.63rem;background:#1a1230;color:#888;padding:2px 7px;border-radius:99px;border:1px solid #3b1f8c;">0</span>
+</button>
+<div id="panelLoginWrap" style="padding:6px 10px 0">
+  <button class="plink" onclick="openAuthGate(null);closeMenu();" style="width:100%;border-radius:9px;background:#1a1a1a;color:#ccc;border:1px solid rgba(255,255,255,0.12);">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+    Login / Masuk
+  </button>
+</div>
+<div id="panelLogoutWrap" style="display:none;padding:6px 10px 0">
+  <button class="plink" id="panelLogoutBtn" style="width:100%;border-radius:9px;background:rgba(248,113,113,0.08);color:#f87171;border:1px solid rgba(248,113,113,0.2)" onclick="doLogout();closeMenu()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:#f87171"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    Keluar (Logout)
+  </button>
+</div>
+</nav>
+<div class="panel-foot">© 2025 Astrobot · All rights reserved</div>
+</div>
+<!-- HEADER -->
+<header>
+<div class="hdr">
+<a class="logo" href="#" style="display:flex;align-items:center;gap:6px;text-decoration:none;">
+<span style="font-size:.78rem;font-weight:700;color:#fff;letter-spacing:.01em;">Astrobot</span>
+</a>
+<div class="hdr-right">
+<button class="menu-btn" onclick="openMenu()"><i class="fas fa-bars"></i></button>
+</div>
+</div>
+</header>
+<!-- SABTU PROMO BANNER -->
+
+<!-- BANNER -->
+<div class="banner">
+<div class="banner-wrap">
+<img alt="Astrobot" loading="lazy" src="https://cdn.nekohime.site/file/8o6yi8rl.jpeg"/>
+</div>
+</div>
+<!-- HERO -->
+<section>
+<div class="hero">
+<div class="hero-grid">
+<!-- KIRI -->
+<div>
+<div class="hero-badge" style="display:flex;align-items:center;gap:5px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;"><circle cx="12" cy="12" r="12" fill="#1d9bf0"/><path d="M6.5 12.5l3.5 3.5 7.5-8" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Astrobot Dev</div>
+<h1>Astrobot <span>WhatsApp</span> Bot</h1>
+<div class="type-wrap">
+<span class="typed">Otomatis untuk Grup &amp; Pribadi</span>
+</div>
+<p class="hero-desc">Bot WhatsApp untuk manajemen grup, download media, game seru, dan AI chat. Stabil seharian, gampang dipake, harga ga bikin kantong jebol.</p>
+<div class="hero-btns">
+<a class="btn-purple" href="#pricing"><i class="fas fa-tags" style="font-size:.8rem"></i> Lihat Harga</a>
+<button id="historyHeroBtn" onclick="openHistoryPage()" style="display:flex;position:relative;align-items:center;gap:7px;" class="btn-outline">
+  <i class="fas fa-receipt" style="font-size:.85rem"></i> Riwayat
+  <span id="historyBadge" style="display:none;position:absolute;top:-6px;right:-6px;min-width:16px;height:16px;border-radius:99px;background:#333;font-size:.55rem;color:#fff;font-weight:800;align-items:center;justify-content:center;padding:0 4px;line-height:16px;">0</span>
+</button>
+<a class="btn-outline" href="https://wa.me/6289674097203" target="_blank"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:.9rem"></i> Hubungi Admin</a>
+</div>
+<div class="stats">
+<div class="stat">
+<div class="stat-n"><span class="countup" data-n="14765">0</span> <svg fill="none" height="18" style="vertical-align:middle;margin-left:3px;flex-shrink:0" viewbox="0 0 18 18" width="18"><circle cx="9" cy="9" fill="#1a1a1a" r="9" stroke="rgba(255,255,255,0.3)" stroke-width="1"></circle><path d="M5.5 9.2l2.5 2.5 5-5" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></div>
+<div class="stat-l">Pengguna Verified</div>
+</div>
+<div class="stat">
+<div class="stat-n">24h</div>
+<div class="stat-l">Online</div>
+</div>
+<div class="stat">
+<div class="stat-n">99%</div>
+<div class="stat-l">Uptime</div>
+</div>
+</div>
+</div>
+<!-- KANAN: FEATURE CARD -->
+<div id="features">
+<div class="feat-card rv d2">
+<div class="fc-head">
+<span class="tl-d tl-r"></span>
+<span class="tl-d tl-y"></span>
+<span class="tl-d tl-g"></span>
+<span>astrobot.features</span>
+</div>
+<div class="fc-body">
+<div class="fc-lbl">Fitur Populer</div>
+<ul class="feat-list">
+<li class="feat-item">
+<span class="fi-ic"><i class="fas fa-download"></i></span>
+<span><b>All-in-One Downloader</b>TikTok, IG, FB tanpa watermark</span>
+</li>
+<li class="feat-item">
+<span class="fi-ic"><i class="fas fa-robot"></i></span>
+<span><b>AI Chat</b>Tanya apa saja, langsung dijawab</span>
+</li>
+<li class="feat-item">
+<span class="fi-ic"><i class="fas fa-sticky-note"></i></span>
+<span><b>Brat &amp; BratVid</b>Teks jadi stiker/video estetik</span>
+</li>
+<li class="feat-item">
+<span class="fi-ic"><i class="fas fa-users"></i></span>
+<span><b>Tools Grup</b>Welcome, anti-link, admin tools</span>
+</li>
+<li class="feat-item">
+<span class="fi-ic"><i class="fas fa-gamepad"></i></span>
+<span><b>RPG &amp; Game</b>Ekonomi, quest, dan game seru</span>
+</li>
+<li class="feat-item">
+<span class="fi-ic"><i class="fas fa-comment-dots"></i></span>
+<span><b>Auto-Reply</b>Respon cepat tanpa delay</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- WHY -->
+<section class="why-sec">
+<div class="sec">
+<div class="sec-lbl">Kenapa Astrobot?</div>
+<h2 class="sec-title rv"></h2>
+<div class="why-grid">
+<div class="why-card rv d1">
+<div class="why-ic ic-p"><i class="fas fa-bolt"></i></div>
+<div class="why-t">Respon Instan</div>
+<div class="why-d">Menjawab pesan dalam hitungan milidetik. Ga ada delay, ga ada drama.</div>
+</div>
+<div class="why-card rv d2">
+<div class="why-ic ic-b"><i class="fas fa-users"></i></div>
+<div class="why-t">Manajemen Grup</div>
+<div class="why-d">Welcome message, anti-link, kick spam, dan tools admin lengkap.</div>
+</div>
+<div class="why-card rv d3">
+<div class="why-ic ic-g"><i class="fas fa-shield-halved"></i></div>
+<div class="why-t">Server Stabil</div>
+<div class="why-d">Uptime 99%+. Kalau bot down lebih dari 24 jam, masa aktif kamu otomatis diperpanjang.</div>
+</div>
+</div>
+</div>
+</section>
+<!-- PRICING -->
+<section id="pricing">
+<div class="sec">
+<div class="sec-lbl">Paket &amp; Harga</div>
+<h2 class="sec-title rv">Pilih paket <span>yang cocok.</span></h2>
+
+<!-- FILTER TABS -->
+<div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;">
+  <button onclick="filterPricing('group')" id="tab-group" class="pricing-tab active-tab">
+    Sewa Bot (Group)
+  </button>
+  <button onclick="filterPricing('premium')" id="tab-premium" class="pricing-tab">
+    Premium (Pribadi)
+  </button>
+  <button onclick="filterPricing('jadibot')" id="tab-jadibot" class="pricing-tab">
+    Jadibot (VIP)
+  </button>
+</div>
+
+<div class="pricing-wrap" id="pricing-group">
+<!-- CARD 15 HARI -->
+<div class="nc rv d1">
+<div class="nc-top">
+<div>
+<div class="nc-name">Sewa Bot Grup 15 Hari</div>
+<div class="nc-sub">Aktif untuk semua anggota di grup</div>
+</div>
+
+</div>
+<div class="nc-price">6K <span class="nc-per">/ 15 hari</span></div>
+<div class="nc-bens">
+<div class="nc-ben">Semua anggota grup bisa pakai</div>
+<div class="nc-ben">Fitur manajemen grup lengkap</div>
+<div class="nc-ben">Tanpa limit &amp; tanpa iklan</div>
+</div>
+<button class="nc-cta" onclick="openOrder('Sewa Bot Grup 15 Hari', '6K', '15 hari')"><i class="fas fa-shopping-cart"></i> Sewa Sekarang</button>
+</div>
+<!-- CARD 30 HARI -->
+<div class="nc rv d2">
+<div class="nc-top">
+<div>
+<div class="nc-name">Sewa Bot Grup 30 Hari</div>
+<div class="nc-sub">Aktif untuk semua anggota di grup</div>
+</div>
+
+</div>
+<div class="nc-price">12K <span class="nc-per">/ 30 hari</span></div>
+<div class="nc-bens">
+<div class="nc-ben">Semua anggota grup bisa pakai</div>
+<div class="nc-ben">Fitur manajemen grup lengkap</div>
+<div class="nc-ben">Tanpa limit &amp; tanpa iklan</div>
+<div class="nc-ben">Cocok untuk grup aktif</div>
+</div>
+<button class="nc-cta" onclick="openOrder('Sewa Bot Grup 30 Hari', '12K', '30 hari')"><i class="fas fa-shopping-cart"></i> Sewa Sekarang</button>
+</div>
+<!-- CARD 60 HARI -->
+<div class="nc rv d3">
+<div class="nc-top">
+<div>
+<div class="nc-name">Sewa Bot Grup 60 Hari</div>
+<div class="nc-sub">Aktif untuk semua anggota di grup</div>
+</div>
+
+</div>
+<div class="nc-price">20K <span class="nc-per">/ 60 hari</span></div>
+<div class="nc-bens">
+<div class="nc-ben">Semua anggota grup bisa pakai</div>
+<div class="nc-ben">Fitur manajemen grup lengkap</div>
+<div class="nc-ben">Tanpa limit &amp; tanpa iklan</div>
+<div class="nc-ben">Lebih hemat dari paket bulanan</div>
+<div class="nc-ben">Cocok untuk komunitas jangka panjang</div>
+</div>
+<button class="nc-cta" onclick="openOrder('Sewa Bot Grup 60 Hari', '20K', '60 hari')"><i class="fas fa-shopping-cart"></i> Sewa Sekarang</button>
+</div>
+<!-- CARD TAHUNAN / PERMANEN -->
+<div class="nc nc-perm-glow rv d4" id="card-permanen" style="border-color:rgba(251,191,36,0.35)">
+<div class="nc-shimmer"></div>
+<div class="nc-top">
+<div>
+<div class="nc-name">Sewa Bot Grup Tahunan</div>
+<div class="nc-sub">Bayar setahun, hemat lebih banyak</div>
+</div>
+
+</div>
+<div class="nc-price" style="color:#fbbf24">29K <span class="nc-per" style="color:#64748b">/ 365 hari</span></div>
+<div class="nc-bens">
+<div class="nc-ben">Semua anggota grup bisa pakai</div>
+<div class="nc-ben">Fitur manajemen grup lengkap</div>
+<div class="nc-ben">Tanpa limit &amp; tanpa iklan</div>
+<div class="nc-ben">Jauh lebih murah dari bayar bulanan</div>
+<div class="nc-ben">Aktif penuh selama 1 tahun</div>
+<div class="nc-ben">Prioritas support dari admin</div>
+</div>
+<button class="nc-cta" onclick="openOrder('Sewa Bot Grup Tahunan', '29K', '365 hari')" style="background:linear-gradient(90deg,#d97706,#f59e0b)"><i class="fas fa-shopping-cart"></i> Sewa Sekarang</button>
+</div>
+</div>
+</div><!-- end pricing-group -->
+
+<!-- PREMIUM PRIBADI -->
+<div id="pricing-premium" style="display:none;">
+<div class="pc cyan-card rv d2 closed-card">
+<div class="prem-shimmer"></div>
+
+<div class="pc-name">Premium</div>
+<div style="font-size:.72rem;color:#94a3b8;margin:-6px 0 10px 0;font-family:'JetBrains Mono',monospace;letter-spacing:.03em">💬 Akses chat pribadi langsung ke bot — tanpa antrian, tanpa delay, tanpa iklan.</div>
+<div class="pc-list">
+<div class="pc-row">
+<span class="row-left"><span class="row-dot"></span>30 Hari</span>
+<span class="row-price">Rp 10.000</span>
+</div>
+<div class="pc-row">
+<span class="row-left"><span class="row-dot"></span>3 Bulan</span>
+<span class="row-price">Rp 30.000</span>
+</div>
+<div class="pc-row hl">
+<span class="row-left"><span class="row-dot"></span>Tahunan</span>
+<span style="display:flex;align-items:center;gap:6px">
+<span style="font-size:.78rem;color:#94a3b8;text-decoration:line-through;font-weight:600">Rp 70.000</span>
+<span class="row-price" style="color:#4ade80">Rp 30.000</span>
+<span style="font-size:.58rem;background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);padding:2px 7px;border-radius:99px;font-weight:700;white-space:nowrap">DISKON 57%</span>
+</span>
+</div>
+</div>
+<div class="pc-bens">
+<div class="pc-ben">Limit unlimited</div>
+<div class="pc-ben">Semua fitur terbuka</div>
+<div class="pc-ben">Garansi 30 hari permanen</div>
+<div class="pc-ben"><b>Chat pribadi langsung ke bot</b></div>
+<div class="pc-ben"><b>Respon instan tanpa delay</b></div>
+<div class="pc-ben"><b>Tetap aktif meski bot ganti nomor</b></div>
+<div class="pc-ben"><b>Support prioritas admin</b></div>
+</div>
+<a class="pc-cta" href="https://wa.me/6289674097203" target="_blank">
+<i class="fab fa-whatsapp"></i> Sewa Bot Pribadi
+        </a>
+</div>
+</div>
+</div><!-- end pricing-premium -->
+
+<!-- JADIBOT -->
+<div id="pricing-jadibot" style="display:none;">
+<div class="jb-card rv closed-card" style="position:relative;overflow:hidden">
+<div class="jb-title">List Harga Jadibot Astrobot VVIP</div>
+<!-- Tier 5k -->
+<div class="jb-tier">
+<div class="jb-tier-head">
+<span class="jb-price">5K <span class="jb-per">/ bulan</span></span>
+</div>
+<div class="jb-divider"></div>
+<div class="jb-feat">Nomor WA Kamu Sendiri</div>
+<div class="jb-feat">Respon Stabil &amp; Fast</div>
+<div class="jb-feat">Tanpa Limit</div>
+<div class="jb-feat">Tanpa Iklan</div>
+<div class="jb-feat">Semua Fitur Terbuka</div>
+</div>
+<!-- Tier 10k -->
+<div class="jb-tier">
+<div class="jb-tier-head">
+<span class="jb-price">10K <span class="jb-per">/ bulan</span></span>
+</div>
+<div class="jb-divider"></div>
+<div class="jb-feat">Nomor WA Kamu Sendiri</div>
+<div class="jb-feat">Respon Stabil &amp; Anti Delay</div>
+<div class="jb-feat">Tanpa Limit</div>
+<div class="jb-feat">Tanpa Iklan</div>
+<div class="jb-feat">Semua Fitur Terbuka</div>
+</div>
+<!-- Tier 15k -->
+<div class="jb-tier">
+<div class="jb-tier-head">
+<span class="jb-price">15K <span class="jb-per">/ bulan</span></span>
+<span style="font-size:.62rem;background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3);padding:3px 9px;border-radius:99px;font-weight:700">Best</span>
+</div>
+<div class="jb-divider"></div>
+<div class="jb-feat">Nomor WA Kamu Sendiri</div>
+<div class="jb-feat">Performa Lebih Tinggi!</div>
+<div class="jb-feat">Optimal &amp; Responsif</div>
+<div class="jb-feat">Tanpa Limit</div>
+<div class="jb-feat">Tanpa Iklan</div>
+<div class="jb-feat">Semua Fitur Terbuka</div>
+</div>
+<a class="jb-cta" href="https://wa.me/6289674097203" target="_blank">
+<i class="fab fa-whatsapp"></i> Order Jadibot Sekarang
+        </a>
+</div>
+</div><!-- end pricing-jadibot -->
+
+</section>
+
+
+<!-- FAQ -->
+<section class="faq-sec" id="faq">
+<div class="sec">
+<div class="sec-lbl">FAQ</div>
+<h2 class="sec-title rv">Pertanyaan <span>yang sering ditanya.</span></h2>
+<div class="faq-item rv d1">
+<button class="faq-btn" onclick="toggleFaq(this)">Apa itu Premium? <i class="fas fa-plus"></i></button>
+<div class="faq-body"><div class="faq-inner"><ul>
+<li>Premium adalah membership bot untuk pribadi dan grup pribadi.</li>
+<li>Akses ke semua fitur dengan limit unlimited.</li>
+<li>Permanen berlaku selama bot masih beroperasi.</li>
+<li>Tidak akan hilang meski bot berganti nomor.</li>
+<li>Akan hilang jika kamu mengganti nomor WhatsApp.</li>
+<li>Tidak dapat dipindahkan ke nomor lain &amp; tidak dapat direfund.</li>
+</ul></div></div>
+</div>
+<div class="faq-item rv d2">
+<button class="faq-btn" onclick="toggleFaq(this)">Bagaimana proses pembelian? <i class="fas fa-plus"></i></button>
+<div class="faq-body"><div class="faq-inner"><ul>
+<li>Pilih paket yang diinginkan dari halaman harga.</li>
+<li>Hubungi admin via WhatsApp di nomor yang tertera.</li>
+<li>Lakukan pembayaran sesuai metode yang dipilih.</li>
+<li>Kirim bukti pembayaran ke admin.</li>
+<li>Bot diaktifkan dalam 1–2 jam setelah verifikasi.</li>
+</ul></div></div>
+</div>
+<div class="faq-item rv d3">
+<button class="faq-btn" onclick="toggleFaq(this)">Apakah ada garansi? <i class="fas fa-plus"></i></button>
+<div class="faq-body"><div class="faq-inner"><ul>
+<li>Garansi 30 hari untuk paket permanen.</li>
+<li>Bot down lebih dari 24 jam = ekstensi masa aktif gratis.</li>
+<li>Support 24/7 via WhatsApp   admin selalu siap membantu.</li>
+</ul></div></div>
+</div>
+</div>
+</section>
+<!-- PROSES PEMBELIAN -->
+<section style="background:#000;padding:60px 0 0;">
+<div class="sec">
+  <div class="sec-lbl">Cara Beli</div>
+  <h2 class="sec-title rv">Proses <span>pembelian.</span></h2>
+
+  <div style="display:flex;flex-direction:column;gap:0;margin-top:32px;">
+
+    <!-- STEP 1 -->
+    <div class="rv d1" style="display:flex;gap:18px;align-items:flex-start;margin-bottom:28px;">
+      <div style="width:54px;height:54px;border-radius:14px;background:#0d0d0d;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div style="padding-top:4px;">
+        <div style="font-size:.68rem;font-weight:700;color:#555;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Langkah 1</div>
+        <div style="font-size:1rem;font-weight:800;color:#fff;margin-bottom:4px;">Login / Daftar</div>
+        <div style="font-size:.85rem;color:#555;line-height:1.65;">Masuk atau mendaftar jika belum memiliki akun untuk melanjutkan proses pembelian.</div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="rv d2" style="display:flex;gap:18px;align-items:flex-start;margin-bottom:28px;">
+      <div style="width:54px;height:54px;border-radius:14px;background:#0d0d0d;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+      </div>
+      <div style="padding-top:4px;">
+        <div style="font-size:.68rem;font-weight:700;color:#555;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Langkah 2</div>
+        <div style="font-size:1rem;font-weight:800;color:#fff;margin-bottom:4px;">Pilih Pesanan</div>
+        <div style="font-size:.85rem;color:#555;line-height:1.65;">Pilih paket yang sesuai kebutuhan. Sewa Bot Group, Premium Pribadi, atau Jadibot VIP. Lengkapi data pesanan kamu.</div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="rv d3" style="display:flex;gap:18px;align-items:flex-start;margin-bottom:28px;">
+      <div style="width:54px;height:54px;border-radius:14px;background:#0d0d0d;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="4" width="22" height="16" rx="2"/>
+          <line x1="1" y1="10" x2="23" y2="10"/>
+        </svg>
+      </div>
+      <div style="padding-top:4px;">
+        <div style="font-size:.68rem;font-weight:700;color:#555;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Langkah 3</div>
+        <div style="font-size:1rem;font-weight:800;color:#fff;margin-bottom:4px;">Pembayaran</div>
+        <div style="font-size:.85rem;color:#555;line-height:1.65;">Lakukan pembayaran sesuai total yang tertera via transfer bank, e-wallet, atau QRIS.</div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="rv d4" style="display:flex;gap:18px;align-items:flex-start;">
+      <div style="width:54px;height:54px;border-radius:14px;background:#0d0d0d;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16c.01.31.01.62-.01.92z"/>
+        </svg>
+      </div>
+      <div style="padding-top:4px;">
+        <div style="font-size:.68rem;font-weight:700;color:#555;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Langkah 4</div>
+        <div style="font-size:1rem;font-weight:800;color:#fff;margin-bottom:4px;">Kirim Bukti Pembayaran</div>
+        <div style="font-size:.85rem;color:#555;line-height:1.65;">Kirim bukti transfer ke admin via WhatsApp. Bot akan masuk otomatis ke grup kamu dalam 5 menit hingga 1 jam.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="btm-cta">
+<h2 class="rv">Tunggu apa lagi? <span>Sewa sekarang!</span></h2>
+<p class="rv d1">Udah ribuan orang pake Astrobot buat grup mereka. Giliran kamu sekarang — pilih paket dan langsung gas.</p>
+<a class="btn-purple rv d2" href="https://wa.me/6289674097203" style="font-size:.9rem;padding:13px 28px;display:inline-flex" target="_blank">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="#86efac" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg> SEWA ASTROBOT SEKARANG
+</a>
+</section>
+<!-- FOOTER -->
+<footer style="background:#000000;border-top:1px solid rgba(255,255,255,0.1);padding:0">
+<!-- Main footer content -->
+<div style="max-width:1100px;margin:0 auto;padding:48px 24px 32px">
+<!-- Brand col -->
+<div style="max-width:320px">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+<span style="width:8px;height:8px;border-radius:50%;background:#ffffff;flex-shrink:0;display:inline-block"></span>
+<span style="font-size:1.05rem;font-weight:800;color:#ffffff">Astrobot</span>
+</div>
+<p style="font-size:.8rem;color:#aaaaaa;line-height:1.85;margin-bottom:20px">Bot WhatsApp serbaguna untuk kebutuhan grup &amp; pribadi. Fitur lengkap, stabil 24/7, harga terjangkau.</p>
+<!-- Sosmed icons -->
+<div style="display:flex;gap:8px">
+<a href="https://wa.me/6289674097203" onmouseout="this.style.background='#1a1a1a';this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='#999999'" onmouseover="this.style.background='#22c55e20';this.style.borderColor='#22c55e';this.style.color='#22c55e'" style="width:36px;height:36px;border-radius:8px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:#999999;font-size:.9rem;text-decoration:none;transition:.2s" target="_blank" title="Chat Owner"><i class="fab fa-whatsapp"></i></a>
+<a href="https://chat.whatsapp.com/HcJxcLFaMYBEmfZfCAG5az?mode=gi_t" onmouseout="this.style.background='#1a1a1a';this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='#999999'" onmouseover="this.style.background='#ffffff20';this.style.borderColor='#ffffff';this.style.color='#ffffff'" style="width:36px;height:36px;border-radius:8px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:#999999;font-size:.9rem;text-decoration:none;transition:.2s" target="_blank" title="Grup WA"><i class="fas fa-users"></i></a>
+<a href="https://whatsapp.com/channel/0029VbC6RVdIt5s3zNeEzP2m" onmouseout="this.style.background='#1a1a1a';this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='#999999'" onmouseover="this.style.background='#ffffff20';this.style.borderColor='#ffffff';this.style.color='#ffffff'" style="width:36px;height:36px;border-radius:8px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:#999999;font-size:.9rem;text-decoration:none;transition:.2s" target="_blank" title="Channel WA"><i class="fas fa-satellite-dish"></i></a>
+</div>
+</div>
+</div>
+<!-- Disclaimer -->
+<div style="max-width:1100px;margin:0 auto;padding:0 24px 24px">
+<div style="background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px 18px;font-size:.75rem;color:#888888;line-height:1.7">
+<strong style="color:#cccccc;display:block;margin-bottom:4px">Catatan Penting:</strong>
+      Astrobot tidak menyediakan fitur bug WhatsApp, push kontak massal, maupun penjualan panel bot. Kami berkomitmen menjaga kenyamanan publik dan menggunakan bot hanya untuk fitur yang aman, wajar, dan bermanfaat.
+    </div>
+</div>
+<!-- Bottom bar -->
+<div style="border-top:1px solid rgba(255,255,255,0.1);padding:16px 24px;text-align:center">
+<div class="ft-copy">© <span id="yr">2025</span> Astrobot. All rights reserved. · WhatsApp is a trademark of WhatsApp Inc.</div>
+</div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<!-- ===== MODAL SCRIPT SALE ===== -->
+<div id="scriptSaleModal" onclick="if(event.target===this)closeScriptModal()" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.9);overflow-y:auto;">
+<div style="max-width:680px;margin:40px auto;padding:16px;animation:slideUp .25s ease;">
+<div style="background:#0d0d0d;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+<!-- Header -->
+<div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #1a1a1a;">
+<span style="color:#fff;font-weight:700;font-size:1rem;">Script Bot Astrobot Digital</span>
+<button onclick="closeScriptModal()" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#888;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+</div>
+<!-- Thumbnail 16:9 -->
+<div style="margin:16px 20px;border-radius:8px;overflow:hidden;border:1px solid #1a1a1a;">
+<div style="position:relative;width:100%;padding-top:56.25%;background:#111;overflow:hidden;">
+<img alt="Astrobot Digital" src="https://cdn.nekohime.site/file/ujz0uvGt.jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;"/>
+<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:16px;">
+<div style="font-size:1.1rem;font-weight:900;color:#fff;line-height:1.2;">ASTROBOT DIGITAL</div>
+<div style="font-size:.75rem;color:rgba(255,255,255,.7);margin:4px 0 8px;">WhatsApp Bot • Version 3.0.0 • ESM Module</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;">
+<span style="background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;padding:2px 9px;border-radius:4px;font-size:11px;backdrop-filter:blur(4px);">1007+ Plugins</span>
+<span style="background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;padding:2px 9px;border-radius:4px;font-size:11px;backdrop-filter:blur(4px);">Baileys ORI</span>
+<span style="background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;padding:2px 9px;border-radius:4px;font-size:11px;backdrop-filter:blur(4px);">Node 18/20/22</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Info Grid -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px 16px;">
+<div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Info System</div>
+<ul style="list-style:none;padding:0;margin:0;color:#666;font-size:.8rem;line-height:1.9;">
+<li><span style="color:#555;">▸</span> Type: <strong style="color:#ccc;">ESM Module</strong></li>
+<li><span style="color:#555;">▸</span> Node: <strong style="color:#ccc;">18 / 20 / 22</strong></li>
+<li><span style="color:#555;">▸</span> Baileys: <strong style="color:#ccc;">ORI Whiskeysockets</strong></li>
+<li><span style="color:#555;">▸</span> Pairing Code: <strong style="color:#ccc;">✅ Support</strong></li>
+<li><span style="color:#555;">▸</span> Multi Device: <strong style="color:#ccc;">✅ Support</strong></li>
+</ul>
+</div>
+<div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Info Database</div>
+<ul style="list-style:none;padding:0;margin:0;color:#666;font-size:.8rem;line-height:1.9;">
+<li><span style="color:#555;">▸</span> Database: <strong style="color:#ccc;">SQLite</strong></li>
+<li><span style="color:#555;">▸</span> RPG &amp; Bank: <strong style="color:#ccc;">✅ Ada</strong></li>
+<li><span style="color:#555;">▸</span> Money &amp; Level: <strong style="color:#ccc;">✅ Ada</strong></li>
+<li><span style="color:#555;">▸</span> User Data: <strong style="color:#ccc;">✅ Tersimpan</strong></li>
+<li><span style="color:#555;">▸</span> Cache System: <strong style="color:#ccc;">✅ Optimized</strong></li>
+</ul>
+</div>
+<div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Total Fitur</div>
+<ul style="list-style:none;padding:0;margin:0;color:#666;font-size:.8rem;line-height:1.9;">
+<li><span style="color:#555;">▸</span> Total Fitur: <strong style="color:#ccc;">900+</strong></li>
+<li><span style="color:#555;">▸</span> Plugins: <strong style="color:#ccc;">1007+</strong></li>
+<li><span style="color:#555;">▸</span> System File: <strong style="color:#ccc;">42+</strong></li>
+<li><span style="color:#555;">▸</span> Kategori: <strong style="color:#ccc;">30+</strong></li>
+</ul>
+</div>
+<div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Menu Populer</div>
+<div style="display:flex;flex-wrap:wrap;gap:5px;">
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">AI</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Downloader</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Game</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">RPG</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Stiker</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Tools</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Fun</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Internet</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Group</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Audio</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">News</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Search</span>
+</div>
+</div>
+</div>
+<!-- Fitur Unggulan -->
+<div style="padding:0 20px 16px;">
+<div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Fitur Unggulan</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+<div style="font-size:.78rem;color:#888;">All-in-One Downloader</div>
+<div style="font-size:.78rem;color:#888;">AI Chat (GPT, Gemini)</div>
+<div style="font-size:.78rem;color:#888;">Brat &amp; BratVid Stiker</div>
+<div style="font-size:.78rem;color:#888;">Anti-Link &amp; Anti-Spam</div>
+<div style="font-size:.78rem;color:#888;">RPG Economy &amp; Quest</div>
+<div style="font-size:.78rem;color:#888;">Auto-Reply Cepat</div>
+<div style="font-size:.78rem;color:#888;">Welcome &amp; Goodbye</div>
+<div style="font-size:.78rem;color:#888;">Admin Tools Lengkap</div>
+</div>
+</div>
+</div>
+<!-- CTA -->
+<div style="padding:0 20px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid #1a1a1a;padding-top:16px;">
+<p style="color:#555;font-size:.82rem;margin:0;">Hubungi admin untuk info harga &amp; pembelian</p>
+<a href="https://wa.me/6289674097203?text=Halo%20min%2C%20saya%20tertarik%20beli%20script%20Astrobot%20Digital%20%E2%9A%A1" style="display:inline-flex;align-items:center;gap:8px;background:#ffffff;color:#000;padding:10px 24px;border-radius:8px;font-weight:700;font-size:.9rem;text-decoration:none;border:1px solid #333;" target="_blank">
+<i class="fab fa-whatsapp" style="color:#22c55e;"></i> Beli Script Sekarang
+        </a>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- ===== ORDER PAGE (Full Screen Scroll) ===== -->
+<div id="orderModal" style="position:fixed;inset:0;z-index:9998;background:#0a0a0a;overflow-y:auto;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);visibility:hidden;">
+
+  <!-- TOP NAV -->
+  <div style="position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;">
+    <button onclick="closeOrder()" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:none;border:none;color:#ccc;cursor:pointer;font-family:inherit;border-radius:8px;transition:.15s;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='none'">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div style="font-size:.95rem;font-weight:700;color:#fff;letter-spacing:.01em;">Detail Produk</div>
+    <button onclick="openMenu()" style="width:38px;height:38px;border-radius:8px;background:#111111;border:1px solid rgba(255,255,255,0.12);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;transition:.15s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111111'">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div style="max-width:680px;margin:0 auto;padding:0 0 120px;">
+
+    <!-- DESKRIPSI -->
+    <div style="padding:20px 16px 0;">
+      <p style="font-size:.9rem;color:#aaa;line-height:1.8;margin-bottom:18px;">
+        Bot disewakan khusus untuk dimasukkan ke dalam grup WhatsApp. Cocok untuk meramaikan grup, membantu admin, dan menyediakan berbagai fitur hiburan serta utilitas otomatis.
+      </p>
+    </div>
+
+    <!-- ✨ Fitur Bot Group -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">Fitur Bot Group:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Game seru (tebak gambar, quiz, dll)</li>
+        <li style="font-size:.9rem;color:#ccc;">Fun command &amp; hiburan</li>
+        <li style="font-size:.9rem;color:#ccc;">Auto welcome &amp; goodbye member</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti link / anti spam</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti toxic / kata kasar</li>
+        <li style="font-size:.9rem;color:#ccc;">Tag semua / hidetag</li>
+        <li style="font-size:.9rem;color:#ccc;">Sticker &amp; converter media</li>
+        <li style="font-size:.9rem;color:#ccc;">Downloader (TikTok, IG, dll)</li>
+        <li style="font-size:.9rem;color:#ccc;">Random anime / quotes / dll</li>
+        <li style="font-size:.9rem;color:#ccc;">Leveling &amp; rank member</li>
+        <li style="font-size:.9rem;color:#ccc;">AFK system</li>
+        <li style="font-size:.9rem;color:#ccc;">Vote &amp; polling grup</li>
+      </ul>
+    </div>
+
+    <!-- 🔧 Fungsi Admin -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">Fungsi Admin:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Kick / add member (jika bot admin)</li>
+        <li style="font-size:.9rem;color:#ccc;">Close / open grup</li>
+        <li style="font-size:.9rem;color:#ccc;">Reset link grup</li>
+        <li style="font-size:.9rem;color:#ccc;">Promote / demote</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti link grup lain</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti virtex / anti bug</li>
+      </ul>
+    </div>
+
+    <!-- 🎯 Cocok Untuk -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">Cocok Untuk:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Grup komunitas</li>
+        <li style="font-size:.9rem;color:#ccc;">Grup tongkrongan</li>
+        <li style="font-size:.9rem;color:#ccc;">Grup publik / open member</li>
+        <li style="font-size:.9rem;color:#ccc;">Grup roleplay / game</li>
+        <li style="font-size:.9rem;color:#ccc;">Grup jual beli biar rame</li>
+      </ul>
+    </div>
+
+    <!-- 📦 Ketentuan Sewa -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">Ketentuan Sewa:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Bot dimasukkan ke grup Anda</li>
+        <li style="font-size:.9rem;color:#ccc;">Durasi sesuai paket sewa</li>
+        <li style="font-size:.9rem;color:#ccc;">Owner grup bebas menggunakan fitur bot</li>
+        <li style="font-size:.9rem;color:#ccc;">Bot online 24 jam (selama server normal)</li>
+        <li style="font-size:.9rem;color:#ccc;">Tidak untuk spam / bug grup lain</li>
+      </ul>
+      <p style="font-size:.85rem;color:#888;font-style:italic;margin-top:12px;">Bot siap meramaikan grup + membantu admin otomatis</p>
+    </div>
+
+    <!-- DIVIDER -->
+    <div style="height:1px;background:#1e1e1e;margin:8px 16px 24px;"></div>
+
+    <!-- HARGA -->
+    <div style="padding:0 16px;">
+      <div style="font-size:1.6rem;font-weight:900;color:#fff;margin-bottom:6px;" id="orderHargaBesar">Rp 6.000</div>
+    </div>
+
+    <!-- FORM PESANAN -->
+    <div style="padding:0 16px;">
+      <div style="font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:18px;">Lengkapi Data Pesanan</div>
+
+      <div style="margin-bottom:14px;">
+        <div style="font-size:.85rem;color:#ccc;font-weight:600;margin-bottom:8px;">Nama pembeli</div>
+        <input id="orderNama" type="text" placeholder="Masukkan Nama pembeli"
+          style="width:100%;background:transparent;border:1px solid #2a2a2a;border-radius:10px;padding:14px 15px;color:#fff;font-family:inherit;font-size:.95rem;outline:none;box-sizing:border-box;transition:border-color .2s;"
+          onfocus="this.style.borderColor='#555'" onblur="this.style.borderColor='#2a2a2a'"/>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <div style="font-size:.85rem;color:#ccc;font-weight:600;margin-bottom:8px;">Nomor pembeli</div>
+        <input id="orderNomor" type="tel" placeholder="Masukkan Nomor pembeli"
+          style="width:100%;background:transparent;border:1px solid #2a2a2a;border-radius:10px;padding:14px 15px;color:#fff;font-family:inherit;font-size:.95rem;outline:none;box-sizing:border-box;transition:border-color .2s;"
+          onfocus="this.style.borderColor='#555'" onblur="this.style.borderColor='#2a2a2a'"/>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <div style="font-size:.85rem;color:#ccc;font-weight:600;margin-bottom:8px;">Link group pembeli</div>
+        <input id="orderLink" type="text" placeholder="Masukkan Link group pembeli"
+          style="width:100%;background:transparent;border:1px solid #2a2a2a;border-radius:10px;padding:14px 15px;color:#fff;font-family:inherit;font-size:.95rem;outline:none;box-sizing:border-box;transition:border-color .2s;"
+          onfocus="this.style.borderColor='#555'" onblur="this.style.borderColor='#2a2a2a'"/>
+      </div>
+
+      <!-- Ringkasan Harga -->
+      <div style="margin-top:20px;border-top:1px solid #1e1e1e;padding-top:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:.9rem;color:#888;">Harga Produk</span>
+          <span style="font-size:.9rem;color:#ccc;font-weight:600;" id="orderHargaRingkas">Rp 6.000</span>
+        </div>
+        <div style="height:1px;background:#1e1e1e;margin:10px 0;"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:1rem;font-weight:800;color:#fff;">Total</span>
+          <span style="font-size:1rem;font-weight:800;color:#fff;" id="orderTotal">Rp 6.000</span>
+        </div>
+      </div>
+
+      <!-- Stok -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 12.5l3.5 3.5 6-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font-size:.9rem;color:#22c55e;font-weight:700;">Stok Tersedia</span>
+        </div>
+      </div>
+
+      <!-- TOMBOL BELI -->
+      <div style="display:flex;align-items:center;gap:10px;padding-bottom:40px;">
+        <a href="https://wa.me/6289674097203" target="_blank"
+          style="width:46px;height:46px;border-radius:10px;background:#1a1a1a;border:1px solid #2a2a2a;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        </a>
+        <button id="orderBeliBtn" onclick="handleBeli()"
+          style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#000;padding:13px 16px;border-radius:10px;font-weight:800;font-size:.92rem;border:none;cursor:pointer;transition:.2s;letter-spacing:.01em;">
+          <i class="fas fa-bolt"></i> Beli Sekarang
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<!-- ===== END ORDER PAGE ===== -->
+
+<!-- ===== HISTORY PAGE ===== -->
+<div id="historyPage" style="display:none;position:fixed;inset:0;z-index:99990;background:#0a0a0a;overflow-y:auto;">
+  <div style="position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.96);backdrop-filter:blur(12px);border-bottom:1px solid #161616;">
+    <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;">
+      <button onclick="closeHistoryPage()" style="width:34px;height:34px;border-radius:9px;background:#161616;border:1px solid #222;color:#aaa;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <i class="fas fa-arrow-left" style="font-size:.82rem;"></i>
+      </button>
+      <div style="flex:1;">
+        <div style="font-size:.98rem;font-weight:800;color:#fff;">Riwayat Pembelian</div>
+        <div style="font-size:.7rem;color:#444;margin-top:1px;">Semua transaksi tersimpan di sini</div>
+      </div>
+      <button onclick="clearHistory()" style="padding:6px 11px;border-radius:8px;background:transparent;border:1px solid #222;color:#444;font-size:.7rem;cursor:pointer;font-family:inherit;">Hapus Semua</button>
+    </div>
+  </div>
+  <div style="padding:16px 16px 100px;">
+    <div id="historyEmpty" style="display:none;flex-direction:column;align-items:center;padding:56px 20px;text-align:center;">
+      <div style="width:68px;height:68px;border-radius:18px;background:#111;border:1px solid #1a1a1a;display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
+        <i class="fas fa-receipt" style="font-size:1.7rem;color:#222;"></i>
+      </div>
+      <div style="font-size:.92rem;font-weight:700;color:#333;margin-bottom:6px;">Belum Ada Transaksi</div>
+      <div style="font-size:.78rem;color:#2a2a2a;line-height:1.6;">Setelah melakukan pembelian,<br>riwayat akan muncul di sini.</div>
+      <button onclick="closeHistoryPage()" style="margin-top:18px;padding:11px 22px;border-radius:10px;background:#1e1e1e;border:1px solid rgba(255,255,255,0.15);color:#ccc;font-weight:700;font-size:.84rem;cursor:pointer;font-family:inherit;">Lihat Paket</button>
+    </div>
+    <div id="historyList" style="display:flex;flex-direction:column;gap:10px;"></div>
+    <div style="margin-top:20px;background:#0d0d0d;border-radius:14px;border:1px solid #161616;overflow:hidden;">
+      <div style="padding:14px 16px 10px;border-bottom:1px solid #161616;">
+        <div style="font-size:.8rem;font-weight:800;color:#888;display:flex;align-items:center;gap:7px;"><i class="fas fa-book-open"></i> Panduan Setelah Pembayaran</div>
+      </div>
+      <div style="padding:14px 16px;display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <div style="width:22px;height:22px;border-radius:6px;background:#130d2a;border:1px solid #3b1f8c;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;"><span style="font-size:.68rem;font-weight:800;color:#888;">1</span></div>
+          <div><div style="font-size:.8rem;font-weight:700;color:#ccc;margin-bottom:2px;">Hubungi Admin</div><div style="font-size:.74rem;color:#444;line-height:1.5;">Setelah bayar, langsung chat admin via WhatsApp dengan ID transaksi & bukti bayar.</div></div>
+        </div>
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <div style="width:22px;height:22px;border-radius:6px;background:#130d2a;border:1px solid #3b1f8c;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;"><span style="font-size:.68rem;font-weight:800;color:#888;">2</span></div>
+          <div><div style="font-size:.8rem;font-weight:700;color:#ccc;margin-bottom:2px;">Tunggu Proses</div><div style="font-size:.74rem;color:#444;line-height:1.5;">Bot aktif dalam 1x24 jam. Kalau lebih, ping admin lagi.</div></div>
+        </div>
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <div style="width:22px;height:22px;border-radius:6px;background:#130d2a;border:1px solid #3b1f8c;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;"><span style="font-size:.68rem;font-weight:800;color:#888;">3</span></div>
+          <div><div style="font-size:.8rem;font-weight:700;color:#ccc;margin-bottom:2px;">Bot Aktif</div><div style="font-size:.74rem;color:#444;line-height:1.5;">Ketik <span style="color:#888;font-family:'JetBrains Mono',monospace;font-size:.78rem;">.menu</span> di grup untuk lihat semua fitur.</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:10px;background:#0d0d0d;border-radius:14px;border:1px solid #161616;overflow:hidden;">
+      <div style="padding:14px 16px 10px;border-bottom:1px solid #161616;">
+        <div style="font-size:.8rem;font-weight:800;color:#ccc;display:flex;align-items:center;gap:7px;"><i class="fas fa-headset" style="color:#888;"></i> Butuh Bantuan?</div>
+      </div>
+      <div style="padding:10px 16px;display:flex;flex-direction:column;gap:7px;">
+        <a href="https://wa.me/6289674097203" target="_blank" style="display:flex;align-items:center;gap:11px;padding:10px 12px;background:#111;border-radius:10px;border:1px solid #1a1a1a;text-decoration:none;">
+          <div style="width:30px;height:30px;border-radius:8px;background:#dcfce7;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="#16a34a"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></div>
+          <div><div style="font-size:.8rem;font-weight:700;color:#fff;">WhatsApp</div><div style="font-size:.68rem;color:#444;">+62 896-7409-7203</div></div>
+          <i class="fas fa-chevron-right" style="color:#222;margin-left:auto;font-size:.7rem;"></i>
+        </a>
+        <a href="https://t.me/myrexzastrobot" target="_blank" style="display:flex;align-items:center;gap:11px;padding:10px 12px;background:#111;border-radius:10px;border:1px solid #1a1a1a;text-decoration:none;">
+          <div style="width:30px;height:30px;border-radius:8px;background:#dbeafe;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fab fa-telegram" style="color:#2563eb;font-size:.95rem;"></i></div>
+          <div><div style="font-size:.8rem;font-weight:700;color:#fff;">Telegram</div><div style="font-size:.68rem;color:#444;">@myrexzastrobot</div></div>
+          <i class="fas fa-chevron-right" style="color:#222;margin-left:auto;font-size:.7rem;"></i>
+        </a>
+        <a href="https://instagram.com/astrobot.digital" target="_blank" style="display:flex;align-items:center;gap:11px;padding:10px 12px;background:#111;border-radius:10px;border:1px solid #1a1a1a;text-decoration:none;">
+          <div style="width:30px;height:30px;border-radius:8px;background:#fce7f3;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fab fa-instagram" style="color:#db2777;font-size:.95rem;"></i></div>
+          <div><div style="font-size:.8rem;font-weight:700;color:#fff;">Instagram</div><div style="font-size:.68rem;color:#444;">@astrobot.digital</div></div>
+          <i class="fas fa-chevron-right" style="color:#222;margin-left:auto;font-size:.7rem;"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ===== END HISTORY PAGE ===== -->
+
+<!-- ===== QRIS PAYMENT MODAL ===== -->
+<div id="qrisPayModal" style="display:none;position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,0.9);backdrop-filter:blur(10px);align-items:flex-end;justify-content:center;padding:0;">
+  <div id="qrisPayBox" style="background:#111;border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;padding:0;transform:translateY(100%);transition:transform .4s cubic-bezier(.32,1.25,.6,1);">
+    
+    <!-- Handle bar -->
+    <div style="display:flex;justify-content:center;padding:12px 0 0;">
+      <div style="width:36px;height:4px;border-radius:99px;background:#333;"></div>
+    </div>
+
+    <!-- Header -->
+    <div style="padding:16px 20px 0;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:1.1rem;font-weight:800;color:#fff;">Bayar via QRIS</div>
+        <div style="font-size:.78rem;color:#888;margin-top:2px;">Scan QR · berlaku 5 menit</div>
+      </div>
+      <button onclick="closeQrisPay()" style="width:32px;height:32px;border-radius:8px;background:#1e1e1e;border:1px solid #2a2a2a;color:#888;cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Timer bar -->
+    <div style="padding:12px 20px 0;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-size:.75rem;color:#888;">Batas waktu</span>
+        <span id="qrisTimer" style="font-size:.78rem;font-weight:700;color:#f97316;font-family:'JetBrains Mono',monospace;">05:00</span>
+      </div>
+      <div style="height:3px;background:#1e1e1e;border-radius:99px;overflow:hidden;">
+        <div id="qrisTimerBar" style="height:100%;width:100%;background:linear-gradient(90deg,#f97316,#ef4444);border-radius:99px;transition:width 1s linear;"></div>
+      </div>
+    </div>
+
+    <!-- Nominal info -->
+    <div style="margin:14px 20px 0;background:#1a1a1a;border-radius:12px;padding:14px 16px;border:1px solid #2a2a2a;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:.82rem;color:#888;">Nominal</span>
+        <span id="qrisNominalAsli" style="font-size:.9rem;color:#ccc;font-weight:600;"></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:.82rem;color:#888;">Biaya admin</span>
+        <span id="qrisKodeUnik" style="font-size:.9rem;color:#888;font-weight:700;font-family:'JetBrains Mono',monospace;"></span>
+      </div>
+      <div style="height:1px;background:#2a2a2a;margin:8px 0;"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:.95rem;font-weight:800;color:#fff;">Total Bayar</span>
+        <span id="qrisTotalBayar" style="font-size:1.05rem;font-weight:900;color:#22c55e;"></span>
+      </div>
+    </div>
+
+    <!-- QR Image -->
+    <div style="padding:16px 20px 0;">
+      <div id="qrisImgWrap" style="background:#fff;border-radius:16px;padding:16px;display:flex;align-items:center;justify-content:center;min-height:220px;position:relative;">
+        <div id="qrisImgLoader" style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <div style="width:36px;height:36px;border:3px solid #222;border-top-color:#888;border-radius:50%;animation:spin .8s linear infinite;"></div>
+          <span style="font-size:.8rem;color:#999;">Membuat QRIS...</span>
+        </div>
+        <div id="qrisCanvasWrap" style="display:none;"></div>
+        <img id="qrisImg" src="" alt="QRIS" style="display:none;max-width:100%;border-radius:8px;"/>
+      </div>
+      <p style="font-size:.72rem;color:#555;text-align:center;margin-top:8px;">Buka e-wallet / mobile banking → Scan QRIS</p>
+    </div>
+
+    <!-- Data Pembelian -->
+    <div style="margin:14px 20px 0;background:#161616;border-radius:12px;padding:14px 16px;border:1px solid #222;">
+      <div style="font-size:.78rem;color:#666;font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;">Detail Pesanan</div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
+        <span style="font-size:.82rem;color:#666;">Paket</span>
+        <span id="qrisPaket" style="font-size:.82rem;color:#ccc;font-weight:600;text-align:right;max-width:60%;"></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
+        <span style="font-size:.82rem;color:#666;">Nama</span>
+        <span id="qrisNamaPembeli" style="font-size:.82rem;color:#ccc;font-weight:600;"></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
+        <span style="font-size:.82rem;color:#666;">Nomor WA</span>
+        <span id="qrisNomorPembeli" style="font-size:.82rem;color:#ccc;font-weight:600;"></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;">
+        <span style="font-size:.82rem;color:#666;">Link Grup</span>
+        <span id="qrisLinkPembeli" style="font-size:.82rem;color:#ccc;font-weight:600;text-align:right;max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+      </div>
+    </div>
+
+    <!-- ID Transaksi -->
+    <div style="padding:10px 20px 0;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:.75rem;color:#666;">ID:</span>
+      <span id="qrisIdTrx" style="font-size:.75rem;color:#888;font-family:'JetBrains Mono',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+      <button onclick="copyIdTrx()" style="padding:4px 10px;border-radius:6px;background:#1e1e1e;border:1px solid #2a2a2a;color:#888;cursor:pointer;font-size:.72rem;">
+        <i class="fas fa-copy"></i>
+      </button>
+    </div>
+
+    <!-- Tombol -->
+    <div style="padding:16px 20px 24px;display:flex;flex-direction:column;gap:10px;">
+      <!-- Cek Status -->
+      <button id="btnCekStatus" onclick="cekStatusQris()" style="width:100%;padding:14px;border-radius:12px;background:#1e1e1e;border:1px solid rgba(255,255,255,0.15);color:#ccc;font-weight:800;font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s;font-family:inherit;">
+        <i class="fas fa-search"></i> Cek Status Pembayaran
+      </button>
+
+      <!-- Cancel -->
+      <button onclick="cancelQris()" style="width:100%;padding:12px;border-radius:12px;background:transparent;border:1px solid #2a2a2a;color:#666;font-weight:600;font-size:.85rem;cursor:pointer;font-family:inherit;transition:.2s;">
+        Batalkan Pembayaran
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== STATUS OVERLAY ===== -->
+<div id="qrisStatusOverlay" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:24px;">
+  
+  <!-- Checking animation — polling terus sampai SUCCESS -->
+  <div id="statusChecking" style="display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;">
+    <div style="position:relative;width:80px;height:80px;">
+      <!-- Ring luar -->
+      <svg viewBox="0 0 80 80" style="position:absolute;inset:0;animation:spin 1.2s linear infinite;">
+        <circle cx="40" cy="40" r="34" fill="none" stroke="#555" stroke-width="3" stroke-dasharray="70 140" stroke-linecap="round"/>
+      </svg>
+      <!-- Ring dalam -->
+      <svg viewBox="0 0 80 80" style="position:absolute;inset:8px;animation:spin 1.8s linear infinite reverse;">
+        <circle cx="32" cy="32" r="26" fill="none" stroke="#333" stroke-width="2" stroke-dasharray="40 120" stroke-linecap="round"/>
+      </svg>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-clock" style="color:#888;font-size:1.4rem;"></i>
+      </div>
+    </div>
+    <div>
+      <div style="color:#fff;font-weight:800;font-size:1rem;margin-bottom:6px;">Memproses Pembayaran</div>
+      <div id="statusLoadingTxt" style="color:#666;font-size:.82rem;">Menunggu konfirmasi...</div>
+      <div style="color:#3a3a3a;font-size:.72rem;margin-top:8px;line-height:1.6;">Jangan tutup halaman ini.<br>Otomatis terkonfirmasi saat pembayaran diterima.</div>
+    </div>
+    <button onclick="stopPolling()" style="background:none;border:1px solid #2a2a2a;border-radius:8px;color:#444;font-size:.75rem;padding:7px 16px;cursor:pointer;font-family:inherit;margin-top:4px;">
+      Batal
+    </button>
+  </div>
+
+  <!-- Success state - kartu kecil -->
+  <div id="statusSuccess" style="display:none;flex-direction:column;align-items:center;gap:0;width:100%;max-width:320px;">
+    <div style="background:#111;border-radius:20px;padding:28px 24px;width:100%;text-align:center;border:1px solid #1e1e1e;">
+      <!-- Centang -->
+      <div style="width:72px;height:72px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;animation:popIn .4s cubic-bezier(.32,1.25,.6,1);">
+        <i class="fas fa-check" style="color:#fff;font-size:2rem;"></i>
+      </div>
+      <div style="color:#fff;font-weight:900;font-size:1.15rem;margin-bottom:20px;">Pembayaran Berhasil</div>
+
+      <!-- Kontak Owner -->
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <!-- WhatsApp -->
+        <a href="https://wa.me/6289674097203?text=" id="successWaLink" target="_blank"
+          style="display:flex;align-items:center;gap:12px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:12px 16px;text-decoration:none;transition:.2s;">
+          <div style="width:36px;height:36px;border-radius:9px;background:#dcfce7;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#16a34a"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          </div>
+          <div style="text-align:left;">
+            <div style="font-size:.82rem;font-weight:700;color:#fff;">WhatsApp</div>
+            <div style="font-size:.72rem;color:#666;">Hubungi owner langsung</div>
+          </div>
+          <i class="fas fa-chevron-right" style="color:#444;margin-left:auto;font-size:.75rem;"></i>
+        </a>
+
+        <!-- Telegram -->
+        <a href="https://t.me/myrexzastrobot" target="_blank"
+          style="display:flex;align-items:center;gap:12px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:12px 16px;text-decoration:none;">
+          <div style="width:36px;height:36px;border-radius:9px;background:#dbeafe;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="fab fa-telegram" style="color:#2563eb;font-size:1.1rem;"></i>
+          </div>
+          <div style="text-align:left;">
+            <div style="font-size:.82rem;font-weight:700;color:#fff;">Telegram</div>
+            <div style="font-size:.72rem;color:#666;">@myrexzastrobot</div>
+          </div>
+          <i class="fas fa-chevron-right" style="color:#444;margin-left:auto;font-size:.75rem;"></i>
+        </a>
+
+        <!-- Instagram -->
+        <a href="https://instagram.com/astrobot.digital" target="_blank"
+          style="display:flex;align-items:center;gap:12px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:12px 16px;text-decoration:none;">
+          <div style="width:36px;height:36px;border-radius:9px;background:#fce7f3;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="fab fa-instagram" style="color:#db2777;font-size:1.1rem;"></i>
+          </div>
+          <div style="text-align:left;">
+            <div style="font-size:.82rem;font-weight:700;color:#fff;">Instagram</div>
+            <div style="font-size:.72rem;color:#666;">@astrobot.digital</div>
+          </div>
+          <i class="fas fa-chevron-right" style="color:#444;margin-left:auto;font-size:.75rem;"></i>
+        </a>
+      </div>
+      <!-- Tombol kembali ke dashboard -->
+      <button onclick="closeStatusOverlay();closeQrisPay();" style="width:100%;padding:13px;border-radius:12px;background:#1e1e1e;border:1px solid #2a2a2a;color:#ccc;font-weight:700;font-size:.88rem;cursor:pointer;font-family:inherit;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;">
+        <i class="fas fa-home" style="font-size:.8rem;"></i> Kembali ke Dashboard
+      </button>
+    </div>
+  </div>
+
+  <!-- Pending: tidak dipakai lagi, polling terus di background -->
+  <div id="statusPending" style="display:none;"></div>
+
+  <!-- Failed -->
+  <div id="statusFailed" style="display:none;flex-direction:column;align-items:center;gap:0;width:100%;max-width:320px;">
+    <div style="background:#111;border-radius:20px;padding:28px 24px;width:100%;text-align:center;border:1px solid #1e1e1e;">
+      <div style="width:72px;height:72px;border-radius:50%;background:#ef4444;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+        <i class="fas fa-times" style="color:#fff;font-size:1.8rem;"></i>
+      </div>
+      <div style="color:#ef4444;font-weight:900;font-size:1.1rem;margin-bottom:8px;">Tidak Ditemukan</div>
+      <div id="statusFailedMsg" style="color:#666;font-size:.82rem;margin-bottom:20px;line-height:1.5;"></div>
+      <button onclick="closeStatusOverlay()" style="width:100%;padding:13px;border-radius:12px;background:#1e1e1e;border:1px solid #2a2a2a;color:#ccc;font-weight:700;font-size:.88rem;cursor:pointer;font-family:inherit;">
+        Kembali
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+</style>
+<!-- ===== END QRIS MODALS ===== -->
+
+</div><!-- end mainContent -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="script.js"></script>
+<script src="auth.js"></script>
+<script>
+// Auth state listener: update panel user info & handle authGate
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof firebase !== 'undefined' && firebase.auth) {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // Logged in: update panel, close gate if open, handle pending order
+        updatePanelUser(user);
+        const gate = document.getElementById('authGate');
+        if (gate && gate.style.display === 'flex') {
+          onLoginSuccess(user);
+        }
+      } else {
+        updatePanelUser(null);
+      }
+    });
+  }
+});
+</script>
+</body>
+</html>
