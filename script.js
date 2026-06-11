@@ -143,10 +143,10 @@ function doLogout() {
 
 /* ===== ORDER MODAL ===== */
 const priceMap = {
-  '6K':  { rp: 6000,  total: 6000  },
-  '12K': { rp: 12000, total: 12000 },
-  '20K': { rp: 20000, total: 20000 },
-  '29K': { rp: 29000, total: 29000 },
+  '5K':  { rp: 6000,  total: 6000  },
+  '10K': { rp: 12000, total: 12000 },
+  '18K': { rp: 20000, total: 20000 },
+  '25K': { rp: 29000, total: 29000 },
 };
 
 // openOrder: langsung buka, login dicek saat pencet Beli
@@ -785,8 +785,8 @@ function _histPendingAction(pkg, total) {
       if (priceKey) {
         // Cari durasi dari nama paket
         const durMap = {
-          '6K': '15 hari', '12K': '30 hari',
-          '20K': '60 hari', '29K': '365 hari'
+          '5K': '15 hari', '10K': '30 hari',
+          '18K': '60 hari', '25K': '365 hari'
         };
         setTimeout(() => {
           openOrder(pkg, priceKey, durMap[priceKey] || '');
