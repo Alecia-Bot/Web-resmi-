@@ -664,16 +664,10 @@ function _updateHistoryBadge() {
   }
 }
 
-function openOwnerDashboard() {
-  const page = document.getElementById('ownerDashboard');
-  if (!page) return;
-  page.style.display = 'block';
-  document.body.style.overflow = 'hidden';
-  loadOwnerOrders();
+// openHistoryPage dihapus - pakai openOwnerDashboard);
 }
 
-function closeHistoryPage() {
-  closeOwnerDashboard();
+// closeHistoryPage dihapus - pakai closeOwnerDashboard, 350);
 }
 
 function clearHistory() {
@@ -779,7 +773,7 @@ function _histPendingAction(pkg, total) {
     `Kamu masih punya pesanan <b>${pkg}</b> yang belum dibayar.`,
     () => {
       // Setelah toast ditutup → tutup history → buka order modal langsung
-      closeHistoryPage();
+      closeOwnerDashboard();
       if (priceKey) {
         // Cari durasi dari nama paket
         const durMap = {
