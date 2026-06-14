@@ -107,11 +107,11 @@ function updatePanelUser(user) {
     document.getElementById('panelNoUser').style.display = 'block';
     document.getElementById('panelLogoutWrap').style.display = 'none';
     document.getElementById('panelLoginWrap').style.display = 'block';
-    // Sembunyikan tombol history saat logout
+    // Tetap tampilkan tombol history meski belum login (pakai localStorage)
     const heroBtn = document.getElementById('historyHeroBtn');
     const navBtn  = document.getElementById('panelHistoryBtn');
-    if (heroBtn) heroBtn.style.display = 'none';
-    if (navBtn)  navBtn.style.display = 'none';
+    if (heroBtn) heroBtn.style.display = 'flex';
+    if (navBtn)  navBtn.style.display = 'block';
     return;
   }
   const panelInfo = document.getElementById('panelUserInfo');
