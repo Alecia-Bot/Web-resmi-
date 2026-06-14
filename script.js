@@ -664,11 +664,6 @@ function _updateHistoryBadge() {
   }
 }
 
-// openHistoryPage dihapus - pakai openOwnerDashboard);
-}
-
-// closeHistoryPage dihapus - pakai closeOwnerDashboard, 350);
-}
 
 function clearHistory() {
   if (!confirm('Hapus semua riwayat pembelian?')) return;
