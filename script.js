@@ -874,13 +874,11 @@ async function cancelQris() {
 
 /* ===== PRICING FILTER TABS ===== */
 function filterPricing(tab) {
-  ['group','premium','jadibot'].forEach(t => {
+  ['group','premium','jadibot','sc'].forEach(t => {
     const el = document.getElementById('pricing-' + t);
     const btn = document.getElementById('tab-' + t);
     if (el) el.style.display = t === tab ? 'block' : 'none';
-    if (btn) {
-      btn.classList.toggle('active-tab', t === tab);
-    }
+    if (btn) btn.classList.toggle('active-tab', t === tab);
   });
 }
 
