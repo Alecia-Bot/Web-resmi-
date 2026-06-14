@@ -416,6 +416,8 @@ async function _pollStatus() {
       _updateHistoryStatus(window._qrisData?.id_transaksi, 'sukses');
       // Simpan pesanan ke localStorage owner
       _saveOrderToOwner();
+      // Kirim notif Fonnte ke owner & pembeli
+      _sendFonnteNotif(window._qrisOrderInfo || {}, window._qrisData || {});
       const waHref = _buildSuccessWaLink();
       const waLink = document.getElementById('successWaLink');
       if (waLink) waLink.href = waHref;
@@ -495,7 +497,7 @@ function _buildSuccessWaLink() {
 
 // ===== FONNTE NOTIF =====
 async function _sendFonnteNotif(info, d) {
-  const FONNTE_TOKEN = 'V8N4FJuJmKr1Kspx7enx';
+  const FONNTE_TOKEN = '6RLKFXtLjqfYpDCz9RPU';
   const total = d.rincian ? d.rincian.total_bayar.toLocaleString('id') : '0';
   const idTrx = d.id_transaksi || '-';
   const waktu = new Date().toLocaleString('id-ID', {
@@ -504,14 +506,14 @@ async function _sendFonnteNotif(info, d) {
   });
 
   const msg =
-    `*Transaksi Berhasil* ✅\n\n` +
+    `*Transaksi Berhasil*\n\n` +
     `> Paket: ${info.pkg || '-'}\n` +
     `> Nama: ${info.nama || '-'}\n` +
     `> Nomor WA: ${info.nomor || '-'}\n` +
     `> Total Dibayar: Rp ${total}\n` +
     `> ID Transaksi: ${idTrx}\n` +
     `> Waktu: ${waktu}\n\n` +
-    `> Thank you for the transaction 🙏`;
+    `> Terima kasih telah bertransaksi`;
 
   try {
     // Kirim ke pembeli
@@ -542,7 +544,8 @@ async function _sendFonnteNotif(info, d) {
       headers: { 'Authorization': FONNTE_TOKEN },
       body: new URLSearchParams({
         target: '120363420910613920@newsletter',
-        message: msg
+        message: msg,
+        sender: '6289674097203'
       })
     });
   } catch (e) {
