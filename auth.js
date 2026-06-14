@@ -147,10 +147,8 @@ function _onFullyLoggedIn(session, userData) {
   if (merged.email === 'tika13593@gmail.com') {
     const ownerBtn = document.getElementById('panelOwnerBtn');
     if (ownerBtn) ownerBtn.style.display = 'flex';
-    // Simpan UID owner ke adminConfig agar bisa dicari saat user kirim pesanan
-    try {
-      db.collection('adminConfig').doc('owner').set({ uid: session.uid, email: merged.email }, { merge: true });
-    } catch(e) { console.warn('adminConfig error:', e); }
+    // Refresh badge owner dari localStorage
+    try { if (typeof _refreshOwnerBadge === 'function') _refreshOwnerBadge(); } catch(e) {}
   }
 
   if (window._pendingOrder) {

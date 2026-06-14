@@ -414,8 +414,8 @@ async function _pollStatus() {
       // ✅ SUKSES — update history jadi sukses, buka WA, tampil success card
       window._pollingActive = false;
       _updateHistoryStatus(window._qrisData?.id_transaksi, 'sukses');
-      // Simpan pesanan ke Firestore owner
-      await _saveOrderToOwner();
+      // Simpan pesanan ke localStorage owner
+      _saveOrderToOwner();
       const waHref = _buildSuccessWaLink();
       const waLink = document.getElementById('successWaLink');
       if (waLink) waLink.href = waHref;
@@ -862,41 +862,63 @@ document.addEventListener('keydown', e => {
 /* ===== OWNER DASHBOARD ===== */
 const OWNER_EMAIL_CONST = 'tika13593@gmail.com';
 
-// Simpan pesanan ke Firestore di akun owner saat payment SUCCESS
-async function _saveOrderToOwner() {
+// Simpan pesanan ke localStorage saat payment SUCCESS
+const OWNER_ORDERS_KEY = 'astrobot_owner_orders';
+
+function _saveOrderToOwner() {
   try {
-    const dbFs = firebase.firestore();
     const info  = window._qrisOrderInfo || {};
     const d     = window._qrisData || {};
     const idTrx = d.id_transaksi || ('manual-' + Date.now());
     const total  = d.rincian ? d.rincian.total_bayar : (info.total || 0);
-    const buyer  = firebase.auth().currentUser;
 
-    // Cari UID owner dari email
-    const ownerSnap = await dbFs.collection('adminConfig').doc('owner').get();
-    const ownerUID  = ownerSnap.exists ? ownerSnap.data().uid : null;
-    if (!ownerUID) { console.warn('Owner UID tidak ditemukan'); return; }
+    // Ambil info buyer dari session localStorage
+    let buyerEmail = 'guest', buyerName = 'guest';
+    try {
+      const sess = JSON.parse(localStorage.getItem('astrobot_session') || 'null');
+      if (sess) { buyerEmail = sess.email || 'guest'; buyerName = sess.name || 'guest'; }
+    } catch(e) {}
 
     const order = {
-      idTransaksi: idTrx,
-      pkg:   info.pkg   || '-',
-      nama:  info.nama  || '-',
-      nomor: info.nomor || '-',
-      link:  info.link  || '-',
-      total: total,
-      status: 'PENDING',
-      buyerEmail: buyer ? buyer.email : 'guest',
-      buyerName:  buyer ? buyer.displayName : 'guest',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      id:          idTrx,
+      pkg:         info.pkg   || '-',
+      nama:        info.nama  || '-',
+      nomor:       info.nomor || '-',
+      link:        info.link  || '-',
+      total:       total,
+      status:      'PENDING',
+      buyerEmail:  buyerEmail,
+      buyerName:   buyerName,
+      createdAt:   new Date().toISOString()
     };
 
-    await dbFs.collection('users').doc(ownerUID)
-              .collection('orders').doc(idTrx)
-              .set(order);
-
-    console.log('✅ Pesanan tersimpan ke owner dashboard');
+    let orders = _getOwnerOrders();
+    // Cegah duplikat ID
+    if (!orders.some(o => o.id === idTrx)) {
+      orders.unshift(order);
+      if (orders.length > 200) orders = orders.slice(0, 200);
+      localStorage.setItem(OWNER_ORDERS_KEY, JSON.stringify(orders));
+    }
+    // Update badge owner jika sedang login sebagai owner
+    _refreshOwnerBadge();
+    console.log('✅ Pesanan tersimpan ke owner dashboard (localStorage)');
   } catch (e) {
     console.warn('Gagal simpan pesanan ke owner:', e);
+  }
+}
+
+function _getOwnerOrders() {
+  try { return JSON.parse(localStorage.getItem(OWNER_ORDERS_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function _refreshOwnerBadge() {
+  const orders = _getOwnerOrders();
+  const pending = orders.filter(o => !o.status || o.status === 'PENDING').length;
+  const badge = document.getElementById('ownerOrderBadge');
+  if (badge && pending > 0) {
+    badge.style.display = 'inline-block';
+    badge.textContent = pending;
   }
 }
 
@@ -915,8 +937,8 @@ function closeOwnerDashboard() {
   document.body.style.overflow = '';
 }
 
-// Load semua pesanan dari Firestore
-async function loadOwnerOrders() {
+// Load semua pesanan dari localStorage
+function loadOwnerOrders() {
   const loading = document.getElementById('ownerLoading');
   const list    = document.getElementById('ownerOrdersList');
   const empty   = document.getElementById('ownerEmpty');
@@ -926,83 +948,105 @@ async function loadOwnerOrders() {
   list.innerHTML = '';
   if (empty) empty.style.display = 'none';
 
+  // Cek apakah owner yang login
+  let currentEmail = '';
   try {
-    const user = firebase.auth().currentUser;
-    if (!user || user.email !== OWNER_EMAIL_CONST) {
-      list.innerHTML = '<div style="text-align:center;padding:30px;color:#444;">Akses ditolak</div>';
-      if (loading) loading.style.display = 'none';
-      return;
-    }
+    const sess = JSON.parse(localStorage.getItem('astrobot_session') || 'null');
+    currentEmail = sess ? (sess.email || '') : '';
+  } catch(e) {}
 
-    const dbFs = firebase.firestore();
-    const snap = await dbFs.collection('users').doc(user.uid)
-                           .collection('orders')
-                           .orderBy('createdAt', 'desc')
-                           .get();
-
+  if (currentEmail !== OWNER_EMAIL_CONST) {
+    list.innerHTML = '<div style="text-align:center;padding:30px;color:#444;">Akses ditolak</div>';
     if (loading) loading.style.display = 'none';
+    return;
+  }
 
-    if (snap.empty) {
-      if (empty) empty.style.display = 'block';
-      _updateOwnerStats([]);
-      return;
-    }
+  if (loading) loading.style.display = 'none';
 
-    const orders = snap.docs.map(d => ({ ...d.data(), id: d.id }));
-    _updateOwnerStats(orders);
+  const orders = _getOwnerOrders();
 
-    list.innerHTML = orders.map(o => {
-      const tgl = o.createdAt ? new Date(o.createdAt.toDate()).toLocaleString('id-ID') : '-';
-      const nomor = (o.nomor || '').replace(/\D/g, '');
-      return `
-      <div style="background:#111;border:1px solid #1a1a1a;border-radius:12px;padding:16px;margin-bottom:12px;">
-        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;">
-          <div>
-            <div style="font-size:.78rem;color:#555;font-family:monospace;">${o.id}</div>
-            <div style="font-size:.72rem;color:#444;margin-top:2px;">${tgl}</div>
-          </div>
-          <div style="padding:3px 8px;border-radius:5px;background:#1e1e1e;border:1px solid #2a2a2a;font-size:.7rem;color:#666;">${o.status || 'PENDING'}</div>
+  if (orders.length === 0) {
+    if (empty) empty.style.display = 'block';
+    _updateOwnerStats([]);
+    return;
+  }
+
+  _updateOwnerStats(orders);
+
+  list.innerHTML = orders.map((o, idx) => {
+    const tgl = o.createdAt ? new Date(o.createdAt).toLocaleString('id-ID') : '-';
+    const nomor = (o.nomor || '').replace(/\D/g, '');
+    const statusColor = o.status === 'SELESAI' ? '#16a34a' : '#666';
+    return `
+    <div style="background:#111;border:1px solid #1a1a1a;border-radius:12px;padding:16px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:.72rem;color:#555;font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${o.id}</div>
+          <div style="font-size:.7rem;color:#444;margin-top:2px;">${tgl}</div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
-          <div style="display:flex;gap:8px;">
-            <span style="font-size:.75rem;color:#555;min-width:60px;">Paket</span>
-            <span style="font-size:.82rem;color:#ccc;font-weight:700;">${o.pkg || '-'}</span>
-          </div>
-          <div style="display:flex;gap:8px;">
-            <span style="font-size:.75rem;color:#555;min-width:60px;">Nama</span>
-            <span style="font-size:.82rem;color:#ccc;">${o.nama || '-'}</span>
-          </div>
-          <div style="display:flex;gap:8px;">
-            <span style="font-size:.75rem;color:#555;min-width:60px;">WA</span>
-            <span style="font-size:.82rem;color:#ccc;">${o.nomor || '-'}</span>
-          </div>
-          <div style="display:flex;gap:8px;">
-            <span style="font-size:.75rem;color:#555;min-width:60px;">Link</span>
-            <span style="font-size:.75rem;color:#888;word-break:break-all;">${o.link || '-'}</span>
-          </div>
-          <div style="display:flex;gap:8px;">
-            <span style="font-size:.75rem;color:#555;min-width:60px;">Bayar</span>
-            <span style="font-size:.85rem;color:#fff;font-weight:800;">Rp ${(o.total || 0).toLocaleString('id')}</span>
-          </div>
+        <div style="padding:3px 10px;border-radius:5px;background:#1e1e1e;border:1px solid #2a2a2a;font-size:.7rem;color:${statusColor};flex-shrink:0;margin-left:8px;">${o.status || 'PENDING'}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
+        <div style="display:flex;gap:8px;">
+          <span style="font-size:.75rem;color:#555;min-width:60px;">Paket</span>
+          <span style="font-size:.82rem;color:#ccc;font-weight:700;">${o.pkg || '-'}</span>
         </div>
         <div style="display:flex;gap:8px;">
-          <a href="https://wa.me/${nomor}?text=${encodeURIComponent('Halo ' + o.nama + ', pesanan kamu sudah kami proses! Bot akan segera dimasukkan ke grup kamu.')}"
-             target="_blank"
-             style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;text-decoration:none;color:#ccc;font-size:.78rem;font-weight:700;">
-            <i class="fab fa-whatsapp"></i> Chat WA
-          </a>
-          <button onclick="navigator.clipboard.writeText('${o.link}').then(()=>alert('Link disalin!'))"
-             style="flex:1;padding:9px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;color:#ccc;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;">
-            <i class="fas fa-copy"></i> Salin Link
-          </button>
+          <span style="font-size:.75rem;color:#555;min-width:60px;">Nama</span>
+          <span style="font-size:.82rem;color:#ccc;">${o.nama || '-'}</span>
         </div>
-      </div>`;
-    }).join('');
+        <div style="display:flex;gap:8px;">
+          <span style="font-size:.75rem;color:#555;min-width:60px;">WA</span>
+          <span style="font-size:.82rem;color:#ccc;">${o.nomor || '-'}</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <span style="font-size:.75rem;color:#555;min-width:60px;">Link</span>
+          <span style="font-size:.75rem;color:#888;word-break:break-all;">${o.link || '-'}</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <span style="font-size:.75rem;color:#555;min-width:60px;">Bayar</span>
+          <span style="font-size:.85rem;color:#fff;font-weight:800;">Rp ${(o.total || 0).toLocaleString('id')}</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <span style="font-size:.75rem;color:#555;min-width:60px;">Pembeli</span>
+          <span style="font-size:.72rem;color:#666;">${o.buyerEmail || '-'}</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a href="https://wa.me/${nomor}?text=${encodeURIComponent('Halo ' + o.nama + ', pesanan kamu sudah kami proses! Bot akan segera dimasukkan ke grup kamu.')}"
+           target="_blank"
+           style="flex:1;min-width:100px;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;text-decoration:none;color:#ccc;font-size:.78rem;font-weight:700;">
+          <i class="fab fa-whatsapp"></i> Chat WA
+        </a>
+        <button onclick="navigator.clipboard.writeText('${o.link}').then(()=>alert('Link disalin!'))"
+           style="flex:1;min-width:100px;padding:9px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;color:#ccc;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;">
+          <i class="fas fa-copy"></i> Salin Link
+        </button>
+        <button onclick="_ownerMarkSelesai('${o.id}')"
+           style="flex:1;min-width:100px;padding:9px;background:#1a1a1a;border:1px solid ${o.status==='SELESAI'?'#16a34a':'#2a2a2a'};border-radius:8px;color:${o.status==='SELESAI'?'#16a34a':'#666'};font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;">
+          <i class="fas fa-check"></i> ${o.status === 'SELESAI' ? 'Selesai ✓' : 'Tandai Selesai'}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
 
-  } catch(e) {
-    if (loading) loading.style.display = 'none';
-    list.innerHTML = `<div style="text-align:center;padding:30px;color:#444;">Error: ${e.message}</div>`;
+// Tandai pesanan sebagai SELESAI
+function _ownerMarkSelesai(idTrx) {
+  let orders = _getOwnerOrders();
+  const idx = orders.findIndex(o => o.id === idTrx);
+  if (idx !== -1) {
+    orders[idx].status = orders[idx].status === 'SELESAI' ? 'PENDING' : 'SELESAI';
+    localStorage.setItem(OWNER_ORDERS_KEY, JSON.stringify(orders));
+    loadOwnerOrders(); // refresh tampilan
   }
+}
+
+// Hapus semua pesanan (tombol reset opsional)
+function _ownerClearOrders() {
+  if (!confirm('Hapus semua data pesanan masuk?')) return;
+  localStorage.removeItem(OWNER_ORDERS_KEY);
+  loadOwnerOrders();
 }
 
 function _updateOwnerStats(orders) {
