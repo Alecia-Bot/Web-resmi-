@@ -664,7 +664,7 @@ function _updateHistoryBadge() {
   }
 }
 
-function openHistoryPage() {
+function openOwnerDashboard() {
   const page = document.getElementById('historyPage');
   if (!page) return;
   page.style.display = 'block';
