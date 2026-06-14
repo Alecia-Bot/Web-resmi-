@@ -904,7 +904,7 @@ document.addEventListener('keydown', e => {
 
 const _scriptData = {
   update: {
-    nama: 'ASTROBOT MD — Free Update Selamanya',
+    nama: 'ASTROBOT MD \u2014 Free Update Selamanya',
     harga: 50000,
     hargaFmt: 'Rp 50.000',
     hargaColor: '#fff',
@@ -917,7 +917,7 @@ const _scriptData = {
     ]
   },
   replace: {
-    nama: 'ASTROBOT MD — 1x Replace Script',
+    nama: 'ASTROBOT MD \u2014 1x Replace Script',
     harga: 35000,
     hargaFmt: 'Rp 35.000',
     hargaColor: '#fbbf24',
@@ -933,17 +933,23 @@ const _scriptData = {
 
 let _currentScript = 'update'
 
-// Buka detail produk (slide-in page)
 function openScriptDetail(type) {
   _currentScript = type
   const d = _scriptData[type]
-  // Set harga
-  const el = document.getElementById('sdHargaBesar')
-  if (el) { el.textContent = d.hargaFmt; el.style.color = d.hargaColor; }
-  // Set benefit
-  const list = document.getElementById('sdBenefitList')
-  if (list) list.innerHTML = d.benefits.map(b => `<li style="font-size:.9rem;color:#ccc;">${b}</li>`).join('')
-  // Slide in
+
+  // judul
+  const titleEl = document.getElementById('sdTitleMain')
+  if (titleEl) titleEl.textContent = d.nama
+
+  // harga
+  const hargaEl = document.getElementById('sdHargaBesar')
+  if (hargaEl) { hargaEl.textContent = d.hargaFmt; hargaEl.style.color = d.hargaColor }
+
+  // benefit per tipe
+  const benList = document.getElementById('sdBenefitList')
+  if (benList) benList.innerHTML = d.benefits.map(b =>
+    `<li style="font-size:.88rem;color:#ccc;">${b}</li>`).join('')
+
   const modal = document.getElementById('scriptDetailModal')
   modal.style.display = 'block'
   modal.style.visibility = 'visible'
@@ -964,43 +970,48 @@ function closeScriptDetail() {
   }, 350)
 }
 
-// Dari tombol "Beli Sekarang" di detail page → tutup detail, buka order
 function closeDetailThenOrder() {
   const d = _scriptData[_currentScript]
   closeScriptDetail()
   setTimeout(() => openScriptOrder(d.nama, d.harga), 360)
 }
 
-// Buka order page (slide-in)
 function openScriptOrder(nama, harga) {
-  const hargaFmt = 'Rp ' + harga.toLocaleString('id')
-  // Set harga di form
-  const el1 = document.getElementById('soHargaBesar')
-  const el2 = document.getElementById('soHargaRingkas')
-  const el3 = document.getElementById('soTotal')
-  if (el1) el1.textContent = hargaFmt
-  if (el2) el2.textContent = hargaFmt
-  if (el3) el3.textContent = hargaFmt
+  const d = harga === 50000 ? _scriptData.update : _scriptData.replace
+  _currentScript = harga === 50000 ? 'update' : 'replace'
 
-  // Simpan data produk
+  const hargaFmt = d.hargaFmt
+
+  if (document.getElementById('soHargaBesar'))   document.getElementById('soHargaBesar').textContent   = hargaFmt
+  if (document.getElementById('soHargaRingkas')) document.getElementById('soHargaRingkas').textContent = hargaFmt
+  if (document.getElementById('soTotal'))        document.getElementById('soTotal').textContent        = hargaFmt
+  if (document.getElementById('soTitle'))        document.getElementById('soTitle').textContent        = nama
+
+  // benefit di order page
+  const benList = document.getElementById('soBenList')
+  if (benList) benList.innerHTML = d.benefits.map(b =>
+    `<li style="font-size:.9rem;color:#ccc;">${b}</li>`).join('')
+
+  // reset form
+  if (document.getElementById('soNama'))  document.getElementById('soNama').value  = ''
+  if (document.getElementById('soNomor')) document.getElementById('soNomor').value = ''
+
+  // Simpan ke orderModal.dataset agar _openQrisPay bisa baca
+  const orderModal = document.getElementById('orderModal')
+  if (orderModal) {
+    orderModal.dataset.pkg   = nama
+    orderModal.dataset.total = harga
+    orderModal.dataset.price = harga
+    // kosongkan field link grup supaya qrisLinkPembeli tampil '-'
+    const linkEl = document.getElementById('orderLink')
+    if (linkEl) linkEl.value = '-'
+    const namaEl = document.getElementById('orderNama')
+    if (namaEl) namaEl.value = ''
+    const nomorEl = document.getElementById('orderNomor')
+    if (nomorEl) nomorEl.value = ''
+  }
+
   const modal = document.getElementById('scriptOrderModal')
-  modal.dataset.nama = nama
-  modal.dataset.harga = harga
-
-  // Set benefit di order page
-  const type = harga === 50000 ? 'update' : 'replace'
-  _currentScript = type
-  const d = _scriptData[type]
-  const benefitList = document.getElementById('soBenefitList')
-  if (benefitList) benefitList.innerHTML = d.benefits.map(b => `<li style="font-size:.9rem;color:#ccc;">${b}</li>`).join('')
-
-  // Reset form
-  const soNama = document.getElementById('soNama')
-  const soNomor = document.getElementById('soNomor')
-  if (soNama) soNama.value = ''
-  if (soNomor) soNomor.value = ''
-
-  // Slide in
   modal.style.display = 'block'
   modal.style.visibility = 'visible'
   modal.style.transform = 'translateX(100%)'
@@ -1021,26 +1032,46 @@ function closeScriptOrder() {
 }
 
 function handleScriptBeli() {
-  const nama  = (document.getElementById('soNama')?.value || '').trim()
+  const nama  = (document.getElementById('soNama')?.value  || '').trim()
   const nomor = (document.getElementById('soNomor')?.value || '').trim()
+
   if (!nama || !nomor) {
     alert('Mohon lengkapi nama dan nomor WhatsApp!')
     return
   }
+
   // Cek login
-  const session = (function(){ try { return JSON.parse(localStorage.getItem('astrobot_session') || 'null') } catch { return null } })()
+  const session = (function(){
+    try { return JSON.parse(localStorage.getItem('astrobot_session') || 'null') } catch { return null }
+  })()
   if (!session || !session.uid) {
     openAuthGate(null)
     return
   }
-  const modal = document.getElementById('scriptOrderModal')
-  const produk = modal.dataset.nama || 'ASTROBOT MD'
-  const harga  = modal.dataset.harga || '0'
-  const pesan  = `Halo min, saya mau beli *${produk}*%0A%0ANama: ${nama}%0ANomor: ${nomor}%0AHarga: Rp ${parseInt(harga).toLocaleString('id')}`
-  window.open(`https://wa.me/6289674097203?text=${pesan}`, '_blank')
+
+  // Inject data ke orderModal agar _openQrisPay bisa baca
+  const orderModal = document.getElementById('orderModal')
+  if (orderModal) {
+    orderModal.dataset.pkg   = document.getElementById('soTitle')?.textContent || 'ASTROBOT MD'
+    orderModal.dataset.total = _scriptData[_currentScript].harga
+    // inject nama & nomor ke field orderModal supaya qris info terisi
+    const namaEl  = document.getElementById('orderNama')
+    const nomorEl = document.getElementById('orderNomor')
+    const linkEl  = document.getElementById('orderLink')
+    if (namaEl)  namaEl.value  = nama
+    if (nomorEl) nomorEl.value = nomor
+    if (linkEl)  linkEl.value  = '-'
+  }
+
+  // Tutup script order, buka QRIS
+  closeScriptOrder()
+  setTimeout(() => {
+    if (typeof _openQrisPay === 'function') {
+      _openQrisPay()
+    }
+  }, 360)
 }
 
-// ESC close script modals
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeScriptOrder()
