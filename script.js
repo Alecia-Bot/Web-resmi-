@@ -414,6 +414,8 @@ async function _pollStatus() {
       // ✅ SUKSES — update history jadi sukses, buka WA, tampil success card
       window._pollingActive = false;
       _updateHistoryStatus(window._qrisData?.id_transaksi, 'sukses');
+      // Simpan pesanan ke Firestore owner
+      await _saveOrderToOwner();
       const waHref = _buildSuccessWaLink();
       const waLink = document.getElementById('successWaLink');
       if (waLink) waLink.href = waHref;
@@ -856,3 +858,164 @@ function filterPricing(tab) {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeOrder();
 });
+
+/* ===== OWNER DASHBOARD ===== */
+const OWNER_EMAIL_CONST = 'tika13593@gmail.com';
+
+// Simpan pesanan ke Firestore di akun owner saat payment SUCCESS
+async function _saveOrderToOwner() {
+  try {
+    const dbFs = firebase.firestore();
+    const info  = window._qrisOrderInfo || {};
+    const d     = window._qrisData || {};
+    const idTrx = d.id_transaksi || ('manual-' + Date.now());
+    const total  = d.rincian ? d.rincian.total_bayar : (info.total || 0);
+    const buyer  = firebase.auth().currentUser;
+
+    // Cari UID owner dari email
+    const ownerSnap = await dbFs.collection('adminConfig').doc('owner').get();
+    const ownerUID  = ownerSnap.exists ? ownerSnap.data().uid : null;
+    if (!ownerUID) { console.warn('Owner UID tidak ditemukan'); return; }
+
+    const order = {
+      idTransaksi: idTrx,
+      pkg:   info.pkg   || '-',
+      nama:  info.nama  || '-',
+      nomor: info.nomor || '-',
+      link:  info.link  || '-',
+      total: total,
+      status: 'PENDING',
+      buyerEmail: buyer ? buyer.email : 'guest',
+      buyerName:  buyer ? buyer.displayName : 'guest',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    await dbFs.collection('users').doc(ownerUID)
+              .collection('orders').doc(idTrx)
+              .set(order);
+
+    console.log('✅ Pesanan tersimpan ke owner dashboard');
+  } catch (e) {
+    console.warn('Gagal simpan pesanan ke owner:', e);
+  }
+}
+
+// Buka owner dashboard
+function openOwnerDashboard() {
+  const el = document.getElementById('ownerDashboard');
+  if (!el) return;
+  el.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  loadOwnerOrders();
+}
+
+function closeOwnerDashboard() {
+  const el = document.getElementById('ownerDashboard');
+  if (el) el.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Load semua pesanan dari Firestore
+async function loadOwnerOrders() {
+  const loading = document.getElementById('ownerLoading');
+  const list    = document.getElementById('ownerOrdersList');
+  const empty   = document.getElementById('ownerEmpty');
+  if (!list) return;
+
+  if (loading) loading.style.display = 'block';
+  list.innerHTML = '';
+  if (empty) empty.style.display = 'none';
+
+  try {
+    const user = firebase.auth().currentUser;
+    if (!user || user.email !== OWNER_EMAIL_CONST) {
+      list.innerHTML = '<div style="text-align:center;padding:30px;color:#444;">Akses ditolak</div>';
+      if (loading) loading.style.display = 'none';
+      return;
+    }
+
+    const dbFs = firebase.firestore();
+    const snap = await dbFs.collection('users').doc(user.uid)
+                           .collection('orders')
+                           .orderBy('createdAt', 'desc')
+                           .get();
+
+    if (loading) loading.style.display = 'none';
+
+    if (snap.empty) {
+      if (empty) empty.style.display = 'block';
+      _updateOwnerStats([]);
+      return;
+    }
+
+    const orders = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+    _updateOwnerStats(orders);
+
+    list.innerHTML = orders.map(o => {
+      const tgl = o.createdAt ? new Date(o.createdAt.toDate()).toLocaleString('id-ID') : '-';
+      const nomor = (o.nomor || '').replace(/\D/g, '');
+      return `
+      <div style="background:#111;border:1px solid #1a1a1a;border-radius:12px;padding:16px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;">
+          <div>
+            <div style="font-size:.78rem;color:#555;font-family:monospace;">${o.id}</div>
+            <div style="font-size:.72rem;color:#444;margin-top:2px;">${tgl}</div>
+          </div>
+          <div style="padding:3px 8px;border-radius:5px;background:#1e1e1e;border:1px solid #2a2a2a;font-size:.7rem;color:#666;">${o.status || 'PENDING'}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
+          <div style="display:flex;gap:8px;">
+            <span style="font-size:.75rem;color:#555;min-width:60px;">Paket</span>
+            <span style="font-size:.82rem;color:#ccc;font-weight:700;">${o.pkg || '-'}</span>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <span style="font-size:.75rem;color:#555;min-width:60px;">Nama</span>
+            <span style="font-size:.82rem;color:#ccc;">${o.nama || '-'}</span>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <span style="font-size:.75rem;color:#555;min-width:60px;">WA</span>
+            <span style="font-size:.82rem;color:#ccc;">${o.nomor || '-'}</span>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <span style="font-size:.75rem;color:#555;min-width:60px;">Link</span>
+            <span style="font-size:.75rem;color:#888;word-break:break-all;">${o.link || '-'}</span>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <span style="font-size:.75rem;color:#555;min-width:60px;">Bayar</span>
+            <span style="font-size:.85rem;color:#fff;font-weight:800;">Rp ${(o.total || 0).toLocaleString('id')}</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://wa.me/${nomor}?text=${encodeURIComponent('Halo ' + o.nama + ', pesanan kamu sudah kami proses! Bot akan segera dimasukkan ke grup kamu.')}"
+             target="_blank"
+             style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;text-decoration:none;color:#ccc;font-size:.78rem;font-weight:700;">
+            <i class="fab fa-whatsapp"></i> Chat WA
+          </a>
+          <button onclick="navigator.clipboard.writeText('${o.link}').then(()=>alert('Link disalin!'))"
+             style="flex:1;padding:9px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;color:#ccc;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;">
+            <i class="fas fa-copy"></i> Salin Link
+          </button>
+        </div>
+      </div>`;
+    }).join('');
+
+  } catch(e) {
+    if (loading) loading.style.display = 'none';
+    list.innerHTML = `<div style="text-align:center;padding:30px;color:#444;">Error: ${e.message}</div>`;
+  }
+}
+
+function _updateOwnerStats(orders) {
+  const pending = orders.filter(o => !o.status || o.status === 'PENDING').length;
+  const total   = orders.reduce((s, o) => s + (o.total || 0), 0);
+  const el = id => document.getElementById(id);
+  if (el('ownerStatTotal'))  el('ownerStatTotal').textContent  = orders.length;
+  if (el('ownerStatPending')) el('ownerStatPending').textContent = pending;
+  if (el('ownerStatTotal2')) el('ownerStatTotal2').textContent = 'Rp ' + total.toLocaleString('id');
+  // Badge di panel nav
+  const badge = el('ownerOrderBadge');
+  if (badge && pending > 0) {
+    badge.style.display = 'inline-block';
+    badge.textContent = pending;
+  }
+}

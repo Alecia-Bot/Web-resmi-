@@ -132,7 +132,6 @@ function _resetLoginBtn() {
 // ─── FULLY LOGGED IN ──────────────────────────────────────────────────────
 function _onFullyLoggedIn(session, userData) {
   closeAuthGate();
-  // Merge session + userData supaya updatePanelUser dapat semua field (name/displayName, picture/photoURL, username)
   const merged = {
     uid:         session.uid,
     name:        session.name,
@@ -143,6 +142,16 @@ function _onFullyLoggedIn(session, userData) {
     username:    userData.username    || ''
   };
   updatePanelUser(merged);
+
+  // Tampilkan tombol "Pesanan Masuk" jika owner
+  if (merged.email === 'tika13593@gmail.com') {
+    const ownerBtn = document.getElementById('panelOwnerBtn');
+    if (ownerBtn) ownerBtn.style.display = 'flex';
+    // Simpan UID owner ke adminConfig agar bisa dicari saat user kirim pesanan
+    try {
+      db.collection('adminConfig').doc('owner').set({ uid: session.uid, email: merged.email }, { merge: true });
+    } catch(e) { console.warn('adminConfig error:', e); }
+  }
 
   if (window._pendingOrder) {
     const p = window._pendingOrder;
