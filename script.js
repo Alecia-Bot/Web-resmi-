@@ -874,7 +874,7 @@ async function cancelQris() {
 
 /* ===== PRICING FILTER TABS ===== */
 function filterPricing(tab) {
-  ['group','premium','jadibot'].forEach(t => {
+  ['group','premium','jadibot','script'].forEach(t => {
     const el = document.getElementById('pricing-' + t);
     const btn = document.getElementById('tab-' + t);
     if (el) el.style.display = t === tab ? 'block' : 'none';
@@ -899,114 +899,151 @@ document.addEventListener('keydown', e => {
 
 
 
-// ===== SCRIPT BOT TAB & MODAL =====
 
-// Tab filter — tambah reset untuk tab script
-const _origFilterPricing = typeof filterPricing === 'function' ? filterPricing : null
-function filterPricing(type) {
-  ['group','premium','jadibot','script'].forEach(t => {
-    const el = document.getElementById('pricing-' + t)
-    const tab = document.getElementById('tab-' + t)
-    if (el) el.style.display = t === type ? '' : 'none'
-    if (tab) {
-      tab.classList.toggle('active-tab', t === type)
-    }
-  })
-}
+/* ===== SCRIPT BOT FUNCTIONS ===== */
 
-// Data per tipe
-const scriptData = {
+const _scriptData = {
   update: {
-    title: 'ASTROBOT MD — Free Update Selamanya',
-    harga: 'Rp 50.000',
-    badge: 'FREE UPDATE',
-    badgeStyle: 'background:rgba(74,222,128,.12);color:#4ade80;border:1px solid rgba(74,222,128,.25)',
-    hargaStyle: 'color:#fff',
+    nama: 'ASTROBOT MD — Free Update Selamanya',
+    harga: 50000,
+    hargaFmt: 'Rp 50.000',
+    hargaColor: '#fff',
     benefits: [
       'Free update selamanya selama pengembangan',
       'Mudah dikustomisasi sesuai kebutuhan',
       'Struktur plugin terpisah dan rapi',
       'Siap digunakan tanpa konfigurasi rumit',
       'Support pengembangan fitur baru',
-    ],
-    beliText: 'ASTROBOT MD — Free Update Selamanya',
-    beliHarga: '50.000'
+    ]
   },
   replace: {
-    title: 'ASTROBOT MD — 1x Replace Script',
-    harga: 'Rp 35.000',
-    badge: '1x REPLACE',
-    badgeStyle: 'background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.25)',
-    hargaStyle: 'color:#fbbf24',
+    nama: 'ASTROBOT MD — 1x Replace Script',
+    harga: 35000,
+    hargaFmt: 'Rp 35.000',
+    hargaColor: '#fbbf24',
     benefits: [
-      '1x Replace (tukar ke versi script terbaru)',
+      '1x Replace ke versi script terbaru',
       'Harga lebih hemat dari paket update',
       'Struktur plugin terpisah dan rapi',
       'Siap digunakan tanpa konfigurasi rumit',
-      'Cocok untuk yang beli sekali pakai',
-    ],
-    beliText: 'ASTROBOT MD — 1x Replace',
-    beliHarga: '35.000'
+      'Cocok untuk pembelian sekali pakai',
+    ]
   }
 }
 
-let _currentScriptType = 'update'
+let _currentScript = 'update'
 
+// Buka detail produk (slide-in page)
 function openScriptDetail(type) {
-  _currentScriptType = type
-  const d = scriptData[type]
-  document.getElementById('sdTitle').textContent = d.title
-  document.getElementById('sdHarga').textContent = d.harga
-  document.getElementById('sdHarga').style.cssText = 'font-size:1.8rem;font-weight:900;' + d.hargaStyle
-  const badge = document.getElementById('sdBadge')
-  badge.textContent = d.badge
-  badge.style.cssText = d.badgeStyle
+  _currentScript = type
+  const d = _scriptData[type]
+  // Set harga
+  const el = document.getElementById('sdHargaBesar')
+  if (el) { el.textContent = d.hargaFmt; el.style.color = d.hargaColor; }
+  // Set benefit
   const list = document.getElementById('sdBenefitList')
-  list.innerHTML = d.benefits.map(b => `<li>▸ ${b}</li>`).join('')
+  if (list) list.innerHTML = d.benefits.map(b => `<li style="font-size:.9rem;color:#ccc;">${b}</li>`).join('')
+  // Slide in
   const modal = document.getElementById('scriptDetailModal')
   modal.style.display = 'block'
+  modal.style.visibility = 'visible'
+  modal.style.transform = 'translateX(100%)'
   document.body.style.overflow = 'hidden'
+  void modal.offsetHeight
+  modal.style.transform = 'translateX(0)'
+  modal.scrollTop = 0
 }
 
 function closeScriptDetail() {
-  document.getElementById('scriptDetailModal').style.display = 'none'
-  document.body.style.overflow = ''
+  const modal = document.getElementById('scriptDetailModal')
+  modal.style.transform = 'translateX(100%)'
+  setTimeout(() => {
+    modal.style.visibility = 'hidden'
+    modal.style.display = ''
+    document.body.style.overflow = ''
+  }, 350)
 }
 
-function closeThenOrder() {
-  const d = scriptData[_currentScriptType]
+// Dari tombol "Beli Sekarang" di detail page → tutup detail, buka order
+function closeDetailThenOrder() {
+  const d = _scriptData[_currentScript]
   closeScriptDetail()
-  openScriptOrder(d.beliText, d.beliHarga)
+  setTimeout(() => openScriptOrder(d.nama, d.harga), 360)
 }
 
+// Buka order page (slide-in)
 function openScriptOrder(nama, harga) {
-  // Pakai orderModal yang sudah ada, tapi mode script (tanpa field link grup)
-  const modal = document.getElementById('orderModal')
-  if (!modal) {
-    window.open('https://wa.me/6289674097203?text=' + encodeURIComponent('Halo min, saya mau beli ' + nama + ' seharga Rp ' + harga), '_blank')
-    return
-  }
-  // Set harga
-  const hargaFmt = 'Rp ' + harga
-  const el1 = document.getElementById('orderHargaBesar')
-  const el2 = document.getElementById('orderHargaRingkas')
-  const el3 = document.getElementById('orderTotal')
+  const hargaFmt = 'Rp ' + harga.toLocaleString('id')
+  // Set harga di form
+  const el1 = document.getElementById('soHargaBesar')
+  const el2 = document.getElementById('soHargaRingkas')
+  const el3 = document.getElementById('soTotal')
   if (el1) el1.textContent = hargaFmt
   if (el2) el2.textContent = hargaFmt
   if (el3) el3.textContent = hargaFmt
 
-  // Simpan nama produk untuk handleBeli
-  modal.dataset.scriptNama = nama
-  modal.dataset.scriptHarga = harga
-  modal.dataset.isScript = '1'
+  // Simpan data produk
+  const modal = document.getElementById('scriptOrderModal')
+  modal.dataset.nama = nama
+  modal.dataset.harga = harga
 
-  // Sembunyikan field link grup, ganti label
-  const linkField = document.getElementById('orderLink')
-  if (linkField) {
-    linkField.parentElement.style.display = 'none'
-  }
+  // Set benefit di order page
+  const type = harga === 50000 ? 'update' : 'replace'
+  _currentScript = type
+  const d = _scriptData[type]
+  const benefitList = document.getElementById('soBenefitList')
+  if (benefitList) benefitList.innerHTML = d.benefits.map(b => `<li style="font-size:.9rem;color:#ccc;">${b}</li>`).join('')
 
-  modal.style.transform = 'translateX(0)'
+  // Reset form
+  const soNama = document.getElementById('soNama')
+  const soNomor = document.getElementById('soNomor')
+  if (soNama) soNama.value = ''
+  if (soNomor) soNomor.value = ''
+
+  // Slide in
+  modal.style.display = 'block'
   modal.style.visibility = 'visible'
+  modal.style.transform = 'translateX(100%)'
   document.body.style.overflow = 'hidden'
+  void modal.offsetHeight
+  modal.style.transform = 'translateX(0)'
+  modal.scrollTop = 0
 }
+
+function closeScriptOrder() {
+  const modal = document.getElementById('scriptOrderModal')
+  modal.style.transform = 'translateX(100%)'
+  setTimeout(() => {
+    modal.style.visibility = 'hidden'
+    modal.style.display = ''
+    document.body.style.overflow = ''
+  }, 350)
+}
+
+function handleScriptBeli() {
+  const nama  = (document.getElementById('soNama')?.value || '').trim()
+  const nomor = (document.getElementById('soNomor')?.value || '').trim()
+  if (!nama || !nomor) {
+    alert('Mohon lengkapi nama dan nomor WhatsApp!')
+    return
+  }
+  // Cek login
+  const session = (function(){ try { return JSON.parse(localStorage.getItem('astrobot_session') || 'null') } catch { return null } })()
+  if (!session || !session.uid) {
+    openAuthGate(null)
+    return
+  }
+  const modal = document.getElementById('scriptOrderModal')
+  const produk = modal.dataset.nama || 'ASTROBOT MD'
+  const harga  = modal.dataset.harga || '0'
+  const pesan  = `Halo min, saya mau beli *${produk}*%0A%0ANama: ${nama}%0ANomor: ${nomor}%0AHarga: Rp ${parseInt(harga).toLocaleString('id')}`
+  window.open(`https://wa.me/6289674097203?text=${pesan}`, '_blank')
+}
+
+// ESC close script modals
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeScriptOrder()
+    closeScriptDetail()
+  }
+})
