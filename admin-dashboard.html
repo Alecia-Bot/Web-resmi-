@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Pesanan Masuk</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0a0a; color: #ccc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; overflow-x: hidden; }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .header { padding: 20px 0; border-bottom: 1px solid #1a1a1a; display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+    .header h1 { font-size: 1.4rem; color: #fff; }
+    .btn-logout { padding: 8px 16px; background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 8px; color: #ccc; cursor: pointer; font-size: .85rem; }
+    .btn-logout:hover { background: #252525; }
+    
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 30px; }
+    .stat-card { background: #111; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; }
+    .stat-card .label { font-size: .85rem; color: #666; margin-bottom: 8px; }
+    .stat-card .value { font-size: 1.8rem; font-weight: 800; color: #fff; }
+    
+    .orders-section { margin-top: 30px; }
+    .orders-section h2 { font-size: 1.1rem; color: #fff; margin-bottom: 18px; }
+    
+    .order-card { background: #111; border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+    .order-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 14px; }
+    .order-id { font-size: .85rem; color: #888; font-family: 'Courier New', monospace; }
+    .order-status { padding: 4px 10px; border-radius: 6px; font-size: .75rem; font-weight: 700; background: #1e1e1e; color: #aaa; }
+    .order-status.pending { background: #2a2a2a; color: #ccc; }
+    
+    .order-detail { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px; }
+    .detail-row { padding: 10px; background: #0d0d0d; border-radius: 8px; border-left: 2px solid #2a2a2a; }
+    .detail-label { font-size: .75rem; color: #666; margin-bottom: 2px; }
+    .detail-value { font-size: .9rem; color: #fff; font-weight: 600; word-break: break-all; }
+    
+    .order-actions { display: flex; gap: 8px; }
+    .btn-action { padding: 8px 14px; background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 8px; color: #ccc; cursor: pointer; font-size: .78rem; }
+    .btn-action:hover { background: #252525; }
+    .btn-copy { padding: 8px 14px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; color: #888; cursor: pointer; font-size: .78rem; }
+    
+    .empty { text-align: center; padding: 40px 20px; color: #444; }
+    .empty i { font-size: 3rem; margin-bottom: 14px; opacity: 0.3; display: block; }
+    
+    .loading { text-align: center; padding: 30px; color: #666; }
+    .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #222; border-top-color: #888; border-radius: 50%; animation: spin .6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    @media (max-width: 768px) {
+      .header { flex-direction: column; gap: 12px; align-items: flex-start; }
+      .order-detail { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1>📦 Pesanan Masuk</h1>
+        <div style="font-size: .85rem; color: #666; margin-top: 4px;">Dashboard Admin Astrobot</div>
+      </div>
+      <button class="btn-logout" onclick="logoutAdmin()">Keluar</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="label">Total Pesanan</div>
+        <div class="value" id="totalOrders">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Belum Diproses</div>
+        <div class="value" id="pendingOrders">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Bayar</div>
+        <div class="value" id="totalPayment">Rp 0</div>
+      </div>
+    </div>
+
+    <div class="orders-section">
+      <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <div style="margin-top: 10px;">Memuat pesanan...</div>
+      </div>
+      <div id="ordersList"></div>
+      <div id="emptyState" class="empty" style="display: none;">
+        <i class="fas fa-inbox"></i>
+        <div>Belum ada pesanan masuk</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBsoZ8DizsO2DBqqq4kP6GYV8EJXX6rV2U",
+      authDomain: "astrobot-f248f.firebaseapp.com",
+      projectId: "astrobot-f248f",
+      storageBucket: "astrobot-f248f.firebasestorage.app",
+      messagingSenderId: "119300956122",
+      appId: "1:119300956122:web:cd072a0d4c433a9351eae3"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const OWNER_EMAIL = 'tika13593@gmail.com';
+
+    // Auth check
+    auth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        // Redirect ke login
+        window.location.href = 'index.html#login';
+        return;
+      }
+
+      if (user.email !== OWNER_EMAIL) {
+        alert('❌ Akses ditolak. Hanya owner yang bisa akses dashboard ini.');
+        await auth.signOut();
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Load orders
+      loadOrders(user.uid);
+    });
+
+    async function loadOrders(ownerUID) {
+      try {
+        const snap = await db.collection('users').doc(ownerUID)
+          .collection('orders')
+          .orderBy('createdAt', 'desc')
+          .get();
+
+        const orders = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+
+        document.getElementById('loading').style.display = 'none';
+
+        if (orders.length === 0) {
+          document.getElementById('emptyState').style.display = 'block';
+          updateStats(orders);
+          return;
+        }
+
+        document.getElementById('emptyState').style.display = 'none';
+        document.getElementById('ordersList').innerHTML = orders.map(order => `
+          <div class="order-card">
+            <div class="order-header">
+              <div>
+                <div class="order-id">ID: ${order.id}</div>
+                <div style="font-size: .85rem; color: #888; margin-top: 4px;">${new Date(order.createdAt.toDate()).toLocaleString('id-ID')}</div>
+              </div>
+              <div class="order-status pending">${order.status || 'PENDING'}</div>
+            </div>
+
+            <div class="order-detail">
+              <div class="detail-row">
+                <div class="detail-label">📦 Paket</div>
+                <div class="detail-value">${order.pkg || '-'}</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">👤 Nama</div>
+                <div class="detail-value">${order.nama || '-'}</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">📱 WhatsApp</div>
+                <div class="detail-value">${order.nomor || '-'}</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">💬 Grup</div>
+                <div class="detail-value" style="font-size: .8rem;">${order.link || '-'}</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">💰 Total Bayar</div>
+                <div class="detail-value">Rp ${order.total?.toLocaleString('id') || '0'}</div>
+              </div>
+            </div>
+
+            <div class="order-actions">
+              <button class="btn-copy" onclick="copyToClipboard('${order.nomor}')" title="Salin nomor WA">
+                <i class="fas fa-copy"></i> Salin WA
+              </button>
+              <button class="btn-copy" onclick="copyToClipboard('${order.link}')" title="Salin link grup">
+                <i class="fas fa-copy"></i> Salin Link
+              </button>
+              <a href="https://wa.me/${order.nomor?.replace(/\D/g, '')}?text=Halo%20${encodeURIComponent(order.nama)}%2C%20pesanan%20anda%20sudah%20diproses" 
+                 target="_blank" class="btn-action" style="text-decoration: none; color: #ccc;">
+                <i class="fab fa-whatsapp"></i> Chat WA
+              </a>
+            </div>
+          </div>
+        `).join('');
+
+        updateStats(orders);
+      } catch (err) {
+        console.error(err);
+        document.getElementById('loading').innerHTML = '❌ Gagal memuat pesanan: ' + err.message;
+      }
+    }
+
+    function updateStats(orders) {
+      const pending = orders.filter(o => !o.status || o.status === 'PENDING').length;
+      const total = orders.reduce((sum, o) => sum + (o.total || 0), 0);
+
+      document.getElementById('totalOrders').textContent = orders.length;
+      document.getElementById('pendingOrders').textContent = pending;
+      document.getElementById('totalPayment').textContent = 'Rp ' + total.toLocaleString('id');
+    }
+
+    function copyToClipboard(text) {
+      if (!text || text === '-') return;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('✅ Disalin!');
+      });
+    }
+
+    function logoutAdmin() {
+      if (confirm('Yakin mau keluar?')) {
+        auth.signOut().then(() => {
+          window.location.href = 'index.html';
+        });
+      }
+    }
+  </script>
+</body>
+</html>
