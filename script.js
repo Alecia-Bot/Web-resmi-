@@ -665,24 +665,15 @@ function _updateHistoryBadge() {
 }
 
 function openOwnerDashboard() {
-  const page = document.getElementById('historyPage');
+  const page = document.getElementById('ownerDashboard');
   if (!page) return;
   page.style.display = 'block';
   document.body.style.overflow = 'hidden';
-  _renderHistory();
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => page.classList.add('hp-visible'));
-  });
+  loadOwnerOrders();
 }
 
 function closeHistoryPage() {
-  const page = document.getElementById('historyPage');
-  if (!page) return;
-  page.classList.remove('hp-visible');
-  setTimeout(() => {
-    page.style.display = 'none';
-    document.body.style.overflow = '';
-  }, 350);
+  closeOwnerDashboard();
 }
 
 function clearHistory() {
