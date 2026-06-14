@@ -1173,7 +1173,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <!-- ===== OWNER DASHBOARD ===== -->
-<div id="ownerDashboard" style="display:none;position:fixed;inset:0;z-index:99991;background:#0a0a0a;overflow-y:auto;">
+<div id="ownerDashboard" style="display:none;position:fixed;inset:0;z-index:99991;background:#0a0a0a;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;">
   <div style="position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.92);backdrop-filter:blur(16px);border-bottom:1px solid #161616;">
     <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;">
       <button onclick="closeOwnerDashboard()" style="width:34px;height:34px;border-radius:9px;background:#161616;border:1px solid #222;color:#aaa;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">

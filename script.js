@@ -927,7 +927,11 @@ function openOwnerDashboard() {
   const el = document.getElementById('ownerDashboard');
   if (!el) return;
   el.style.display = 'block';
+  el.scrollTop = 0; // reset ke atas
+  // Lock scroll body supaya tidak tembus
   document.body.style.overflow = 'hidden';
+  document.body.style.position = 'fixed';
+  document.body.style.width = '100%';
   loadOwnerOrders();
 }
 
@@ -935,6 +939,8 @@ function closeOwnerDashboard() {
   const el = document.getElementById('ownerDashboard');
   if (el) el.style.display = 'none';
   document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.width = '';
 }
 
 // Load semua pesanan dari localStorage
