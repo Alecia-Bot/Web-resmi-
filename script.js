@@ -1078,3 +1078,40 @@ document.addEventListener('keydown', e => {
     closeScriptDetail()
   }
 })
+
+/* ===== CEK MY IP ===== */
+async function cekMyIP() {
+  const resultEl = document.getElementById('ipResult')
+  const statusEl = document.getElementById('ipStatus')
+  const card     = document.getElementById('ipCard')
+
+  if (resultEl) resultEl.textContent = 'Sedang mengecek...'
+  if (statusEl) { statusEl.textContent = '...'; statusEl.style.color = '#555'; statusEl.style.borderColor = '#2a2a2a' }
+
+  try {
+    const res  = await fetch('https://qris.zakki.store/myip')
+    const json = await res.json()
+
+    if (json.code !== 200) throw new Error(json.message || 'API error')
+
+    const ip     = json.ip || '-'
+    const status = json.security_status || '-'
+    const isAman = /aman/i.test(status)
+
+    if (resultEl) resultEl.textContent = `IP: ${ip}`
+    if (statusEl) {
+      statusEl.textContent    = status
+      statusEl.style.color    = isAman ? '#4ade80' : '#f87171'
+      statusEl.style.background = isAman ? 'rgba(74,222,128,.08)' : 'rgba(248,113,113,.08)'
+      statusEl.style.borderColor = isAman ? 'rgba(74,222,128,.25)' : 'rgba(248,113,113,.25)'
+    }
+  } catch (e) {
+    if (resultEl) resultEl.textContent = 'Gagal: ' + e.message
+    if (statusEl) { statusEl.textContent = 'ERROR'; statusEl.style.color = '#f87171'; statusEl.style.borderColor = 'rgba(248,113,113,.25)' }
+  }
+}
+
+// Auto cek saat halaman load
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(cekMyIP, 1500)
+})
