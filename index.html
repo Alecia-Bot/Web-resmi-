@@ -18,13 +18,11 @@
 <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
 
 <link href="style.css" rel="stylesheet"/>
-<!-- Firebase -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
-<!-- ===== AUTH MODAL (opsional - hanya muncul saat beli) ===== -->
-<div id="authGate" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
+<!-- ===== AUTH MODAL (DISABLED - tidak digunakan lagi) ===== -->
+<div id="authGate" style="display:none !important;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
 
   <!-- LOGIN SCREEN -->
   <div id="loginScreen" class="auth-screen active">
@@ -38,10 +36,7 @@
       </div>
       <h1 class="auth-title">Login Diperlukan</h1>
       <p class="auth-sub">Silakan login untuk melanjutkan pembelian</p>
-      <button id="btnGoogleLogin" class="auth-google-btn">
-        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
-        Masuk dengan Google
-      </button>
+
       <p class="auth-footer-note">Dengan masuk, kamu menyetujui syarat & ketentuan Astrobot</p>
     </div>
   </div>
@@ -78,26 +73,6 @@
 <div id="mainContent">
 
 <div id="bar"></div>
-<!-- QRIS MODAL -->
-<div class="qmodal" id="qm" onclick="if(event.target===this)closeQ()">
-<div class="qbox">
-<button class="qclose" onclick="closeQ()"><i class="fas fa-times"></i></button>
-<div class="qtitle">QRIS Pembayaran</div>
-<div class="qsub">Scan QR untuk bayar langsung &amp; aman</div>
-<div class="qimg">
-<i class="fas fa-qrcode"></i>
-<p>QR Code Astrobot</p>
-<p style="font-size:.65rem;margin-top:2px">Astrobot Payment</p>
-</div>
-<div class="qsteps">
-<b>Cara bayar:</b><br/>
-      1. Buka e-wallet / mobile banking<br/>
-      2. Pilih menu Scan QRIS<br/>
-      3. Arahkan ke QR di atas<br/>
-      4. Konfirmasi &amp; kirim bukti ke admin
-    </div>
-</div>
-</div>
 <!-- OVERLAY -->
 <div class="overlay" id="ov" onclick="closeMenu()" style="z-index:999998;"></div>
 <!-- MENU PANEL -->
@@ -121,26 +96,10 @@
 <a class="plink" href="#testimonials" onclick="closeMenu()"><i class="fas fa-comment"></i> Testimoni</a>
 <a class="plink" href="#faq" onclick="closeMenu()"><i class="fas fa-question-circle"></i> FAQ</a>
 <a class="plink" href="https://wa.me/6289674097203" target="_blank"><i class="fab fa-whatsapp"></i> Hubungi Admin</a>
-<button class="plink special" onclick="openQ();closeMenu()">
-<i class="fas fa-qrcode"></i> QRIS Pembayaran
-      <span style="margin-left:auto;font-size:.63rem;background:#dcfce7;color:#16a34a;padding:2px 7px;border-radius:99px">Baru</span>
-</button>
 <button id="panelHistoryBtn" class="plink" onclick="openHistoryPage();closeMenu()">
   <i class="fas fa-receipt" style="color:#888;"></i> Riwayat Pembelian
   <span id="historyNavBadge" style="margin-left:auto;font-size:.63rem;background:transparent;color:#666;padding:2px 7px;border-radius:99px;border:1px solid #2a2a2a;">0</span>
 </button>
-<div id="panelLoginWrap" style="padding:6px 10px 0">
-  <button class="plink" onclick="openAuthGate(null);closeMenu();" style="width:100%;border-radius:9px;background:#1a1a1a;color:#ccc;border:1px solid rgba(255,255,255,0.12);">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-    Login / Masuk
-  </button>
-</div>
-<div id="panelLogoutWrap" style="display:none;padding:6px 10px 0">
-  <button class="plink" id="panelLogoutBtn" style="width:100%;border-radius:9px;background:rgba(248,113,113,0.08);color:#f87171;border:1px solid rgba(248,113,113,0.2)" onclick="doLogout();closeMenu()">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:#f87171"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-    Keluar (Logout)
-  </button>
-</div>
 </nav>
 <div class="panel-foot">© 2025 Astrobot · All rights reserved</div>
 </div>
@@ -609,21 +568,6 @@
 </div>
 </div>
 </div>
-<!-- Cek IP Card -->
-<div style="max-width:1100px;margin:0 auto;padding:0 24px 16px">
-<div id="ipCard" style="background:#111;border:1px solid #1e1e1e;border-radius:10px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;" onclick="cekMyIP()" onmouseover="this.style.borderColor='#333'" onmouseout="this.style.borderColor='#1e1e1e'">
-<div style="display:flex;align-items:center;gap:10px;">
-<div style="width:32px;height:32px;border-radius:8px;background:#1a1a1a;border:1px solid #2a2a2a;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-<i class="fas fa-network-wired" style="color:#888;font-size:.85rem;"></i>
-</div>
-<div>
-<div style="font-size:.82rem;font-weight:700;color:#ccc;">Cek IP Publik</div>
-<div id="ipResult" style="font-size:.75rem;color:#555;margin-top:2px;">Klik untuk cek IP server</div>
-</div>
-</div>
-<div id="ipStatus" style="font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:99px;background:#1a1a1a;border:1px solid #2a2a2a;color:#555;white-space:nowrap;">— —</div>
-</div>
-</div>
 <!-- Disclaimer -->
 <div style="max-width:1100px;margin:0 auto;padding:0 24px 24px">
 <div style="background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px 18px;font-size:.75rem;color:#888888;line-height:1.7">
@@ -633,7 +577,7 @@
 </div>
 <!-- Bottom bar -->
 <div style="border-top:1px solid rgba(255,255,255,0.1);padding:16px 24px;text-align:center">
-<div class="ft-copy">© <span id="yr">2025</span> Astrobot. All rights reserved. · WhatsApp is a trademark of WhatsApp Inc.</div>
+<div class="ft-copy">© 2025 Astrobot · All rights reserved</div>
 </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -830,59 +774,18 @@
 
     <!-- FORM PESANAN -->
     <div style="padding:0 16px;">
-      <div style="font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:18px;">Lengkapi Data Pesanan</div>
-
-      <div style="margin-bottom:14px;">
-        <div style="font-size:.85rem;color:#ccc;font-weight:600;margin-bottom:8px;">Nama pembeli</div>
-        <input id="orderNama" type="text" placeholder="Masukkan Nama pembeli"
-          style="width:100%;background:transparent;border:1px solid #2a2a2a;border-radius:10px;padding:14px 15px;color:#fff;font-family:inherit;font-size:.95rem;outline:none;box-sizing:border-box;transition:border-color .2s;"
-          onfocus="this.style.borderColor='#555'" onblur="this.style.borderColor='#2a2a2a'"/>
-      </div>
-
-      <div style="margin-bottom:14px;">
-        <div style="font-size:.85rem;color:#ccc;font-weight:600;margin-bottom:8px;">Nomor pembeli</div>
-        <input id="orderNomor" type="tel" placeholder="Masukkan Nomor pembeli"
-          style="width:100%;background:transparent;border:1px solid #2a2a2a;border-radius:10px;padding:14px 15px;color:#fff;font-family:inherit;font-size:.95rem;outline:none;box-sizing:border-box;transition:border-color .2s;"
-          onfocus="this.style.borderColor='#555'" onblur="this.style.borderColor='#2a2a2a'"/>
-      </div>
-
-      <div style="margin-bottom:14px;">
-        <div style="font-size:.85rem;color:#ccc;font-weight:600;margin-bottom:8px;">Link group pembeli</div>
-        <input id="orderLink" type="text" placeholder="Masukkan Link group pembeli"
-          style="width:100%;background:transparent;border:1px solid #2a2a2a;border-radius:10px;padding:14px 15px;color:#fff;font-family:inherit;font-size:.95rem;outline:none;box-sizing:border-box;transition:border-color .2s;"
-          onfocus="this.style.borderColor='#555'" onblur="this.style.borderColor='#2a2a2a'"/>
-      </div>
-
-      <!-- Ringkasan Harga -->
-      <div style="margin-top:20px;border-top:1px solid #1e1e1e;padding-top:16px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <span style="font-size:.9rem;color:#888;">Harga Produk</span>
-          <span style="font-size:.9rem;color:#ccc;font-weight:600;" id="orderHargaRingkas">Rp 6.000</span>
-        </div>
-        <div style="height:1px;background:#1e1e1e;margin:10px 0;"></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-size:1rem;font-weight:800;color:#fff;">Total</span>
-          <span style="font-size:1rem;font-weight:800;color:#fff;" id="orderTotal">Rp 6.000</span>
-        </div>
-      </div>
-
       <!-- Stok -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 12.5l3.5 3.5 6-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span style="font-size:.9rem;color:#22c55e;font-weight:700;">Stok Tersedia</span>
-        </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 12.5l3.5 3.5 6-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-size:.9rem;color:#22c55e;font-weight:700;">Stok Tersedia</span>
       </div>
 
       <!-- TOMBOL BELI -->
       <div style="display:flex;align-items:center;gap:10px;padding-bottom:40px;">
-        <a href="https://wa.me/6289674097203" target="_blank"
-          style="width:46px;height:46px;border-radius:10px;background:#1a1a1a;border:1px solid #2a2a2a;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-        </a>
         <button id="orderBeliBtn" onclick="handleBeli()"
-          style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#000;padding:13px 16px;border-radius:10px;font-weight:800;font-size:.92rem;border:none;cursor:pointer;transition:.2s;letter-spacing:.01em;">
-          <i class="fas fa-bolt"></i> Beli Sekarang
+          style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#000;padding:13px 16px;border-radius:10px;font-weight:800;font-size:.92rem;border:none;cursor:pointer;transition:.2s;letter-spacing:.01em;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          <i class="fas fa-bolt"></i> Hubungi Admin
         </button>
       </div>
     </div>
@@ -895,7 +798,7 @@
 <!-- ===== HISTORY PAGE ===== -->
 <!-- HISTORY PAGE DIHAPUS -->
 
-<!-- ===== QRIS PAYMENT MODAL ===== -->
+<!-- ===== SCRIPT ORDER PAGE ===== -->
 <div id="qrisPayModal" style="display:none;position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,0.9);backdrop-filter:blur(10px);align-items:flex-end;justify-content:center;padding:0;">
   <div id="qrisPayBox" style="background:#111;border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;padding:0;transform:translateY(100%);transition:transform .4s cubic-bezier(.32,1.25,.6,1);">
     
@@ -1137,36 +1040,15 @@
       <div id="soHargaBesar" style="font-size:1.6rem;font-weight:900;color:#fff;margin-bottom:6px;"></div>
     </div>
     <div style="padding:0 16px;">
-      <div style="font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:18px;">Lengkapi Data Pesanan</div>
-      <div style="margin-bottom:14px;">
-        <div style="font-size:.85rem;color:#ccc;font-weight:600;margin-bottom:8px;">Nama pembeli</div>
-        <input id="soNama" type="text" placeholder="Masukkan Nama pembeli" style="width:100%;background:transparent;border:1px solid #2a2a2a;border-radius:10px;padding:14px 15px;color:#fff;font-family:inherit;font-size:.95rem;outline:none;box-sizing:border-box;transition:border-color .2s;" onfocus="this.style.borderColor='#555'" onblur="this.style.borderColor='#2a2a2a'"/>
-      </div>
-      <div style="margin-bottom:14px;">
-        <div style="font-size:.85rem;color:#ccc;font-weight:600;margin-bottom:8px;">Nomor WhatsApp pembeli</div>
-        <input id="soNomor" type="tel" placeholder="Masukkan Nomor WhatsApp pembeli" style="width:100%;background:transparent;border:1px solid #2a2a2a;border-radius:10px;padding:14px 15px;color:#fff;font-family:inherit;font-size:.95rem;outline:none;box-sizing:border-box;transition:border-color .2s;" onfocus="this.style.borderColor='#555'" onblur="this.style.borderColor='#2a2a2a'"/>
-      </div>
-      <div style="margin-top:20px;border-top:1px solid #1e1e1e;padding-top:16px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <span style="font-size:.9rem;color:#888;">Harga Produk</span>
-          <span id="soHargaRingkas" style="font-size:.9rem;color:#ccc;font-weight:600;"></span>
-        </div>
-        <div style="height:1px;background:#1e1e1e;margin:10px 0;"></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-size:1rem;font-weight:800;color:#fff;">Total</span>
-          <span id="soTotal" style="font-size:1rem;font-weight:800;color:#fff;"></span>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;margin-top:16px;margin-bottom:20px;">
+      <!-- Stok -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 12.5l3.5 3.5 6-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span style="font-size:.9rem;color:#22c55e;font-weight:700;">Stok Tersedia</span>
       </div>
       <div style="display:flex;align-items:center;gap:10px;padding-bottom:40px;">
-        <a href="https://wa.me/6289674097203" target="_blank" style="width:46px;height:46px;border-radius:10px;background:#1a1a1a;border:1px solid #2a2a2a;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-        </a>
-        <button onclick="handleScriptBeli()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#000;padding:13px 16px;border-radius:10px;font-weight:800;font-size:.92rem;border:none;cursor:pointer;transition:.2s;">
-          <i class="fas fa-bolt"></i> Beli Sekarang
+        <button onclick="handleScriptBeli()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#000;padding:13px 16px;border-radius:10px;font-weight:800;font-size:.92rem;border:none;cursor:pointer;transition:.2s;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          <i class="fas fa-bolt"></i> Hubungi Admin
         </button>
       </div>
     </div>
