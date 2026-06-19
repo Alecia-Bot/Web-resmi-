@@ -188,7 +188,7 @@ function handleBeli() {
   const modal = document.getElementById('orderModal');
   const duration = modal.dataset.duration || '15 hari';
   const msg = 'hai aku ingin pesan paket sewabot ' + duration;
-  const waHref = 'https://wa.me/18763192888?text=' + encodeURIComponent(msg);
+  const waHref = 'https://wa.me/6289674097203?text=' + encodeURIComponent(msg);
   window.open(waHref, '_blank');
 }
 
@@ -265,7 +265,7 @@ function _renderHistory() {
     const tgl    = new Date(e.waktu);
     const tglStr = tgl.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
     const jamStr = tgl.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
-    const waUrl  = 'https://wa.me/18763192888?text=' + encodeURIComponent('Halo min mau sewa bot 15 hari');
+    const waUrl  = 'https://wa.me/6289674097203?text=' + encodeURIComponent('Halo min mau sewa bot 15 hari');
     const delay  = i * 0.06;
 
     return `
@@ -462,7 +462,7 @@ function closeScriptOrder() {
 function handleScriptBeli() {
   // Direct redirect to WhatsApp with script-specific message
   const msg = 'halo min saya tertarik dengan script astrobot';
-  const waHref = 'https://wa.me/18763192888?text=' + encodeURIComponent(msg);
+  const waHref = 'https://wa.me/6289674097203?text=' + encodeURIComponent(msg);
   window.open(waHref, '_blank');
   closeScriptOrder();
 }
