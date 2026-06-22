@@ -18,6 +18,8 @@
 <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
 
 <link href="style.css" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -684,10 +686,10 @@
 
 
 <!-- ===== ORDER PAGE (Full Screen Scroll) ===== -->
-<div id="orderModal" style="position:fixed;inset:0;z-index:99996;background:#0a0a0a;overflow-y:auto;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);visibility:hidden;">
+<div id="orderModal" style="position:fixed;inset:0;z-index:99996;background:#121212;overflow-y:auto;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);visibility:hidden;">
 
   <!-- TOP NAV -->
-  <div style="position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;">
+  <div style="position:sticky;top:0;z-index:10;background:rgba(18,18,18,0.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;">
     <button onclick="closeOrder()" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:none;border:none;color:#ccc;cursor:pointer;font-family:inherit;border-radius:8px;transition:.15s;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='none'">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </button>
@@ -1017,8 +1019,8 @@
 
 
 <!-- ===== SCRIPT ORDER PAGE ===== -->
-<div id="scriptOrderModal" style="position:fixed;inset:0;z-index:99996;background:#0a0a0a;overflow-y:auto;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);visibility:hidden;">
-  <div style="position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;">
+<div id="scriptOrderModal" style="position:fixed;inset:0;z-index:99996;background:#121212;overflow-y:auto;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);visibility:hidden;">
+  <div style="position:sticky;top:0;z-index:10;background:rgba(18,18,18,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;">
     <button onclick="closeScriptOrder()" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:none;border:none;color:#ccc;cursor:pointer;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='none'">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </button>
@@ -1057,8 +1059,8 @@
 <!-- ===== END SCRIPT ORDER PAGE ===== -->
 
 <!-- ===== SCRIPT DETAIL PAGE ===== -->
-<div id="scriptDetailModal" style="position:fixed;inset:0;z-index:99995;background:#0a0a0a;overflow-y:auto;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);visibility:hidden;">
-  <div style="position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;">
+<div id="scriptDetailModal" style="position:fixed;inset:0;z-index:99995;background:#121212;overflow-y:auto;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);visibility:hidden;">
+  <div style="position:sticky;top:0;z-index:10;background:rgba(18,18,18,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;">
     <button onclick="closeScriptDetail()" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:none;border:none;color:#ccc;cursor:pointer;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='none'">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </button>
@@ -1219,7 +1221,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <!-- ===== RIWAYAT PEMBELIAN PAGE ===== -->
-<div id="ownerDashboard" style="display:none;position:fixed;inset:0;z-index:99991;background:#0a0a0a;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;">
+<div id="ownerDashboard" style="display:none;position:fixed;inset:0;z-index:99991;background:#121212;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;">
   <div style="position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.96);backdrop-filter:blur(16px);border-bottom:1px solid #161616;">
     <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;">
       <button onclick="closeHistoryPage()" style="width:34px;height:34px;border-radius:9px;background:#161616;border:1px solid #222;color:#aaa;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
