@@ -134,10 +134,10 @@ function doLogout() {
 
 /* ===== ORDER MODAL ===== */
 const priceMap = {
-  '6K':  { rp: 6000,  total: 6000  },
-  '12K': { rp: 12000, total: 12000 },
+  '5K':  { rp: 5000,  total: 5000  },
+  '10K': { rp: 10000, total: 10000 },
+  '15K': { rp: 15000, total: 15000 },
   '20K': { rp: 20000, total: 20000 },
-  '29K': { rp: 29000, total: 29000 },
 };
 
 function openOrder(name, price, duration) {
@@ -188,7 +188,7 @@ function handleBeli() {
   const modal = document.getElementById('orderModal');
   const duration = modal.dataset.duration || '15 hari';
   const msg = 'hai aku ingin pesan paket sewabot ' + duration;
-  const waHref = 'https://wa.me/6289674097203?text=' + encodeURIComponent(msg);
+  const waHref = 'https://wa.me/6285748415936?text=' + encodeURIComponent(msg);
   window.open(waHref, '_blank');
 }
 
