@@ -157,6 +157,12 @@ header{position:fixed;top:0;left:0;right:0;height:60px;background:#0a0a0a;backdr
 
 /* ── PRICING CARDS ── */
 .pricing-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,360px));gap:14px;align-items:start;justify-content:center}
+.pricing-wrap > .nc{width:100%;max-width:360px;margin:0 auto}
+
+@media (max-width:600px){
+  .pricing-wrap{grid-template-columns:1fr;padding:0 16px}
+  .pricing-wrap > .nc{max-width:420px}
+}
 
 
 .pc{
