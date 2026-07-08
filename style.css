@@ -156,12 +156,15 @@ header{position:fixed;top:0;left:0;right:0;height:60px;background:#0a0a0a;backdr
 .why-d{font-size:.82rem;color:#aaaaaa;line-height:1.7}
 
 /* ── PRICING CARDS ── */
-.pricing-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,360px));gap:14px;align-items:start;justify-content:center}
-.pricing-wrap > .nc{width:100%;max-width:360px;margin:0 auto}
+.pricing-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;align-items:start;justify-content:center;width:100%}
+
+.pricing-wrap-group .nc,
+.pricing-wrap-premium .nc{width:100%;max-width:360px;margin:0 0 12px}
 
 @media (max-width:600px){
-  .pricing-wrap{grid-template-columns:1fr;padding:0 16px}
-  .pricing-wrap > .nc{max-width:420px}
+  .pricing-wrap{grid-template-columns:1fr;padding:0 16px;gap:16px}
+  .pricing-wrap-group .nc,
+  .pricing-wrap-premium .nc{max-width:100%;width:100%;margin-bottom:16px}
 }
 
 
