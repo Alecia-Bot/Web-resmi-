@@ -192,3 +192,84 @@ function handleBeli() {
   window.open(waHref, '_blank');
 }
 
+
+/* ===== PRICING FILTER TABS ===== */
+function filterPricing(tab) {
+  ['group','script'].forEach(t => {
+    const el = document.getElementById('pricing-' + t);
+    const btn = document.getElementById('tab-' + t);
+    if (el) el.style.display = t === tab ? 'block' : 'none';
+    if (btn) {
+      btn.classList.toggle('active-tab', t === tab);
+    }
+  });
+}
+
+/* ===== SCRIPT BOT FUNCTIONS ===== */
+function openScriptModal() { document.getElementById('scriptSaleModal').style.display='block'; document.body.style.overflow='hidden'; }
+function closeScriptModal() { document.getElementById('scriptSaleModal').style.display='none'; document.body.style.overflow=''; }
+
+function openScriptDetail(type) {
+  const modal = document.getElementById('scriptDetailModal');
+  if (!modal) return;
+  modal.style.display = 'block';
+  modal.style.visibility = 'visible';
+  modal.style.transform = 'translateX(100%)';
+  document.body.style.overflow = 'hidden';
+  void modal.offsetHeight;
+  modal.style.transform = 'translateX(0)';
+  modal.scrollTop = 0;
+}
+
+function closeScriptDetail() {
+  const modal = document.getElementById('scriptDetailModal');
+  if (!modal) return;
+  modal.style.transform = 'translateX(100%)';
+  setTimeout(() => {
+    modal.style.visibility = 'hidden';
+    modal.style.display = '';
+    document.body.style.overflow = '';
+  }, 350);
+}
+
+function openScriptOrder(nama, harga) {
+  const modal = document.getElementById('scriptOrderModal');
+  if (!modal) return;
+  modal.style.display = 'block';
+  modal.style.visibility = 'visible';
+  modal.style.transform = 'translateX(100%)';
+  document.body.style.overflow = 'hidden';
+  void modal.offsetHeight;
+  modal.style.transform = 'translateX(0)';
+  modal.scrollTop = 0;
+}
+
+function closeScriptOrder() {
+  const modal = document.getElementById('scriptOrderModal');
+  if (!modal) return;
+  modal.style.transform = 'translateX(100%)';
+  setTimeout(() => {
+    modal.style.visibility = 'hidden';
+    modal.style.display = '';
+    document.body.style.overflow = '';
+  }, 350);
+}
+
+function handleScriptBeli() {
+  const msg = 'halo min saya tertarik dengan premium shina-ai';
+  window.open('https://wa.me/6285748415936?text=' + encodeURIComponent(msg), '_blank');
+  closeScriptOrder();
+}
+
+function closeDetailThenOrder() {
+  closeScriptDetail();
+  setTimeout(() => openScriptOrder('Premium', 0), 360);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeScriptOrder();
+    closeScriptDetail();
+    closeOrder();
+  }
+});
