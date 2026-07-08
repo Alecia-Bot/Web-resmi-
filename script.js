@@ -198,7 +198,22 @@ function filterPricing(tab) {
   ['group','script'].forEach(t => {
     const el = document.getElementById('pricing-' + t);
     const btn = document.getElementById('tab-' + t);
-    if (el) el.style.display = t === tab ? 'block' : 'none';
+    if (el) {
+      if (t === tab) {
+        el.style.display = 'block';
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(8px)';
+        requestAnimationFrame(() => {
+          el.style.transition = 'opacity .28s ease, transform .28s ease';
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        });
+      } else {
+        el.style.transition = 'opacity .2s ease';
+        el.style.opacity = '0';
+        setTimeout(() => { el.style.display = 'none'; }, 180);
+      }
+    }
     if (btn) {
       btn.classList.toggle('active-tab', t === tab);
     }
