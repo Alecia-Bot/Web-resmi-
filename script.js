@@ -127,8 +127,8 @@ function updatePanelUser(user) {
 }
 
 function doLogout() {
-  if (!confirm('Yakin mau keluar dari Astrobot?')) return;
-  localStorage.removeItem('astrobot_session');
+  if (!confirm('Yakin mau keluar dari Shina-ai?')) return;
+  localStorage.removeItem('shinaai_session');
   location.reload();
 }
 
