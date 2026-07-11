@@ -60,170 +60,6 @@ function toggleFaq(btn) {
 }
 
 /* ===== Script Modal ===== */
-function openScriptModal() { document.getElementById('scriptSaleModal').style.display='block'; document.body.style.overflow='hidden'; }
-function closeScriptModal() { document.getElementById('scriptSaleModal').style.display='none'; document.body.style.overflow=''; }
-
-/* ===== AUTH GATE ===== */
-window._pendingOrder = null;
-
-function openAuthGate(pendingOrderData) {
-  if (pendingOrderData) window._pendingOrder = pendingOrderData;
-  const gate = document.getElementById('authGate');
-  gate.style.display = 'flex';
-  gate.classList.add('visible');
-  document.body.style.overflow = 'hidden';
-  document.getElementById('loginScreen').classList.add('active');
-  document.getElementById('usernameScreen').classList.remove('active');
-  document.getElementById('loadingScreen').style.display = 'none';
-}
-
-function closeAuthGate() {
-  const gate = document.getElementById('authGate');
-  gate.style.display = 'none';
-  gate.classList.remove('visible');
-  document.body.style.overflow = '';
-}
-
-function onLoginSuccess(user) {
-  closeAuthGate();
-  updatePanelUser(user);
-  if (window._pendingOrder) {
-    const p = window._pendingOrder;
-    window._pendingOrder = null;
-    _doOpenOrder(p.name, p.price, p.duration);
-  }
-}
-
-function updatePanelUser(user) {
-  if (!user) {
-    document.getElementById('panelUserInfo').style.display = 'none';
-    document.getElementById('panelNoUser').style.display = 'block';
-    document.getElementById('panelLogoutWrap').style.display = 'none';
-    document.getElementById('panelLoginWrap').style.display = 'block';
-    const heroBtn = document.getElementById('historyHeroBtn');
-    const navBtn  = document.getElementById('panelHistoryBtn');
-    if (heroBtn) heroBtn.style.display = 'flex';
-    if (navBtn)  navBtn.style.display = 'block';
-    return;
-  }
-  const panelInfo = document.getElementById('panelUserInfo');
-  panelInfo.style.display = 'flex';
-  document.getElementById('panelNoUser').style.display = 'none';
-  document.getElementById('panelLogoutWrap').style.display = 'block';
-  document.getElementById('panelLoginWrap').style.display = 'none';
-
-  const displayName = user.displayName || user.username || 'User';
-  document.getElementById('panelUserName').textContent = displayName;
-  document.getElementById('panelUserEmail').textContent = user.email || '';
-
-  const av = document.getElementById('panelUserAv');
-  if (user.photoURL) {
-    av.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" referrerpolicy="no-referrer">`;
-  } else {
-    av.textContent = displayName.charAt(0).toUpperCase();
-  }
-
-  setTimeout(_updateHistoryBadge, 100);
-}
-
-function doLogout() {
-  if (!confirm('Yakin mau keluar dari Shina-ai?')) return;
-  localStorage.removeItem('shinaai_session');
-  location.reload();
-}
-
-/* ===== ORDER MODAL ===== */
-const priceMap = {
-  '5K':  { rp: 5000,  total: 5000  },
-  '10K': { rp: 10000, total: 10000 },
-  '15K': { rp: 15000, total: 15000 },
-  '20K': { rp: 20000, total: 20000 },
-};
-
-function openOrder(name, price, duration) {
-  _doOpenOrder(name, price, duration);
-}
-
-function _doOpenOrder(name, price, duration) {
-  const $ = id => document.getElementById(id);
-  const p = priceMap[price] || { rp: 0, total: 0 };
-  const formatted = 'Rp ' + p.total.toLocaleString('id');
-
-  if ($('orderHargaBesar'))    $('orderHargaBesar').textContent    = formatted;
-  if ($('orderHargaRingkas'))  $('orderHargaRingkas').textContent  = formatted;
-  if ($('orderTotal'))         $('orderTotal').textContent         = formatted;
-
-  const modal = $('orderModal');
-  modal.dataset.pkg      = name;
-  modal.dataset.price    = price;
-  modal.dataset.duration = duration;
-  modal.dataset.total    = p.total;
-
-  if ($('orderNama'))    $('orderNama').value    = '';
-  if ($('orderNomor'))   $('orderNomor').value   = '';
-  if ($('orderLink'))    $('orderLink').value    = '';
-  if ($('orderCatatan')) $('orderCatatan').value = '';
-
-  modal.style.display = 'block';
-  modal.style.visibility = 'visible';
-  modal.style.transform = 'translateX(100%)';
-  document.body.style.overflow = 'hidden';
-  void modal.offsetHeight;
-  modal.style.transform = 'translateX(0)';
-  modal.scrollTop = 0;
-}
-
-function closeOrder() {
-  const modal = document.getElementById('orderModal');
-  modal.style.transform = 'translateX(100%)';
-  setTimeout(() => {
-    modal.style.visibility = 'hidden';
-    modal.style.display = '';
-    document.body.style.overflow = '';
-  }, 350);
-}
-
-function handleBeli() {
-  // Get duration from modal
-  const modal = document.getElementById('orderModal');
-  const duration = modal.dataset.duration || '15 hari';
-  const msg = 'hai aku ingin pesan paket sewabot ' + duration;
-  const waHref = 'https://wa.me/6285748415936?text=' + encodeURIComponent(msg);
-  window.open(waHref, '_blank');
-}
-
-
-/* ===== PRICING FILTER TABS ===== */
-function filterPricing(tab) {
-  ['group','script'].forEach(t => {
-    const el = document.getElementById('pricing-' + t);
-    const btn = document.getElementById('tab-' + t);
-    if (el) {
-      if (t === tab) {
-        el.style.display = 'block';
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(8px)';
-        requestAnimationFrame(() => {
-          el.style.transition = 'opacity .28s ease, transform .28s ease';
-          el.style.opacity = '1';
-          el.style.transform = 'translateY(0)';
-        });
-      } else {
-        el.style.transition = 'opacity .2s ease';
-        el.style.opacity = '0';
-        setTimeout(() => { el.style.display = 'none'; }, 180);
-      }
-    }
-    if (btn) {
-      btn.classList.toggle('active-tab', t === tab);
-    }
-  });
-}
-
-/* ===== SCRIPT BOT FUNCTIONS ===== */
-function openScriptModal() { document.getElementById('scriptSaleModal').style.display='block'; document.body.style.overflow='hidden'; }
-function closeScriptModal() { document.getElementById('scriptSaleModal').style.display='none'; document.body.style.overflow=''; }
-
 function openScriptDetail(type) {
   const modal = document.getElementById('scriptDetailModal');
   if (!modal) return;
@@ -287,4 +123,41 @@ document.addEventListener('keydown', e => {
     closeScriptDetail();
     closeOrder();
   }
+});
+
+/* ===== SCRIPT BOT DETAIL ===== */
+function openScriptBotDetail() {
+  const modal = document.getElementById('scriptBotDetailModal');
+  if (!modal) return;
+  modal.style.display = 'block';
+  modal.style.visibility = 'visible';
+  modal.style.transform = 'translateX(100%)';
+  document.body.style.overflow = 'hidden';
+  void modal.offsetHeight;
+  modal.style.transform = 'translateX(0)';
+  modal.scrollTop = 0;
+}
+
+function closeScriptBotDetail() {
+  const modal = document.getElementById('scriptBotDetailModal');
+  if (!modal) return;
+  modal.style.transform = 'translateX(100%)';
+  setTimeout(() => {
+    modal.style.visibility = 'hidden';
+    modal.style.display = '';
+    document.body.style.overflow = '';
+  }, 350);
+}
+
+function filterPricing(tab) {
+  ['group','script','scriptbot'].forEach(t => {
+    const el = document.getElementById('pricing-' + t);
+    const btn = document.getElementById('tab-' + t);
+    if (el) el.style.display = t === tab ? 'block' : 'none';
+    if (btn) btn.classList.toggle('active-tab', t === tab);
+  });
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeScriptBotDetail();
 });
