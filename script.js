@@ -91,6 +91,9 @@ function openOrder(nama, harga, durasi) {
 
   currentOrderContext = { nama, harga, durasi };
 
+  const descEl = document.getElementById('soDesc');
+  if (descEl) descEl.textContent = 'Sewa bot WhatsApp untuk grup, lengkap dengan fitur manajemen & moderasi.';
+
   const titleEl = document.getElementById('soTitle');
   if (titleEl) titleEl.textContent = nama;
 
@@ -138,6 +141,9 @@ function closeOrder() {
 function openScriptOrder(nama, harga) {
   const modal = document.getElementById('scriptOrderModal');
   if (!modal) return;
+  currentOrderContext = null;
+  const descEl = document.getElementById('soDesc');
+  if (descEl) descEl.textContent = 'Script Bot WhatsApp Modern, Lengkap & Siap Pakai';
   modal.style.display = 'block';
   modal.style.visibility = 'visible';
   modal.style.transform = 'translateX(100%)';
