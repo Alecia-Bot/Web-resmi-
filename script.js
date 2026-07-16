@@ -83,40 +83,30 @@ function closeScriptDetail() {
   }, 350);
 }
 
-let currentOrderContext = null;
+const priceMap = {
+  '6K':  { rp: 6000,  total: 6000  },
+  '12K': { rp: 12000, total: 12000 },
+  '20K': { rp: 20000, total: 20000 },
+  '29K': { rp: 29000, total: 29000 },
+};
 
-function openOrder(nama, harga, durasi) {
-  const modal = document.getElementById('scriptOrderModal');
+function openOrder(name, price, duration) {
+  _doOpenOrder(name, price, duration);
+}
+
+function _doOpenOrder(name, price, duration) {
+  const $ = id => document.getElementById(id);
+  const p = priceMap[price] || { rp: 0, total: 0 };
+  const formatted = 'Rp ' + p.total.toLocaleString('id');
+
+  if ($('orderHargaBesar')) $('orderHargaBesar').textContent = formatted;
+
+  const modal = $('orderModal');
   if (!modal) return;
-
-  currentOrderContext = { nama, harga, durasi };
-
-  const descEl = document.getElementById('soDesc');
-  if (descEl) descEl.textContent = 'Sewa bot WhatsApp untuk grup, lengkap dengan fitur manajemen & moderasi.';
-
-  const titleEl = document.getElementById('soTitle');
-  if (titleEl) titleEl.textContent = nama;
-
-  const hargaEl = document.getElementById('soHargaBesar');
-  if (hargaEl) hargaEl.textContent = harga + (durasi ? ' / ' + durasi : '');
-
-  const benList = document.getElementById('soBenList');
-  if (benList) {
-    benList.innerHTML = '';
-    const benefits = [
-      'Semua anggota grup bisa pakai',
-      'Fitur manajemen grup lengkap',
-      'Tanpa limit & tanpa iklan',
-      'Aktif selama ' + (durasi || 'masa berlaku')
-    ];
-    benefits.forEach(b => {
-      const li = document.createElement('li');
-      li.style.color = '#aaa';
-      li.style.fontSize = '.85rem';
-      li.textContent = b;
-      benList.appendChild(li);
-    });
-  }
+  modal.dataset.pkg      = name;
+  modal.dataset.price    = price;
+  modal.dataset.duration = duration;
+  modal.dataset.total    = p.total;
 
   modal.style.display = 'block';
   modal.style.visibility = 'visible';
@@ -128,7 +118,7 @@ function openOrder(nama, harga, durasi) {
 }
 
 function closeOrder() {
-  const modal = document.getElementById('scriptOrderModal');
+  const modal = document.getElementById('orderModal');
   if (!modal) return;
   modal.style.transform = 'translateX(100%)';
   setTimeout(() => {
@@ -138,12 +128,17 @@ function closeOrder() {
   }, 350);
 }
 
+function handleBeli() {
+  const modal = document.getElementById('orderModal');
+  const duration = (modal && modal.dataset.duration) || '15 hari';
+  const msg = 'hai aku ingin pesan paket sewabot ' + duration;
+  const waHref = 'https://wa.me/6289674097203?text=' + encodeURIComponent(msg);
+  window.open(waHref, '_blank');
+}
+
 function openScriptOrder(nama, harga) {
   const modal = document.getElementById('scriptOrderModal');
   if (!modal) return;
-  currentOrderContext = null;
-  const descEl = document.getElementById('soDesc');
-  if (descEl) descEl.textContent = 'Script Bot WhatsApp Modern, Lengkap & Siap Pakai';
   modal.style.display = 'block';
   modal.style.visibility = 'visible';
   modal.style.transform = 'translateX(100%)';
@@ -165,15 +160,9 @@ function closeScriptOrder() {
 }
 
 function handleScriptBeli() {
-  let msg;
-  if (currentOrderContext) {
-    msg = `halo min saya mau sewa "${currentOrderContext.nama}" (${currentOrderContext.harga}${currentOrderContext.durasi ? ' / ' + currentOrderContext.durasi : ''})`;
-  } else {
-    msg = 'halo min saya tertarik dengan premium shina-ai';
-  }
+  const msg = 'halo min saya tertarik dengan premium shina-ai';
   window.open('https://wa.me/6285748415936?text=' + encodeURIComponent(msg), '_blank');
   closeScriptOrder();
-  closeOrder();
 }
 
 function closeDetailThenOrder() {
