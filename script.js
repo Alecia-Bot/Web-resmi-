@@ -83,6 +83,58 @@ function closeScriptDetail() {
   }, 350);
 }
 
+let currentOrderContext = null;
+
+function openOrder(nama, harga, durasi) {
+  const modal = document.getElementById('scriptOrderModal');
+  if (!modal) return;
+
+  currentOrderContext = { nama, harga, durasi };
+
+  const titleEl = document.getElementById('soTitle');
+  if (titleEl) titleEl.textContent = nama;
+
+  const hargaEl = document.getElementById('soHargaBesar');
+  if (hargaEl) hargaEl.textContent = harga + (durasi ? ' / ' + durasi : '');
+
+  const benList = document.getElementById('soBenList');
+  if (benList) {
+    benList.innerHTML = '';
+    const benefits = [
+      'Semua anggota grup bisa pakai',
+      'Fitur manajemen grup lengkap',
+      'Tanpa limit & tanpa iklan',
+      'Aktif selama ' + (durasi || 'masa berlaku')
+    ];
+    benefits.forEach(b => {
+      const li = document.createElement('li');
+      li.style.color = '#aaa';
+      li.style.fontSize = '.85rem';
+      li.textContent = b;
+      benList.appendChild(li);
+    });
+  }
+
+  modal.style.display = 'block';
+  modal.style.visibility = 'visible';
+  modal.style.transform = 'translateX(100%)';
+  document.body.style.overflow = 'hidden';
+  void modal.offsetHeight;
+  modal.style.transform = 'translateX(0)';
+  modal.scrollTop = 0;
+}
+
+function closeOrder() {
+  const modal = document.getElementById('scriptOrderModal');
+  if (!modal) return;
+  modal.style.transform = 'translateX(100%)';
+  setTimeout(() => {
+    modal.style.visibility = 'hidden';
+    modal.style.display = '';
+    document.body.style.overflow = '';
+  }, 350);
+}
+
 function openScriptOrder(nama, harga) {
   const modal = document.getElementById('scriptOrderModal');
   if (!modal) return;
@@ -107,9 +159,15 @@ function closeScriptOrder() {
 }
 
 function handleScriptBeli() {
-  const msg = 'halo min saya tertarik dengan premium shina-ai';
+  let msg;
+  if (currentOrderContext) {
+    msg = `halo min saya mau sewa "${currentOrderContext.nama}" (${currentOrderContext.harga}${currentOrderContext.durasi ? ' / ' + currentOrderContext.durasi : ''})`;
+  } else {
+    msg = 'halo min saya tertarik dengan premium shina-ai';
+  }
   window.open('https://wa.me/6285748415936?text=' + encodeURIComponent(msg), '_blank');
   closeScriptOrder();
+  closeOrder();
 }
 
 function closeDetailThenOrder() {
