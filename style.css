@@ -1,3 +1,9 @@
+/* Performance optimizations */
+.rv{will-change:opacity,transform}
+header{will-change:transform}
+#bar{will-change:width}
+.panel{will-change:transform}
+img{content-visibility:auto}
 /* ===== From <style> tag ===== */
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
@@ -131,6 +137,8 @@ header{position:fixed;top:0;left:0;right:0;height:60px;background-color:rgba(10,
 @keyframes tl{0%{width:0;border-color:#ffffff}40%{width:100%}65%{width:100%}90%{width:0}100%{width:0;border-color:transparent}}
 .hero-desc{font-size:.88rem;color:#cccccc;line-height:1.7;margin-bottom:22px;max-width:500px}
 .hero-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.spotify-embed-wrap{max-width:420px;margin-bottom:12px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);box-shadow:0 10px 30px rgba(0,0,0,0.2)}
+.spotify-embed{display:block;width:100%;height:152px;border:0}
 .btn-purple{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;background:#ffffff;color:#000000;font-weight:700;font-size:.85rem;border-radius:10px;text-decoration:none;transition:.2s;border:none;cursor:pointer;font-family:inherit}
 .btn-purple:hover{background:#e0e0e0;transform:translateY(-1px)}
 .btn-outline{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;background:#1a1a1a;color:#ffffff;font-weight:600;font-size:.85rem;border-radius:10px;text-decoration:none;transition:.2s;border:1px solid rgba(255,255,255,0.2);cursor:pointer;font-family:inherit}
