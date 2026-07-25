@@ -12,17 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.querySelectorAll('.countup').forEach(el => {
-    const t = parseInt(el.dataset.n);
-    if (!t) return;
-    const dur = 1200; // ms total animasi
-    const start = performance.now();
-    const tick = (now) => {
-      const progress = Math.min((now - start) / dur, 1);
-      el.textContent = Math.floor(progress * t).toLocaleString('id');
-      if (progress < 1) requestAnimationFrame(tick);
-      else el.textContent = t.toLocaleString('id');
-    };
-    requestAnimationFrame(tick);
+    const t = parseInt(el.dataset.n), s = t / 60; let c = 0;
+    const ti = setInterval(() => {
+      c = Math.min(c + s, t);
+      el.textContent = Math.floor(c).toLocaleString('id');
+      if (c >= t) clearInterval(ti);
+    }, 22);
   });
 
   const obs = new IntersectionObserver(entries => {
@@ -36,17 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, 80);
 
-  let _scrollTicking = false;
   window.addEventListener('scroll', () => {
-    if (_scrollTicking) return;
-    _scrollTicking = true;
-    requestAnimationFrame(() => {
-      const d = document.documentElement;
-      const bar = document.getElementById('bar');
-      if (bar) bar.style.width = (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
-      _scrollTicking = false;
-    });
-  }, { passive: true });
+    const d = document.documentElement;
+    document.getElementById('bar').style.width = (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
+  });
 });
 
 /* ===== Menu ===== */
