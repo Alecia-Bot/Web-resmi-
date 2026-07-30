@@ -120,12 +120,19 @@ header{position:fixed;top:0;left:0;right:0;height:60px;background-color:rgba(10,
 .qsteps b{color:#ffffff}
 
 /* BANNER */
-.banner{margin-top:60px}
-.banner-wrap{position:relative}
-.banner-wrap img{width:100%;height:220px;object-fit:cover;display:block}
-.banner-caption{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(0,0,0,.75),transparent)}
-.banner-caption h2{color:#fff;font-size:1.2rem;font-weight:700}
-.banner-caption p{color:rgba(255,255,255,.7);font-size:.72rem;font-family:'JetBrains Mono',monospace;margin-top:3px}
+/* BANNER SLIDER NEUBRUTALISM */
+.nb-slider-outer{margin-top:60px;position:relative;overflow:hidden;border-bottom:3px solid #fff;box-shadow:0 6px 0 0 #fff,0 8px 0 0 #333}
+.nb-slider-track{display:flex;transition:transform .45s cubic-bezier(.77,0,.18,1);will-change:transform}
+.nb-slide{min-width:100%;position:relative;overflow:hidden}
+.nb-slide img{width:100%;height:220px;object-fit:cover;display:block;filter:brightness(.85)}
+.nb-slide-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:14px 16px 16px;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,transparent 60%)}
+.nb-slide-badge{display:inline-block;background:#fff;color:#000;font-size:.62rem;font-weight:900;letter-spacing:.1em;padding:2px 8px;border-radius:0;border:2px solid #000;margin-bottom:6px;width:fit-content;box-shadow:2px 2px 0 #000}
+.nb-slide-title{font-size:1.25rem;font-weight:900;color:#fff;letter-spacing:.04em;text-shadow:2px 2px 0 rgba(0,0,0,.5);line-height:1.1;margin-bottom:4px}
+.nb-slide-sub{font-size:.72rem;color:rgba(255,255,255,.75);font-family:'JetBrains Mono',monospace}
+.nb-dots{position:absolute;bottom:10px;right:14px;display:flex;gap:6px;z-index:5}
+.nb-dot{width:8px;height:8px;border-radius:0;background:rgba(255,255,255,.35);border:1.5px solid rgba(255,255,255,.6);cursor:pointer;transition:.2s;display:block}
+.nb-dot.active{background:#fff;border-color:#fff;width:22px}
+.nb-neo-border{position:absolute;top:0;left:0;right:0;height:3px;background:repeating-linear-gradient(90deg,#fff 0,#fff 10px,transparent 10px,transparent 18px)}
 
 /* CONTAINERS */
 .wrap{max-width:1100px;margin:0 auto;padding:0 16px}

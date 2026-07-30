@@ -214,3 +214,65 @@ function filterPricing(tab) {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeScriptBotDetail();
 });
+
+/* ===== BANNER SLIDER NEUBRUTALISM ===== */
+(function() {
+  let nbCurrent = 0;
+  const total = 3;
+  let nbTimer;
+  let startX = 0;
+  let isDragging = false;
+
+  function nbGoTo(idx) {
+    nbCurrent = (idx + total) % total;
+    const track = document.getElementById('nbTrack');
+    if (!track) return;
+    track.style.transform = `translateX(-${nbCurrent * 100}%)`;
+    document.querySelectorAll('.nb-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === nbCurrent);
+    });
+  }
+
+  function nbNext() { nbGoTo(nbCurrent + 1); }
+  function nbPrev() { nbGoTo(nbCurrent - 1); }
+
+  function nbStartAuto() {
+    clearInterval(nbTimer);
+    nbTimer = setInterval(nbNext, 2000);
+  }
+
+  window.nbGoTo = nbGoTo;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const track = document.getElementById('nbTrack');
+    if (!track) return;
+
+    // Touch / drag support
+    track.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+      clearInterval(nbTimer);
+    }, { passive: true });
+
+    track.addEventListener('touchend', e => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) diff > 0 ? nbNext() : nbPrev();
+      nbStartAuto();
+    }, { passive: true });
+
+    track.addEventListener('mousedown', e => {
+      startX = e.clientX;
+      isDragging = true;
+      clearInterval(nbTimer);
+    });
+
+    document.addEventListener('mouseup', e => {
+      if (!isDragging) return;
+      isDragging = false;
+      const diff = startX - e.clientX;
+      if (Math.abs(diff) > 40) diff > 0 ? nbNext() : nbPrev();
+      nbStartAuto();
+    });
+
+    nbStartAuto();
+  });
+})();
