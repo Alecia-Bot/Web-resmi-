@@ -1366,3 +1366,14 @@ footer > div:nth-of-type(3){background:#000 !important;}
     max-width:1180px !important;
   }
 }
+
+/* ===== V9: keep Sewa Bot grid after switching pricing tabs ===== */
+@media (min-width: 900px){
+  #pricing-group[style*="display: block"]{
+    display:grid !important;
+    grid-template-columns:repeat(2, minmax(0, 380px)) !important;
+    justify-content:center !important;
+    align-items:stretch !important;
+    gap:20px !important;
+  }
+}
