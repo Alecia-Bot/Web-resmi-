@@ -1227,3 +1227,27 @@ footer > div:nth-of-type(3){background:#000 !important;}
   height:2px !important;
   background:linear-gradient(90deg,#ffffff,#cccccc) !important;
 }
+
+/* ===== V6: WHY cards manual swipe / drag ===== */
+.why-marquee{
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-x;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+  cursor:grab;
+}
+.why-marquee::-webkit-scrollbar{display:none;}
+.why-marquee:active{cursor:grabbing;}
+.why-marquee-track{
+  animation:none !important;
+  transform:none !important;
+  width:max-content !important;
+  will-change:auto !important;
+}
+.why-marquee .why-card{
+  scroll-snap-align:start;
+  user-select:none;
+  -webkit-user-select:none;
+}

@@ -276,3 +276,35 @@ document.addEventListener('keydown', e => {
     nbStartAuto();
   });
 })();
+
+/* ===== WHY cards: drag with mouse + native touch swipe ===== */
+document.addEventListener('DOMContentLoaded', () => {
+  const slider = document.querySelector('.why-marquee');
+  if (!slider) return;
+
+  let dragging = false;
+  let startX = 0;
+  let startScroll = 0;
+
+  slider.addEventListener('mousedown', (e) => {
+    dragging = true;
+    startX = e.pageX;
+    startScroll = slider.scrollLeft;
+    slider.style.scrollSnapType = 'none';
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!dragging) return;
+    e.preventDefault();
+    slider.scrollLeft = startScroll - (e.pageX - startX);
+  });
+
+  const stopWhyDrag = () => {
+    if (!dragging) return;
+    dragging = false;
+    slider.style.scrollSnapType = 'x mandatory';
+  };
+
+  window.addEventListener('mouseup', stopWhyDrag);
+  slider.addEventListener('mouseleave', stopWhyDrag);
+});
