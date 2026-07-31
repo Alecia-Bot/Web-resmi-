@@ -1296,3 +1296,73 @@ footer > div:nth-of-type(3){background:#000 !important;}
   .why-marquee{max-width:1080px;margin-left:auto;margin-right:auto;}
   footer > div{max-width:1080px !important;margin-left:auto !important;margin-right:auto !important;}
 }
+
+/* ===== V8: desktop centered product layout + mobile-only header thumbnail ===== */
+@media (min-width: 900px){
+  /* Thumbnail/banner slider hanya untuk mobile */
+  .nb-slider-outer{display:none !important;}
+  /* Karena banner hilang, beri jarak dari fixed header */
+  section:first-of-type{padding-top:60px;}
+
+  /* Area pricing jangan melebar penuh */
+  #pricing > .sec{
+    max-width:1080px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    padding-left:32px !important;
+    padding-right:32px !important;
+  }
+
+  /* Semua kategori produk berada di tengah */
+  #pricing-group,
+  #pricing-script,
+  #pricing-scriptbot{
+    width:100% !important;
+    max-width:980px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+
+  /* Sewa bot: 4 kartu rapi dalam 2 kolom, bukan memanjang kanan-kiri */
+  #pricing-group.pricing-wrap,
+  #pricing-group .pricing-wrap,
+  .pricing-wrap-group{
+    grid-template-columns:repeat(2, minmax(0, 380px)) !important;
+    justify-content:center !important;
+    align-items:stretch !important;
+    gap:20px !important;
+    padding:0 !important;
+  }
+  .pricing-wrap-group .nc{
+    width:100% !important;
+    max-width:380px !important;
+    margin:0 !important;
+    justify-self:center !important;
+  }
+
+  /* Premium dan Script Bot juga tidak full layar */
+  #pricing-script > .pricing-unavailable,
+  #pricing-scriptbot .nc{
+    width:100% !important;
+    max-width:480px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+  #pricing-scriptbot .pricing-wrap{
+    display:grid !important;
+    grid-template-columns:minmax(0,480px) !important;
+    justify-content:center !important;
+    padding:0 !important;
+  }
+}
+
+@media (min-width: 1200px){
+  #mainContent{
+    width:calc(100% - 120px) !important;
+    max-width:1180px !important;
+  }
+  header{
+    width:calc(100% - 120px) !important;
+    max-width:1180px !important;
+  }
+}
