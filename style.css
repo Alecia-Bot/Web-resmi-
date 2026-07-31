@@ -1102,54 +1102,62 @@ img,iframe{content-visibility:auto}
 @media(min-width:800px){.why-marquee-track{animation-duration:24s}.why-marquee .why-card{flex-basis:360px}.why-marquee::before,.why-marquee::after{width:70px}}
 @media(prefers-reduced-motion:reduce){.why-marquee-track{animation-play-state:paused}}
 
+/* ===== CLEAN UNIFIED UI — corrected scope ===== */
+/* Warna ini adalah background DI BELAKANG kartu sewa, bukan warna kartunya. */
+.lower-unified-bg{background:#0a0a0a !important;}
 
-/* ===== CLEAN UNIFIED UI — requested revision ===== */
-:root{--bg-deep:#181818;--bg-surface:#181818;--bg-surface-2:#181818;--border-soft:transparent}
-body, #mainContent, section, .hero, .sec, .lower-unified-bg, .why-sec, #pricing, .faq-sec, footer,
-.feat-card, .why-card, .nc, .pc, .sp-card, .jb-card, .faq-item,
-.fc-head, .panel, .panel-head, .panel-foot, header{
-  background:#181818 !important;
+/* Mulai Kenapa Harus Astrobot sampai area link grup memakai satu background. */
+.lower-unified-bg > .why-sec,
+.lower-unified-bg > #pricing,
+.lower-unified-bg > .faq-sec,
+.lower-unified-bg > .why-sec .sec,
+.lower-unified-bg > #pricing .sec,
+.lower-unified-bg > .faq-sec .sec,
+.footer-community-area{
+  background:#0a0a0a !important;
   border:none !important;
   box-shadow:none !important;
 }
 
-/* Header + thumbnail: no decorative separator lines */
-header{border-bottom:none !important}
-.nb-slider-outer{border:none !important;box-shadow:none !important}
-.nb-neo-border{display:none !important}
-
-/* Remove card/section decorative lines */
-.nc::before,.pc::before,.sec-lbl::before{display:none !important}
-.feat-item,.stats,.stat,.fi-ic,.plink .plink-icon,.btn-outline,.pricing-unavailable,
-.qbox,.qimg,.qsteps,.ft-disc{border:none !important;box-shadow:none !important}
-
-/* Kenapa Harus Astrobot: smaller title, text and cards */
-.why-sec{padding-bottom:34px !important}
-.why-shizuku{padding-top:34px !important;padding-bottom:16px !important}
-.why-shizuku-title{
-  font-size:clamp(1.45rem,5.2vw,2.15rem) !important;
-  line-height:1.12 !important;
-  margin-bottom:10px !important;
-  letter-spacing:-.025em !important;
-}
-.why-shizuku-desc{
-  max-width:620px !important;
-  font-size:clamp(.76rem,2.5vw,.9rem) !important;
-  line-height:1.65 !important;
-}
-.why-marquee{padding:8px 0 2px !important}
-.why-marquee::before,.why-marquee::after{display:none !important}
-.why-marquee-track{gap:10px !important;padding-right:10px !important}
-.why-marquee .why-card{
-  flex:0 0 clamp(220px,68vw,300px) !important;
-  min-height:190px !important;
-  padding:18px 16px !important;
+/* Hilangkan garis/batas elemen hanya pada area tersebut. Warna kartu tetap aslinya. */
+.lower-unified-bg > .why-sec,
+.lower-unified-bg > #pricing,
+.lower-unified-bg > .faq-sec{border:none !important;box-shadow:none !important;}
+.lower-unified-bg > .why-sec .why-card,
+.lower-unified-bg > #pricing .nc,
+.lower-unified-bg > #pricing .pc,
+.lower-unified-bg > .faq-sec .faq-item,
+.footer-community-area a{
   border:none !important;
-  border-radius:14px !important;
-  background:#181818 !important;
   box-shadow:none !important;
 }
-.why-marquee .why-ic{width:40px !important;height:40px !important;margin-bottom:12px !important;font-size:1rem !important;box-shadow:none !important}
-.why-marquee .why-t{font-size:.92rem !important;margin-bottom:7px !important}
-.why-marquee .why-d{font-size:.76rem !important;line-height:1.6 !important;color:#aaa !important}
-@media(min-width:800px){.why-marquee .why-card{flex-basis:280px !important}}
+.lower-unified-bg > #pricing .nc::before,
+.lower-unified-bg > #pricing .pc::before,
+.lower-unified-bg > .why-sec .sec-lbl::before,
+.lower-unified-bg > #pricing .sec-lbl::before,
+.lower-unified-bg > .faq-sec .sec-lbl::before{display:none !important;}
+
+/* Kenapa Harus Astrobot tetap dibuat lebih kecil. */
+.why-sec{overflow:hidden;padding-bottom:34px !important;}
+.why-shizuku{padding-top:34px !important;padding-bottom:16px !important;}
+.why-shizuku-title{font-size:clamp(1.45rem,5.2vw,2.15rem) !important;line-height:1.12 !important;margin-bottom:10px !important;letter-spacing:-.025em !important;}
+.why-shizuku-desc{max-width:620px !important;font-size:clamp(.76rem,2.5vw,.9rem) !important;line-height:1.65 !important;}
+.why-marquee{padding:8px 0 2px !important;}
+.why-marquee::before,.why-marquee::after{display:none !important;}
+.why-marquee-track{gap:10px !important;padding-right:10px !important;}
+.why-marquee .why-card{flex:0 0 clamp(220px,68vw,300px) !important;min-height:190px !important;padding:18px 16px !important;border:none !important;border-radius:14px !important;box-shadow:none !important;}
+.why-marquee .why-card:hover{transform:none !important;box-shadow:none !important;}
+.why-marquee .why-ic{width:40px !important;height:40px !important;margin-bottom:12px !important;font-size:1rem !important;box-shadow:none !important;}
+.why-marquee .why-t{font-size:.92rem !important;margin-bottom:7px !important;}
+.why-marquee .why-d{font-size:.76rem !important;line-height:1.6 !important;color:#aaa !important;}
+@media(min-width:800px){.why-marquee .why-card{flex-basis:280px !important;}}
+
+/* Header/thumbnail: hanya garis dekorasinya yang dihapus. */
+header{border-bottom:none !important;}
+.nb-slider-outer{border:none !important;box-shadow:none !important;}
+.nb-neo-border{display:none !important;}
+
+/* Setelah area link grup kembali seperti desain sebelumnya. */
+footer{background:#0a0a0a !important;border-top:none !important;}
+footer > div:nth-of-type(2),
+footer > div:nth-of-type(3){background:#000 !important;}
