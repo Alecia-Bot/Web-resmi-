@@ -1104,7 +1104,7 @@ img,iframe{content-visibility:auto}
 
 /* ===== CLEAN UNIFIED UI — corrected scope ===== */
 /* Warna ini adalah background DI BELAKANG kartu sewa, bukan warna kartunya. */
-.lower-unified-bg{background:#0a0a0a !important;}
+.lower-unified-bg{background:transparent !important;}
 
 /* Mulai Kenapa Harus Astrobot sampai area link grup memakai satu background. */
 .lower-unified-bg > .why-sec,
@@ -1114,7 +1114,7 @@ img,iframe{content-visibility:auto}
 .lower-unified-bg > #pricing .sec,
 .lower-unified-bg > .faq-sec .sec,
 .footer-community-area{
-  background:#0a0a0a !important;
+  background:transparent !important;
   border:none !important;
   box-shadow:none !important;
 }
