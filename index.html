@@ -120,7 +120,7 @@
       <div class="nb-slide-overlay">
         <div class="nb-slide-badge">BOT</div>
         <div class="nb-slide-title">ASTROBOT MD</div>
-        <div class="nb-slide-sub">927+ Plugin • ESM Module • Free Update</div>
+        <div class="nb-slide-sub">Bot WhatsApp Modern</div>
       </div>
     </div>
     <!-- Slide 2 -->
@@ -148,8 +148,6 @@
     <span class="nb-dot" onclick="nbGoTo(1)"></span>
     <span class="nb-dot" onclick="nbGoTo(2)"></span>
   </div>
-  <!-- Border dekorasi neubrutalism -->
-  <div class="nb-neo-border"></div>
 </div>
 <!-- END BANNER SLIDER -->
 
@@ -216,27 +214,82 @@
 </div>
 </section>
 
-<section class="why-sec">
+<section class="why-sec" style="overflow:hidden;">
 <div class="sec">
-<div class="sec-lbl">Kenapa Milih Astrobot?</div>
-<h2 class="sec-title rv"></h2>
-<div class="why-grid">
-<div class="why-card rv d1">
-<div class="why-ic ic-p"><i class="fas fa-bolt"></i></div>
-<div class="why-t">Respon Instan</div>
-<div class="why-d">Menjawab pesan dalam hitungan milidetik. Ga ada delay, ga ada drama.</div>
+  <div class="sec-lbl">Kenapa Harus Astrobot?</div>
+  <h2 class="sec-title rv" style="font-size:2rem;line-height:1.2;">Temukan fitur unggulan yang membuat layanan kami menjadi <span>pilihan terbaik</span> untuk kebutuhan kamu.</h2>
 </div>
-<div class="why-card rv d2">
-<div class="why-ic ic-b"><i class="fas fa-users"></i></div>
-<div class="why-t">Manajemen Grup</div>
-<div class="why-d">Welcome message, anti-link, kick spam, dan tools admin lengkap.</div>
-</div>
-<div class="why-card rv d3">
-<div class="why-ic ic-g"><i class="fas fa-shield-halved"></i></div>
-<div class="why-t">Server Stabil</div>
-<div class="why-d">Uptime 99%+. Kalau bot down lebih dari 24 jam, masa aktif kamu otomatis diperpanjang.</div>
-</div>
-</div>
+
+<!-- Infinite scroll kartu -->
+<div class="why-marquee-wrap" style="margin-top:32px;overflow:hidden;position:relative;">
+  <!-- Fade kiri kanan -->
+  <div style="position:absolute;left:0;top:0;bottom:0;width:60px;background:linear-gradient(to right,#000,transparent);z-index:2;pointer-events:none;"></div>
+  <div style="position:absolute;right:0;top:0;bottom:0;width:60px;background:linear-gradient(to left,#000,transparent);z-index:2;pointer-events:none;"></div>
+
+  <div class="why-marquee-track" id="whyTrack">
+    <!-- Set 1 -->
+    <div class="why-mcard">
+      <div class="why-mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <div class="why-mt">Respon Instan</div>
+      <div class="why-md">Menjawab pesan dalam hitungan milidetik. Ga ada delay, ga ada drama.</div>
+    </div>
+    <div class="why-mcard">
+      <div class="why-mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="why-mt">Manajemen Grup</div>
+      <div class="why-md">Welcome message, anti-link, kick spam, dan tools admin lengkap.</div>
+    </div>
+    <div class="why-mcard">
+      <div class="why-mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="why-mt">Server Stabil</div>
+      <div class="why-md">Uptime 99%+. Kalau bot down lebih dari 24 jam, masa aktif otomatis diperpanjang.</div>
+    </div>
+    <div class="why-mcard">
+      <div class="why-mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+      <div class="why-mt">1000+ Fitur</div>
+      <div class="why-md">Dari downloader, AI, RPG, sticker, sampai tools produktivitas semuanya ada.</div>
+    </div>
+    <div class="why-mcard">
+      <div class="why-mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="why-mt">Update Berkala</div>
+      <div class="why-md">Fitur baru ditambahkan terus. Free update selamanya tanpa biaya tambahan.</div>
+    </div>
+    <div class="why-mcard">
+      <div class="why-mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <div class="why-mt">Koneksi Aman</div>
+      <div class="why-md">Pairing sekali, bot langsung terhubung. Tidak perlu scan ulang setiap hari.</div>
+    </div>
+    <!-- Set 2 — duplikat untuk infinite loop -->
+    <div class="why-mcard">
+      <div class="why-mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <div class="why-mt">Respon Instan</div>
+      <div class="why-md">Menjawab pesan dalam hitungan milidetik. Ga ada delay, ga ada drama.</div>
+    </div>
+    <div class="why-mcard">
+      <div class="why-mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="why-mt">Manajemen Grup</div>
+      <div class="why-md">Welcome message, anti-link, kick spam, dan tools admin lengkap.</div>
+    </div>
+    <div class="why-mcard">
+      <div class="why-mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="why-mt">Server Stabil</div>
+      <div class="why-md">Uptime 99%+. Kalau bot down lebih dari 24 jam, masa aktif otomatis diperpanjang.</div>
+    </div>
+    <div class="why-mcard">
+      <div class="why-mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+      <div class="why-mt">1000+ Fitur</div>
+      <div class="why-md">Dari downloader, AI, RPG, sticker, sampai tools produktivitas semuanya ada.</div>
+    </div>
+    <div class="why-mcard">
+      <div class="why-mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="why-mt">Update Berkala</div>
+      <div class="why-md">Fitur baru ditambahkan terus. Free update selamanya tanpa biaya tambahan.</div>
+    </div>
+    <div class="why-mcard">
+      <div class="why-mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <div class="why-mt">Koneksi Aman</div>
+      <div class="why-md">Pairing sekali, bot langsung terhubung. Tidak perlu scan ulang setiap hari.</div>
+    </div>
+  </div>
 </div>
 </section>
 
@@ -355,7 +408,7 @@
 </div>
 <div class="nc-price">50.000 <span class="nc-per">/ lifetime</span></div>
 <div class="nc-bens">
-<div class="nc-ben">927+ Plugin siap pakai</div>
+<div class="nc-ben">Bot WhatsApp Modern</div>
 <div class="nc-ben">Free update selamanya</div>
 <div class="nc-ben">ESM Module & Node 18/20/22</div>
 <div class="nc-ben">Multi Device & Pairing Code</div>
@@ -868,7 +921,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <!-- DESKRIPSI -->
     <div style="padding:20px 16px 0;">
       <p style="font-size:.9rem;color:#aaa;line-height:1.8;margin-bottom:18px;">
-        Script bot WhatsApp modern dengan sistem ESM Module, 927+ plugin siap pakai, dan free update selamanya. Cocok untuk personal, komunitas, maupun reseller digital.
+        Script bot WhatsApp modern dengan sistem ESM Module,  plugin siap pakai, dan free update selamanya. Cocok untuk personal, komunitas, maupun reseller digital.
       </p>
     </div>
 
