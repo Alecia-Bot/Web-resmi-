@@ -1415,3 +1415,12 @@ footer > div:nth-of-type(3){background:#000 !important;}
 @media (min-width:1200px){
   #mainContent,header{width:min(calc(100% - 140px),1180px) !important;}
 }
+
+/* ===== V11: desktop cleanup ===== */
+@media (min-width:900px){
+  /* desktop uses the text navigation only */
+  .menu-btn{display:none !important;}
+
+  /* hide Catatan Penting on desktop, keep it on mobile */
+  footer > div[style*="padding:0 24px 24px"]{display:none !important;}
+}
