@@ -9,7 +9,7 @@ html{scroll-behavior:smooth;scroll-padding-top:64px}
   --bg-surface-2:rgba(26,26,26,0.72);
   --border-soft:rgba(255,255,255,0.08);
 }
-body{font-family:'Plus Jakarta Sans',sans-serif;background-color:var(--bg-deep);color:#ffffff;overflow-x:hidden;padding-bottom:0;line-height:1.6}
+body{font-family:'Manrope',sans-serif;background-color:var(--bg-deep);color:#ffffff;overflow-x:hidden;padding-bottom:0;line-height:1.6}
 
 /* BLUR BACKDROP EXPERIMENT */
 body::before{
