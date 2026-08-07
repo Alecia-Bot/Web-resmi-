@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="Astrobot – Layanan WhatsApp Bot Terbaik &amp; Terpercaya" property="og:title"/>
+<meta content="Astrobot Bot WhatsApp, downloader, AI chat, game &amp; fitur lengkap. Stabil 24/7." property="og:description"/>
+<meta content="https://g.top4top.io/p_3818177vh0.png" property="og:image"/>
+<meta content="https://astrobot" property="og:url"/>
+<meta content="website" property="og:type"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="https://g.top4top.io/p_3818177vh0.png" name="twitter:image"/>
+<link href="" rel="icon" type="image/jpeg"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Astrobot – Layanan WhatsApp Bot Terbaik &amp; Terpercaya</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
+
+<link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+
+
+<div id="authGate" style="display:none !important;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
+
+
+  <div id="loginScreen" class="auth-screen active">
+    <div class="auth-bg-grid"></div>
+    <div class="auth-card">
+      <button onclick="closeAuthGate()" style="position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:7px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);color:#666;cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
+      <div class="auth-logo">
+        <span class="auth-logo-dot"></span>
+        <span class="auth-logo-name">Astrobot</span>
+        <svg width="13" height="18" viewBox="0 0 13 18" fill="none"><defs><linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#666"/><stop offset="40%" stop-color="#555"/><stop offset="100%" stop-color="#333"/></linearGradient></defs><path d="M8.5 1L1 10.2H6.2L4.5 17L12 7.5H6.8L8.5 1Z" fill="url(#bg2)" stroke="#444" stroke-width="0.3" stroke-linejoin="round"/></svg>
+      </div>
+      <h1 class="auth-title">Login Diperlukan</h1>
+      <p class="auth-sub">Silakan login untuk melanjutkan pembelian</p>
+
+      <p class="auth-footer-note">Dengan masuk, kamu menyetujui syarat & ketentuan Astrobot</p>
+    </div>
+  </div>
+
+
+  <div id="usernameScreen" class="auth-screen">
+    <div class="auth-bg-grid"></div>
+    <div class="auth-card">
+      <div class="auth-avatar" id="setupAvatar"></div>
+      <h1 class="auth-title">Atur Username</h1>
+      <p class="auth-sub">Hei <span id="setupName" style="color:#fff;font-weight:700"></span>! Pilih username unik kamu</p>
+      <div class="auth-input-wrap">
+        <span class="auth-input-prefix">@</span>
+        <input type="text" id="usernameInput" class="auth-input" placeholder="username kamu" maxlength="20" autocomplete="off" spellcheck="false"/>
+      </div>
+      <p class="auth-input-hint" id="usernameHint">3–20 karakter, huruf/angka/underscore saja</p>
+      <button id="btnSaveUsername" class="auth-save-btn" disabled>Simpan & Masuk</button>
+    </div>
+  </div>
+
+
+  <div id="loadingScreen" class="auth-screen" style="display:none">
+    <div class="auth-bg-grid"></div>
+    <div class="auth-spinner-wrap">
+      <div class="auth-spinner"></div>
+      <p style="color:#aaa;font-size:.85rem;margin-top:16px">Memuat...</p>
+    </div>
+  </div>
+
+</div>
+
+
+
+<div id="mainContent">
+
+<div id="bar"></div>
+
+<div class="overlay" id="ov" onclick="closeMenu()" style="z-index:999998;"></div>
+
+<div class="panel" id="pn" style="z-index:999999;background:rgba(15,15,15,0.85);backdrop-filter:blur(16px);">
+<div class="panel-head" style="background:rgba(20,20,20,0.7);backdrop-filter:blur(12px);padding:0;border-bottom:none;position:relative;">
+<div id="panelUserInfo" style="display:none;align-items:center;gap:10px;flex:1;min-width:0"></div>
+<div id="panelNoUser" class="panel-banner-wrap">
+  <div class="panel-banner-thumb">
+    <img src="https://g.top4top.io/p_3862802bm1.png" alt="Banner navigasi" loading="lazy"/>
+  </div>
+</div>
+<button class="panel-close" onclick="closeMenu()"><i class="fas fa-times"></i></button>
+</div>
+<nav class="panel-nav">
+<a class="plink" href="#" onclick="closeMenu()"><span class="plink-icon"><i class="fas fa-home"></i></span><span class="plink-text">Beranda</span></a>
+<a class="plink" href="#pricing" onclick="closeMenu()"><span class="plink-icon"><i class="fas fa-cube"></i></span><span class="plink-text">Produk</span></a>
+<a class="plink" href="#features" onclick="closeMenu()"><span class="plink-icon"><i class="fas fa-star"></i></span><span class="plink-text">Fitur Unggulan</span></a>
+<a class="plink" href="#faq" onclick="closeMenu()"><span class="plink-icon"><i class="fas fa-question-circle"></i></span><span class="plink-text">FAQ</span></a>
+<a class="plink" href="https://wa.me/6289674097203" target="_blank"><span class="plink-icon"><i class="fas fa-at"></i></span><span class="plink-text">Kontak</span></a>
+</nav>
+</nav>
+  <div class="panel-foot">© 2026 Astrobot · All rights reserved</div>
+</div>
+
+
+<header style="background:rgba(30,30,30,0.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);">
+<div class="hdr">
+<a class="logo" href="#" style="display:flex;align-items:center;gap:6px;text-decoration:none;">
+<span style="font-size:1.1rem;font-weight:900;color:#fff;letter-spacing:.08em;text-transform:uppercase;">ASTROBOT</span>
+</a>
+<div class="hdr-right">
+<nav class="desktop-nav" aria-label="Navigasi desktop">
+<a href="#features">Fitur</a>
+<a href="#pricing">Produk</a>
+<a href="#faq">FAQ</a>
+<a href="https://wa.me/6289674097203" target="_blank">Kontak</a>
+</nav>
+<button class="menu-btn" onclick="openMenu()"><i class="fas fa-bars"></i></button>
+</div>
+</div>
+</header>
+
+
+
+<!-- BANNER SLIDER NEUBRUTALISM -->
+<div class="nb-slider-outer">
+  <div class="nb-slider-track" id="nbTrack">
+    <!-- Slide 1 -->
+    <div class="nb-slide">
+      <img src="https://raw.githubusercontent.com/rexxzastrobotz/Web-resmi-/main/IMG-20260729-WA0029.jpg" alt="Astrobot 1" loading="lazy"/>
+      <div class="nb-slide-overlay">
+        <div class="nb-slide-badge">BOT</div>
+        <div class="nb-slide-title">ASTROBOT MD</div>
+        <div class="nb-slide-sub">927+ Plugin • ESM Module • Free Update</div>
+      </div>
+    </div>
+    <!-- Slide 2 -->
+    <div class="nb-slide">
+      <img src="https://raw.githubusercontent.com/rexxzastrobotz/Web-resmi-/main/246c60e4-3d2f-4318-bc8f-54a7ca9596e7.jpeg" alt="Astrobot 2" loading="lazy"/>
+      <div class="nb-slide-overlay">
+        <div class="nb-slide-badge">RPG</div>
+        <div class="nb-slide-title">GAME & RPG</div>
+        <div class="nb-slide-sub">Level, EXP, Dungeon & 100+ Fitur</div>
+      </div>
+    </div>
+    <!-- Slide 3 -->
+    <div class="nb-slide">
+      <img src="https://raw.githubusercontent.com/rexxzastrobotz/Web-resmi-/main/IMG-20260628-WA0041.jpg" alt="Astrobot 3" loading="lazy"/>
+      <div class="nb-slide-overlay">
+        <div class="nb-slide-badge">AI</div>
+        <div class="nb-slide-title">AI & TOOLS</div>
+        <div class="nb-slide-sub">GPT, Gemini, Downloader & Sticker</div>
+      </div>
+    </div>
+  </div>
+  <!-- Dots -->
+  <div class="nb-dots">
+    <span class="nb-dot active" onclick="nbGoTo(0)"></span>
+    <span class="nb-dot" onclick="nbGoTo(1)"></span>
+    <span class="nb-dot" onclick="nbGoTo(2)"></span>
+  </div>
+</div>
+<!-- END BANNER SLIDER -->
+
+<section>
+<div class="hero">
+<div class="hero-grid">
+
+<div>
+<div class="hero-badge" style="display:flex;align-items:center;gap:5px;visibility:hidden;height:0;margin-bottom:0;padding:0;border:none;background:transparent;"></div>
+<h1>Astrobot <span>WhatsApp</span> Bot</h1>
+<div class="type-wrap">
+<span class="typed">Otomatis untuk Grup &amp; Pribadi</span>
+</div>
+<p class="hero-desc">Bot WhatsApp untuk manajemen grup, download media, game seru, dan AI chat. Stabil seharian, gampang dipake, harga ga bikin kantong jebol.</p>
+<div class="hero-btns">
+<a class="btn-purple" href="#pricing"><i class="fas fa-tags" style="font-size:.8rem"></i> Lihat Harga</a>
+<a class="btn-outline" href="https://wa.me/6289674097203" target="_blank"><i class="fab fa-whatsapp" style="color:#22c55e;font-size:.9rem"></i> Hubungi Admin</a>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id="features">
+<div class="feat-card rv d2">
+<div class="fc-head">
+<span class="tl-d tl-r"></span>
+<span class="tl-d tl-y"></span>
+<span class="tl-d tl-g"></span>
+<span>Astrobot.features</span>
+</div>
+<div class="fc-body">
+<div class="fc-lbl">Fitur Populer</div>
+<ul class="feat-list">
+<li class="feat-item">
+<span class="fi-ic"><i class="fas fa-download"></i></span>
+<span><b>All-in-One Downloader</b>TikTok, IG, FB tanpa watermark</span>
+</li>
+<li class="feat-item">
+<span class="fi-ic"><i class="fas fa-robot"></i></span>
+<span><b>AI Chat</b>Tanya apa saja, langsung dijawab</span>
+</li>
+<li class="feat-item">
+<span class="fi-ic"><i class="fas fa-sticky-note"></i></span>
+<span><b>Brat &amp; BratVid</b>Teks jadi stiker/video estetik</span>
+</li>
+<li class="feat-item">
+<span class="fi-ic"><i class="fas fa-users"></i></span>
+<span><b>Tools Grup</b>Welcome, anti-link, admin tools</span>
+</li>
+<li class="feat-item">
+<span class="fi-ic"><i class="fas fa-gamepad"></i></span>
+<span><b>RPG &amp; Game</b>Ekonomi, quest, dan game seru</span>
+</li>
+<li class="feat-item">
+<span class="fi-ic"><i class="fas fa-comment-dots"></i></span>
+<span><b>Auto-Reply</b>Respon cepat tanpa delay</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<div class="lower-unified-bg">
+
+
+<section id="pricing">
+<div class="sec">
+<div class="sec-lbl">Produk &amp; Harga</div>
+<h2 class="sec-title rv">Pilih produk <span>yang cocok.</span></h2>
+
+
+<div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;">
+  <button onclick="filterPricing('group')" id="tab-group" class="pricing-tab active-tab">
+    Sewa Bot (Group)
+  </button>
+  <button onclick="filterPricing('script')" id="tab-script" class="pricing-tab">
+    Premium User
+  </button>
+  <button onclick="filterPricing('scriptbot')" id="tab-scriptbot" class="pricing-tab">
+    Script Bot (SC)
+  </button>
+
+</div>
+
+<div class="pricing-wrap pricing-wrap-group" id="pricing-group" style="position:relative;">
+
+<div class="nc rv d1" style="position:relative;overflow:hidden;">
+<div class="nc-top">
+<div>
+<div class="nc-name">Sewa Bot Grup 15 Hari</div>
+<div class="nc-sub">Aktif untuk semua anggota di grup</div>
+</div>
+</div>
+<div class="nc-price">6K <span class="nc-per">/ 15 hari</span></div>
+<div class="nc-bens">
+<div class="nc-ben">Semua anggota grup bisa pakai</div>
+<div class="nc-ben">Fitur manajemen grup lengkap</div>
+<div class="nc-ben">Tanpa limit &amp; tanpa iklan</div>
+</div>
+<button class="nc-cta" onclick="openOrder('Sewa Bot Grup 15 Hari', '6K', '15 hari')"><i class="fas fa-shopping-cart"></i> Sewa Sekarang</button>
+</div>
+
+<div class="nc rv d2" style="position:relative;overflow:hidden;">
+<div class="nc-top">
+<div>
+<div class="nc-name">Sewa Bot Grup 30 Hari</div>
+<div class="nc-sub">Aktif untuk semua anggota di grup</div>
+</div>
+</div>
+<div class="nc-price">12K <span class="nc-per">/ 30 hari</span></div>
+<div class="nc-bens">
+<div class="nc-ben">Semua anggota grup bisa pakai</div>
+<div class="nc-ben">Fitur manajemen grup lengkap</div>
+<div class="nc-ben">Tanpa limit &amp; tanpa iklan</div>
+<div class="nc-ben">Cocok untuk grup aktif</div>
+</div>
+<button class="nc-cta" onclick="openOrder('Sewa Bot Grup 30 Hari', '12K', '30 hari')"><i class="fas fa-shopping-cart"></i> Sewa Sekarang</button>
+</div>
+
+<div class="nc rv d3" style="position:relative;overflow:hidden;">
+<div class="nc-top">
+<div>
+<div class="nc-name">Sewa Bot Grup 60 Hari</div>
+<div class="nc-sub">Aktif untuk semua anggota di grup</div>
+</div>
+</div>
+<div class="nc-price">20K <span class="nc-per">/ 60 hari</span></div>
+<div class="nc-bens">
+<div class="nc-ben">Semua anggota grup bisa pakai</div>
+<div class="nc-ben">Fitur manajemen grup lengkap</div>
+<div class="nc-ben">Tanpa limit &amp; tanpa iklan</div>
+<div class="nc-ben">Lebih hemat dari paket bulanan</div>
+<div class="nc-ben">Cocok untuk komunitas jangka panjang</div>
+</div>
+<button class="nc-cta" onclick="openOrder('Sewa Bot Grup 60 Hari', '20K', '60 hari')"><i class="fas fa-shopping-cart"></i> Sewa Sekarang</button>
+</div>
+
+<div class="nc nc-perm-glow rv d4" style="position:relative;overflow:hidden;" id="card-permanen">
+<div class="nc-shimmer"></div>
+<div class="nc-top">
+<div>
+<div class="nc-name">Sewa Bot Grup Tahunan</div>
+<div class="nc-sub">Bayar setahun, hemat lebih banyak</div>
+</div>
+</div>
+<div class="nc-price" style="color:#fbbf24">29K <span class="nc-per" style="color:#64748b">/ 365 hari</span></div>
+<div class="nc-bens">
+<div class="nc-ben">Semua anggota grup bisa pakai</div>
+<div class="nc-ben">Fitur manajemen grup lengkap</div>
+<div class="nc-ben">Tanpa limit &amp; tanpa iklan</div>
+<div class="nc-ben">Jauh lebih murah dari bayar bulanan</div>
+<div class="nc-ben">Aktif penuh selama 1 tahun</div>
+<div class="nc-ben">Prioritas support dari admin</div>
+</div>
+<button class="nc-cta" onclick="openOrder('Sewa Bot Grup Tahunan', '29K', '365 hari')" style="background:linear-gradient(90deg,#d97706,#f59e0b)"><i class="fas fa-shopping-cart"></i> Sewa Sekarang</button>
+</div>
+</div>
+</div><!-- end pricing-group -->
+
+
+<div id="pricing-script" style="display:none;">
+<div class="pricing-unavailable rv d1" style="margin-bottom:18px;background:rgba(24,24,24,0.78);border:1px solid rgba(255,255,255,0.08);box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);">
+  <div class="pricing-unavailable-icon" style="color:#ffffff;">✦</div>
+  <div class="pricing-unavailable-title" style="color:#ffffff;">Tidak Tersedia</div>
+  <div class="pricing-unavailable-text" style="color:#cccccc;">Paket premium sedang belum dibuka untuk saat ini.</div>
+</div>
+</div><!-- end pricing-script -->
+
+
+<div id="pricing-scriptbot" style="display:none;">
+<div class="pricing-wrap">
+<div class="nc rv d1">
+<div class="nc-top">
+<div>
+<div class="nc-name">Script Astrobot MD</div>
+<div class="nc-sub">Free Update Selamanya</div>
+</div>
+</div>
+<div class="nc-price">50.000 <span class="nc-per">/ lifetime</span></div>
+<div class="nc-bens">
+<div class="nc-ben">927+ Plugin siap pakai</div>
+<div class="nc-ben">Free update selamanya</div>
+<div class="nc-ben">ESM Module & Node 18/20/22</div>
+<div class="nc-ben">Multi Device & Pairing Code</div>
+</div>
+<button class="nc-cta" onclick="openScriptBotDetail()"><i class="fas fa-shopping-cart"></i> Detail Produk</button>
+</div>
+</div>
+</div><!-- end pricing-scriptbot -->
+
+</div>
+</section>
+
+
+
+<section class="why-sec">
+  <div class="sec why-shizuku">
+    <h2 class="why-shizuku-title">Kenapa Harus <span>Astrobot?</span></h2>
+    <p class="why-shizuku-desc">Temukan fitur unggulan yang membuat layanan Astrobot menjadi pilihan terbaik untuk kebutuhan WhatsApp Anda.</p>
+  </div>
+
+  <div class="why-marquee" aria-label="Keunggulan Astrobot">
+    <div class="why-marquee-track">
+      <div class="why-card">
+        <div class="why-ic ic-p"><i class="fas fa-bolt"></i></div>
+        <div class="why-t">Respon Instan</div>
+        <div class="why-d">Menjawab pesan dengan cepat dan responsif untuk penggunaan grup maupun pribadi.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-ic ic-b"><i class="fas fa-users"></i></div>
+        <div class="why-t">Manajemen Grup</div>
+        <div class="why-d">Welcome message, anti-link, kick spam, dan berbagai tools admin dalam satu bot.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-ic ic-g"><i class="fas fa-server"></i></div>
+        <div class="why-t">Server Stabil</div>
+        <div class="why-d">Layanan dijaga tetap aktif dan stabil agar bot siap digunakan kapan dibutuhkan.</div>
+      </div>
+
+      <!-- duplikat untuk membuat loop bergerak tanpa putar balik -->
+      <div class="why-card" aria-hidden="true">
+        <div class="why-ic ic-p"><i class="fas fa-bolt"></i></div>
+        <div class="why-t">Respon Instan</div>
+        <div class="why-d">Menjawab pesan dengan cepat dan responsif untuk penggunaan grup maupun pribadi.</div>
+      </div>
+      <div class="why-card" aria-hidden="true">
+        <div class="why-ic ic-b"><i class="fas fa-users"></i></div>
+        <div class="why-t">Manajemen Grup</div>
+        <div class="why-d">Welcome message, anti-link, kick spam, dan berbagai tools admin dalam satu bot.</div>
+      </div>
+      <div class="why-card" aria-hidden="true">
+        <div class="why-ic ic-g"><i class="fas fa-server"></i></div>
+        <div class="why-t">Server Stabil</div>
+        <div class="why-d">Layanan dijaga tetap aktif dan stabil agar bot siap digunakan kapan dibutuhkan.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq-sec" id="faq">
+<div class="sec">
+<div class="sec-lbl">FAQ</div>
+<h2 class="sec-title rv">Pertanyaan <span>yang sering ditanya.</span></h2>
+<div class="faq-item rv d1">
+<button class="faq-btn" onclick="toggleFaq(this)">Apa itu Premium? <i class="fas fa-plus"></i></button>
+<div class="faq-body"><div class="faq-inner"><ul>
+<li>Premium adalah membership bot untuk pribadi dan grup pribadi.</li>
+<li>Akses ke semua fitur dengan limit unlimited.</li>
+<li>Permanen berlaku selama bot masih beroperasi.</li>
+<li>Tidak akan hilang meski bot berganti nomor.</li>
+<li>Akan hilang jika kamu mengganti nomor WhatsApp.</li>
+<li>Tidak dapat dipindahkan ke nomor lain &amp; tidak dapat direfund.</li>
+</ul></div></div>
+</div>
+<div class="faq-item rv d2">
+<button class="faq-btn" onclick="toggleFaq(this)">Bagaimana proses pembelian? <i class="fas fa-plus"></i></button>
+<div class="faq-body"><div class="faq-inner"><ul>
+<li>Pilih paket yang diinginkan dari halaman harga.</li>
+<li>Hubungi admin via WhatsApp di nomor yang tertera.</li>
+<li>Lakukan pembayaran sesuai metode yang dipilih.</li>
+<li>Kirim bukti pembayaran ke admin.</li>
+<li>Bot diaktifkan dalam 1–2 jam setelah verifikasi.</li>
+</ul></div></div>
+</div>
+<div class="faq-item rv d3">
+<button class="faq-btn" onclick="toggleFaq(this)">Apakah ada garansi? <i class="fas fa-plus"></i></button>
+<div class="faq-body"><div class="faq-inner"><ul>
+<li>Garansi 30 hari untuk paket permanen.</li>
+<li>Bot down lebih dari 24 jam = ekstensi masa aktif gratis.</li>
+<li>Support 24/7 via WhatsApp   admin selalu siap membantu.</li>
+</ul></div></div>
+</div>
+</div>
+</section>
+
+
+
+
+
+<footer style="background:#000000;border-top:1px solid rgba(255,255,255,0.1);padding:0">
+
+<div class="footer-community-area" style="max-width:1100px;margin:0 auto;padding:48px 24px 32px">
+
+<div style="max-width:320px">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+<span style="width:8px;height:8px;border-radius:50%;background:#ffffff;flex-shrink:0;display:inline-block"></span>
+<span style="font-size:1.05rem;font-weight:800;color:#ffffff">Astrobot</span>
+</div>
+<p style="font-size:.8rem;color:#aaaaaa;line-height:1.85;margin-bottom:20px">Bot WhatsApp serbaguna untuk kebutuhan grup &amp; pribadi. Fitur lengkap, stabil 24/7, harga terjangkau.</p>
+
+<!-- Community Cards -->
+<div style="display:flex;flex-direction:column;gap:10px;margin-top:16px;">
+
+  <!-- Saluran WA -->
+  <a href="https://whatsapp.com/channel/0029VbC6RVdIt5s3zNeEzP2m" target="_blank" style="display:flex;align-items:center;gap:10px;background:#111;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px;text-decoration:none;transition:.2s;" onmouseover="this.style.borderColor='rgba(34,197,94,0.4)';this.style.background='#141414'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='#111'">
+    <img src="https://raw.githubusercontent.com/rexxzastrobotz/Web-resmi-/main/IMG-20260628-WA0041.jpg" alt="Saluran" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+    <div style="min-width:0;">
+      <div style="font-size:.78rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Astrobot Digital</div>
+      <div style="font-size:.68rem;color:#555;margin-top:2px;display:flex;align-items:center;gap:4px;">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="#22c55e"><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.524 5.847L0 24l6.347-1.499A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm6.215 16.615c-.267.746-1.539 1.456-2.11 1.508-.518.048-1.002.232-3.378-.703-2.847-1.12-4.679-4.023-4.82-4.209-.141-.187-1.148-1.527-1.148-2.912s.728-2.067.986-2.35c.258-.282.564-.352.752-.352l.54.01c.173.008.406-.066.635.484.237.568.804 1.963.875 2.107.071.143.12.31.024.499-.095.188-.143.305-.282.469-.14.165-.294.369-.42.495-.14.14-.285.291-.123.571.163.28.723 1.191 1.552 1.928 1.066.948 1.965 1.241 2.246 1.382.282.14.447.117.611-.07.164-.188.703-.819.89-1.1.187-.282.375-.234.633-.14.258.094 1.64.773 1.921.913.28.14.468.211.538.328.07.117.07.673-.197 1.422z"/></svg>
+        <span style="color:#22c55e;">Saluran WhatsApp</span>
+      </div>
+    </div>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" style="margin-left:auto;flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
+  </a>
+
+  <!-- Grup 1 -->
+  <a href="https://chat.whatsapp.com/EkXDeM57C9k07EJqqEfbiT?s=cl&p=a&ilr=4" target="_blank" style="display:flex;align-items:center;gap:10px;background:#111;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px;text-decoration:none;transition:.2s;" onmouseover="this.style.borderColor='rgba(34,197,94,0.4)';this.style.background='#141414'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='#111'">
+    <img src="https://raw.githubusercontent.com/rexxzastrobotz/Web-resmi-/main/246c60e4-3d2f-4318-bc8f-54a7ca9596e7.jpeg" alt="Grup" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+    <div style="min-width:0;">
+      <div style="font-size:.78rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Grup Astrobot Community</div>
+      <div style="font-size:.68rem;color:#555;margin-top:2px;display:flex;align-items:center;gap:4px;">
+        <i class="fas fa-users" style="color:#22c55e;font-size:.6rem;"></i>
+        <span>Grup Publik</span>
+      </div>
+    </div>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" style="margin-left:auto;flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
+  </a>
+
+  <!-- Grup 2 -->
+  <a href="https://chat.whatsapp.com/Cdn8Jl5sws8Ke0RI3Sk7p6?s=cl&p=a&ilr=4" target="_blank" style="display:flex;align-items:center;gap:10px;background:#111;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px;text-decoration:none;transition:.2s;" onmouseover="this.style.borderColor='rgba(34,197,94,0.4)';this.style.background='#141414'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='#111'">
+    <img src="https://raw.githubusercontent.com/rexxzastrobotz/Web-resmi-/main/246c60e4-3d2f-4318-bc8f-54a7ca9596e7.jpeg" alt="Grup" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+    <div style="min-width:0;">
+      <div style="font-size:.78rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Grup Astrobot Community 2</div>
+      <div style="font-size:.68rem;color:#555;margin-top:2px;display:flex;align-items:center;gap:4px;">
+        <i class="fas fa-users" style="color:#22c55e;font-size:.6rem;"></i>
+        <span>Grup Publik</span>
+      </div>
+    </div>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" style="margin-left:auto;flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
+  </a>
+
+  <!-- Grup 3 -->
+  <a href="https://chat.whatsapp.com/Bu6UkFMHsBnASwQRDYpZFa?s=cl&p=a&ilr=4&amv=1" target="_blank" style="display:flex;align-items:center;gap:10px;background:#111;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px;text-decoration:none;transition:.2s;" onmouseover="this.style.borderColor='rgba(34,197,94,0.4)';this.style.background='#141414'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='#111'">
+    <img src="https://raw.githubusercontent.com/rexxzastrobotz/Web-resmi-/main/246c60e4-3d2f-4318-bc8f-54a7ca9596e7.jpeg" alt="Grup" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+    <div style="min-width:0;">
+      <div style="font-size:.78rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Grup Astrobot Community 3</div>
+      <div style="font-size:.68rem;color:#555;margin-top:2px;display:flex;align-items:center;gap:4px;">
+        <i class="fas fa-users" style="color:#22c55e;font-size:.6rem;"></i>
+        <span>Grup Publik</span>
+      </div>
+    </div>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" style="margin-left:auto;flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
+  </a>
+
+</div>
+</div>
+</div>
+
+<div style="max-width:1100px;margin:0 auto;padding:0 24px 24px">
+<div style="background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px 18px;font-size:.75rem;color:#888888;line-height:1.7">
+<strong style="color:#cccccc;display:block;margin-bottom:4px">Catatan Penting:</strong>
+      Astrobot tidak menyediakan fitur bug WhatsApp, push kontak massal, maupun penjualan panel bot. Kami berkomitmen menjaga kenyamanan publik dan menggunakan bot hanya untuk fitur yang aman, wajar, dan bermanfaat.
+    </div>
+</div>
+
+<div style="border-top:1px solid rgba(255,255,255,0.1);padding:16px 24px;text-align:center">
+<div class="ft-copy">© <span id="yr">2026</span> Astrobot Dev. All rights reserved.</div>
+<div class="footer-made-by">Made by <span class="footer-sanzo">Rexzz</span></div>
+</div>
+</footer>
+</div><!-- end lower-unified-bg -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+
+<div id="scriptSaleModal" onclick="if(event.target===this)closeScriptModal()" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.9);overflow-y:auto;">
+<div style="max-width:680px;margin:40px auto;padding:16px;animation:slideUp .25s ease;">
+<div style="background:#0d0d0d;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
+
+<div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #1a1a1a;">
+<span style="color:#fff;font-weight:700;font-size:1rem;">Script Bot Astrobot</span>
+<button onclick="closeScriptModal()" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#888;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+</div>
+
+<div style="margin:16px 20px;border-radius:8px;overflow:hidden;border:1px solid #1a1a1a;">
+<div style="position:relative;width:100%;padding-top:56.25%;background:#111;overflow:hidden;">
+<img alt="Astrobot" src="https://cdn.nekohime.site/file/ujz0uvGt.jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;"/>
+<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:16px;">
+<div style="font-size:1.1rem;font-weight:900;color:#fff;line-height:1.2;">Astrobot DIGITAL</div>
+<div style="font-size:.75rem;color:rgba(255,255,255,.7);margin:4px 0 8px;">WhatsApp Bot • Version 3.0.0 • ESM Module</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;">
+<span style="background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;padding:2px 9px;border-radius:4px;font-size:11px;backdrop-filter:blur(4px);">1007+ Plugins</span>
+<span style="background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;padding:2px 9px;border-radius:4px;font-size:11px;backdrop-filter:blur(4px);">Baileys ORI</span>
+<span style="background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;padding:2px 9px;border-radius:4px;font-size:11px;backdrop-filter:blur(4px);">Node 18/20/22</span>
+</div>
+</div>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px 16px;">
+<div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Info System</div>
+<ul style="list-style:none;padding:0;margin:0;color:#666;font-size:.8rem;line-height:1.9;">
+<li><span style="color:#555;">▸</span> Type: <strong style="color:#ccc;">ESM Module</strong></li>
+<li><span style="color:#555;">▸</span> Node: <strong style="color:#ccc;">18 / 20 / 22</strong></li>
+<li><span style="color:#555;">▸</span> Baileys: <strong style="color:#ccc;">ORI Whiskeysockets</strong></li>
+<li><span style="color:#555;">▸</span> Pairing Code: <strong style="color:#ccc;">✅ Support</strong></li>
+<li><span style="color:#555;">▸</span> Multi Device: <strong style="color:#ccc;">✅ Support</strong></li>
+</ul>
+</div>
+<div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Info Database</div>
+<ul style="list-style:none;padding:0;margin:0;color:#666;font-size:.8rem;line-height:1.9;">
+<li><span style="color:#555;">▸</span> Database: <strong style="color:#ccc;">SQLite</strong></li>
+<li><span style="color:#555;">▸</span> RPG &amp; Bank: <strong style="color:#ccc;">✅ Ada</strong></li>
+<li><span style="color:#555;">▸</span> Money &amp; Level: <strong style="color:#ccc;">✅ Ada</strong></li>
+<li><span style="color:#555;">▸</span> User Data: <strong style="color:#ccc;">✅ Tersimpan</strong></li>
+<li><span style="color:#555;">▸</span> Cache System: <strong style="color:#ccc;">✅ Optimized</strong></li>
+</ul>
+</div>
+<div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Total Fitur</div>
+<ul style="list-style:none;padding:0;margin:0;color:#666;font-size:.8rem;line-height:1.9;">
+<li><span style="color:#555;">▸</span> Total Fitur: <strong style="color:#ccc;">900+</strong></li>
+<li><span style="color:#555;">▸</span> Plugins: <strong style="color:#ccc;">1007+</strong></li>
+<li><span style="color:#555;">▸</span> System File: <strong style="color:#ccc;">42+</strong></li>
+<li><span style="color:#555;">▸</span> Kategori: <strong style="color:#ccc;">30+</strong></li>
+</ul>
+</div>
+<div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Menu Populer</div>
+<div style="display:flex;flex-wrap:wrap;gap:5px;">
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">AI</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Downloader</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Game</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">RPG</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Stiker</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Tools</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Fun</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Internet</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Group</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Audio</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">News</span>
+<span style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;padding:2px 8px;border-radius:4px;font-size:11px;">Search</span>
+</div>
+</div>
+</div>
+
+<div style="padding:0 20px 16px;">
+<div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;">
+<div style="color:#fff;font-weight:700;font-size:.82rem;margin-bottom:10px;">Fitur Unggulan</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+<div style="font-size:.78rem;color:#888;">All-in-One Downloader</div>
+<div style="font-size:.78rem;color:#888;">AI Chat (GPT, Gemini)</div>
+<div style="font-size:.78rem;color:#888;">Brat &amp; BratVid Stiker</div>
+<div style="font-size:.78rem;color:#888;">Anti-Link &amp; Anti-Spam</div>
+<div style="font-size:.78rem;color:#888;">RPG Economy &amp; Quest</div>
+<div style="font-size:.78rem;color:#888;">Auto-Reply Cepat</div>
+<div style="font-size:.78rem;color:#888;">Welcome &amp; Goodbye</div>
+<div style="font-size:.78rem;color:#888;">Admin Tools Lengkap</div>
+</div>
+</div>
+</div>
+
+<div style="padding:0 20px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;border-top:1px solid #1a1a1a;padding-top:16px;">
+<p style="color:#555;font-size:.82rem;margin:0;">Hubungi admin untuk info harga &amp; pembelian</p>
+<a href="https://wa.me/6289674097203?text=Halo%20min%2C%20saya%20tertarik%20beli%20script%20Astrobot%20Digital%20%E2%9A%A1" style="display:inline-flex;align-items:center;gap:8px;background:#ffffff;color:#000;padding:10px 24px;border-radius:8px;font-weight:700;font-size:.9rem;text-decoration:none;border:1px solid #333;" target="_blank">
+<i class="fab fa-whatsapp" style="color:#22c55e;"></i> Beli Script Sekarang
+        </a>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="orderModal" style="position:fixed;inset:0;z-index:99996;background:#0a0a0a;overflow-y:auto;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);visibility:hidden;">
+
+  <!-- TOP NAV -->
+  <div style="position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;">
+    <button onclick="closeOrder()" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:none;border:none;color:#ccc;cursor:pointer;font-family:inherit;border-radius:8px;transition:.15s;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='none'">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div style="font-size:.95rem;font-weight:700;color:#fff;letter-spacing:.01em;">Detail Produk</div>
+    <button onclick="openMenu()" style="width:38px;height:38px;border-radius:8px;background:#111111;border:1px solid rgba(255,255,255,0.12);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;transition:.15s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111111'">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div style="max-width:680px;margin:0 auto;padding:0 0 120px;">
+
+    <!-- DESKRIPSI -->
+    <div style="padding:20px 16px 0;">
+      <p style="font-size:.9rem;color:#aaa;line-height:1.8;margin-bottom:18px;">
+        Bot disewakan khusus untuk dimasukkan ke dalam grup WhatsApp. Cocok untuk meramaikan grup, membantu admin, dan menyediakan berbagai fitur hiburan serta utilitas otomatis.
+      </p>
+    </div>
+
+
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">Fitur Bot Group:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Game seru (tebak gambar, quiz, dll)</li>
+        <li style="font-size:.9rem;color:#ccc;">Fun command &amp; hiburan</li>
+        <li style="font-size:.9rem;color:#ccc;">Auto welcome &amp; goodbye member</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti link / anti spam</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti toxic / kata kasar</li>
+        <li style="font-size:.9rem;color:#ccc;">Tag semua / hidetag</li>
+        <li style="font-size:.9rem;color:#ccc;">Sticker &amp; converter media</li>
+        <li style="font-size:.9rem;color:#ccc;">Downloader (TikTok, IG, dll)</li>
+        <li style="font-size:.9rem;color:#ccc;">Random anime / quotes / dll</li>
+        <li style="font-size:.9rem;color:#ccc;">Leveling &amp; rank member</li>
+        <li style="font-size:.9rem;color:#ccc;">AFK system</li>
+        <li style="font-size:.9rem;color:#ccc;">Vote &amp; polling grup</li>
+      </ul>
+    </div>
+
+
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">Fungsi Admin:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Kick / add member (jika bot admin)</li>
+        <li style="font-size:.9rem;color:#ccc;">Close / open grup</li>
+        <li style="font-size:.9rem;color:#ccc;">Reset link grup</li>
+        <li style="font-size:.9rem;color:#ccc;">Promote / demote</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti link grup lain</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti virtex / anti bug</li>
+      </ul>
+    </div>
+
+
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">Cocok Untuk:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Grup komunitas</li>
+        <li style="font-size:.9rem;color:#ccc;">Grup tongkrongan</li>
+        <li style="font-size:.9rem;color:#ccc;">Grup publik / open member</li>
+        <li style="font-size:.9rem;color:#ccc;">Grup roleplay / game</li>
+        <li style="font-size:.9rem;color:#ccc;">Grup jual beli biar rame</li>
+      </ul>
+    </div>
+
+
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">Ketentuan Sewa:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Bot dimasukkan ke grup Anda</li>
+        <li style="font-size:.9rem;color:#ccc;">Durasi sesuai paket sewa</li>
+        <li style="font-size:.9rem;color:#ccc;">Owner grup bebas menggunakan fitur bot</li>
+        <li style="font-size:.9rem;color:#ccc;">Bot online 24 jam (selama server normal)</li>
+        <li style="font-size:.9rem;color:#ccc;">Tidak untuk spam / bug grup lain</li>
+      </ul>
+      <p style="font-size:.85rem;color:#888;font-style:italic;margin-top:12px;">Bot siap meramaikan grup + membantu admin otomatis</p>
+    </div>
+
+
+    <div style="height:1px;background:#1e1e1e;margin:8px 16px 24px;"></div>
+
+    <!-- HARGA -->
+    <div style="padding:0 16px;">
+      <div style="font-size:1.6rem;font-weight:900;color:#fff;margin-bottom:6px;" id="orderHargaBesar">Rp 6.000</div>
+    </div>
+
+
+    <div style="padding:0 16px;">
+      <!-- Stok -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 12.5l3.5 3.5 6-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-size:.9rem;color:#22c55e;font-weight:700;">Stok Tersedia</span>
+      </div>
+
+
+      <div style="display:flex;align-items:center;gap:10px;padding-bottom:40px;">
+        <button id="orderBeliBtn" onclick="handleBeli()"
+          style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#000;padding:13px 16px;border-radius:10px;font-weight:800;font-size:.92rem;border:none;cursor:pointer;transition:.2s;letter-spacing:.01em;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          <i class="fas fa-bolt"></i> Hubungi Admin
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- ===== SCRIPT DETAIL PAGE ===== -->
+
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="script.js"></script>
+<script src="auth.js"></script>
+<script>
+// Auth state listener: update panel user info & handle authGate
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof firebase !== 'undefined' && firebase.auth) {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // Logged in: update panel, close gate if open, handle pending order
+        updatePanelUser(user);
+        const gate = document.getElementById('authGate');
+        if (gate && gate.style.display === 'flex') {
+          onLoginSuccess(user);
+        }
+      } else {
+        updatePanelUser(null);
+      }
+    });
+  }
+});
+</script>
+
+
+<div id="ownerDashboard" style="display:none;position:fixed;inset:0;z-index:99991;background:#0a0a0a;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;">
+  <div style="position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.96);backdrop-filter:blur(16px);border-bottom:1px solid #161616;">
+    <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;">
+      <button onclick="closeHistoryPage()" style="width:34px;height:34px;border-radius:9px;background:#161616;border:1px solid #222;color:#aaa;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <i class="fas fa-arrow-left" style="font-size:.82rem;"></i>
+      </button>
+      <div style="flex:1;">
+        <div style="font-size:.98rem;font-weight:800;color:#fff;">Riwayat Pembelian</div>
+        <div style="font-size:.7rem;color:#444;margin-top:1px;">Semua transaksi tersimpan di sini</div>
+      </div>
+      <button onclick="clearHistory()" style="padding:6px 11px;border-radius:8px;background:transparent;border:1px solid #222;color:#444;font-size:.7rem;cursor:pointer;font-family:inherit;">Hapus Semua</button>
+    </div>
+  </div>
+
+  <div style="padding:16px 16px 100px;">
+    <div id="historyEmpty" style="display:none;flex-direction:column;align-items:center;padding:56px 20px;text-align:center;">
+      <div style="width:68px;height:68px;border-radius:18px;background:#111;border:1px solid #1a1a1a;display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
+        <i class="fas fa-receipt" style="font-size:1.7rem;color:#222;"></i>
+      </div>
+      <div style="font-size:.92rem;font-weight:700;color:#333;margin-bottom:6px;">Belum Ada Transaksi</div>
+      <div style="font-size:.78rem;color:#2a2a2a;line-height:1.6;">Setelah melakukan pembelian,<br>riwayat akan muncul di sini.</div>
+      <button onclick="closeHistoryPage()" style="margin-top:18px;padding:11px 22px;border-radius:10px;background:#1e1e1e;border:1px solid rgba(255,255,255,0.15);color:#ccc;font-weight:700;font-size:.84rem;cursor:pointer;font-family:inherit;">Lihat Paket</button>
+    </div>
+    <div id="historyList" style="display:flex;flex-direction:column;gap:10px;"></div>
+
+    <div style="margin-top:20px;background:#0d0d0d;border-radius:14px;border:1px solid #161616;overflow:hidden;">
+      <div style="padding:14px 16px 10px;border-bottom:1px solid #161616;">
+        <div style="font-size:.8rem;font-weight:800;color:#888;display:flex;align-items:center;gap:7px;"><i class="fas fa-book-open"></i> Panduan Setelah Pembayaran</div>
+      </div>
+      <div style="padding:14px 16px;display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <div style="width:22px;height:22px;border-radius:6px;background:#130d2a;border:1px solid #3b1f8c;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;"><span style="font-size:.68rem;font-weight:800;color:#888;">1</span></div>
+          <div><div style="font-size:.8rem;font-weight:700;color:#ccc;margin-bottom:2px;">Chat Owner Otomatis</div><div style="font-size:.74rem;color:#444;line-height:1.5;">Setelah bayar, WA owner otomatis terbuka dengan detail pesanan lengkap.</div></div>
+        </div>
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <div style="width:22px;height:22px;border-radius:6px;background:#130d2a;border:1px solid #3b1f8c;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;"><span style="font-size:.68rem;font-weight:800;color:#888;">2</span></div>
+          <div><div style="font-size:.8rem;font-weight:700;color:#ccc;margin-bottom:2px;">Tunggu Proses</div><div style="font-size:.74rem;color:#444;line-height:1.5;">Bot aktif dalam 1x24 jam. Kalau lebih, ping owner lagi.</div></div>
+        </div>
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <div style="width:22px;height:22px;border-radius:6px;background:#130d2a;border:1px solid #3b1f8c;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;"><span style="font-size:.68rem;font-weight:800;color:#888;">3</span></div>
+          <div><div style="font-size:.8rem;font-weight:700;color:#ccc;margin-bottom:2px;">Bot Aktif</div><div style="font-size:.74rem;color:#444;line-height:1.5;">Ketik <span style="color:#888;font-family:monospace;font-size:.78rem;">.menu</span> di grup untuk lihat semua fitur.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:10px;background:#0d0d0d;border-radius:14px;border:1px solid #161616;overflow:hidden;">
+      <div style="padding:14px 16px 10px;border-bottom:1px solid #161616;">
+        <div style="font-size:.8rem;font-weight:800;color:#ccc;display:flex;align-items:center;gap:7px;"><i class="fas fa-headset" style="color:#888;"></i> Butuh Bantuan?</div>
+      </div>
+      <div style="padding:10px 16px;">
+        <a href="https://wa.me/6289674097203" target="_blank" style="display:flex;align-items:center;gap:11px;padding:10px 12px;background:#111;border-radius:10px;border:1px solid #1a1a1a;text-decoration:none;">
+          <div style="width:30px;height:30px;border-radius:8px;background:#dcfce7;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fab fa-whatsapp" style="color:#16a34a;"></i></div>
+          <div><div style="font-size:.8rem;font-weight:700;color:#fff;">WhatsApp Owner</div><div style="font-size:.68rem;color:#444;">+62 896-7409-7203</div></div>
+          <i class="fas fa-chevron-right" style="color:#222;margin-left:auto;font-size:.7rem;"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="scriptOrderModal" style="position:fixed;inset:0;z-index:99996;background:#0a0a0a;overflow-y:auto;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);visibility:hidden;">
+  <div style="position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;">
+    <button onclick="closeScriptOrder()" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:none;border:none;color:#ccc;cursor:pointer;border-radius:8px;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='none'">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div style="font-size:.95rem;font-weight:700;color:#fff;">Detail Produk</div>
+    <button onclick="openMenu()" style="width:38px;height:38px;border-radius:8px;background:#111;border:1px solid rgba(255,255,255,0.12);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div style="max-width:680px;margin:0 auto;padding:0 0 120px;">
+    <div style="padding:20px 16px 0;">
+      <p id="soDesc" style="font-size:.9rem;color:#aaa;line-height:1.8;margin-bottom:18px;">Script Bot WhatsApp Modern, Lengkap &amp; Siap Pakai</p>
+    </div>
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;" id="soTitle">ASTROBOT MD</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;" id="soBenList"></ul>
+    </div>
+    <div style="height:1px;background:#1e1e1e;margin:8px 16px 24px;"></div>
+    <div style="padding:0 16px;">
+      <div id="soHargaBesar" style="font-size:1.6rem;font-weight:900;color:#fff;margin-bottom:6px;"></div>
+    </div>
+    <div style="padding:0 16px;">
+      <!-- Stok -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 12.5l3.5 3.5 6-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-size:.9rem;color:#22c55e;font-weight:700;">Stok Tersedia</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding-bottom:40px;">
+        <button onclick="handleScriptBeli()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#000;padding:13px 16px;border-radius:10px;font-weight:800;font-size:.92rem;border:none;cursor:pointer;transition:.2s;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          <i class="fas fa-bolt"></i> Hubungi Admin
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== SCRIPT DETAIL PAGE ===== -->
+
+
+
+
+<div id="scriptBotDetailModal" style="position:fixed;inset:0;z-index:99996;background:#0a0a0a;overflow-y:auto;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);visibility:hidden;">
+
+  <!-- TOP NAV -->
+  <div style="position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:60px;">
+    <button onclick="closeScriptBotDetail()" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:none;border:none;color:#ccc;cursor:pointer;font-family:inherit;border-radius:8px;transition:.15s;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='none'">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div style="font-size:.95rem;font-weight:700;color:#fff;letter-spacing:.01em;">Detail Produk</div>
+    <button onclick="openMenu()" style="width:38px;height:38px;border-radius:8px;background:#111111;border:1px solid rgba(255,255,255,0.12);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;transition:.15s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111111'">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div style="max-width:680px;margin:0 auto;padding:0 0 120px;">
+
+    <!-- DESKRIPSI -->
+    <div style="padding:20px 16px 0;">
+      <p style="font-size:.9rem;color:#aaa;line-height:1.8;margin-bottom:18px;">
+        Script bot WhatsApp modern dengan sistem ESM Module, 927+ plugin siap pakai, dan free update selamanya. Cocok untuk personal, komunitas, maupun reseller digital.
+      </p>
+    </div>
+
+    <!-- RPG & Economy -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">⚔️ RPG & Economy:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Level, EXP, Role & Bank System</li>
+        <li style="font-size:.9rem;color:#ccc;">Berburu, Mancing, Berkebun, Mining</li>
+        <li style="font-size:.9rem;color:#ccc;">Pet System, Craft & Inventory</li>
+        <li style="font-size:.9rem;color:#ccc;">Arena, Duel PvP, Casino & Dungeon</li>
+        <li style="font-size:.9rem;color:#ccc;">Guild, Clan & Kingdom System</li>
+        <li style="font-size:.9rem;color:#ccc;">BTC, Saham, Investasi & Transfer</li>
+        <li style="font-size:.9rem;color:#ccc;">Daily, Weekly, Monthly Reward</li>
+        <li style="font-size:.9rem;color:#ccc;">Giveaway & Redeem Code</li>
+        <li style="font-size:.9rem;color:#ccc;">100+ fitur RPG lainnya</li>
+      </ul>
+    </div>
+
+    <!-- AI -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">🤖 AI Features:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Chat AI (GPT & Gemini)</li>
+        <li style="font-size:.9rem;color:#ccc;">AI Image Generator HDR</li>
+        <li style="font-size:.9rem;color:#ccc;">OCR, Translate & Rewrite AI</li>
+        <li style="font-size:.9rem;color:#ccc;">Code Helper & AI Sticker</li>
+      </ul>
+    </div>
+
+    <!-- Downloader -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">📥 Downloader (20+ Sumber):</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">YouTube MP3 / MP4</li>
+        <li style="font-size:.9rem;color:#ccc;">TikTok No WM / HD / Slide</li>
+        <li style="font-size:.9rem;color:#ccc;">Instagram, Facebook, Twitter/X</li>
+        <li style="font-size:.9rem;color:#ccc;">Spotify, SoundCloud, CapCut</li>
+        <li style="font-size:.9rem;color:#ccc;">MediaFire, GDrive, Terabox, Mega</li>
+        <li style="font-size:.9rem;color:#ccc;">Pinterest, Threads, Likee, SnackVideo</li>
+        <li style="font-size:.9rem;color:#ccc;">Story WA, GitHub, Douyin & lainnya</li>
+      </ul>
+    </div>
+
+    <!-- Game -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">🎮 Game & Fun:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Tebak Gambar, Lagu, Logo, Lirik</li>
+        <li style="font-size:.9rem;color:#ccc;">Tebak Bendera, Anime, Karakter</li>
+        <li style="font-size:.9rem;color:#ccc;">Family100, Caklontong, Susun Kata</li>
+        <li style="font-size:.9rem;color:#ccc;">Chess, Ludo, UNO, Ular Tangga</li>
+        <li style="font-size:.9rem;color:#ccc;">Suit PvP, Dadu, SKATA Rank</li>
+        <li style="font-size:.9rem;color:#ccc;">Dungeon, War, Soccer & lainnya</li>
+      </ul>
+    </div>
+
+    <!-- Group & Admin -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">👥 Group & Admin Tools:</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Welcome & Goodbye Custom</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti Link, Spam, Delete, Toxic</li>
+        <li style="font-size:.9rem;color:#ccc;">Anti Virtex, Bug, Call, Sticker</li>
+        <li style="font-size:.9rem;color:#ccc;">Tag All, Hide Tag, Vote, Poll</li>
+        <li style="font-size:.9rem;color:#ccc;">Kick, Promote, Demote, Add</li>
+        <li style="font-size:.9rem;color:#ccc;">Enable/Disable Fitur Per Grup</li>
+        <li style="font-size:.9rem;color:#ccc;">Toggle RPG, Game, NSFW, Auto</li>
+        <li style="font-size:.9rem;color:#ccc;">Warn, Ban, Blacklist & Group Settings</li>
+      </ul>
+    </div>
+
+    <!-- Owner -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">👑 Owner Tools (50+):</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Add/Del Premium & Owner</li>
+        <li style="font-size:.9rem;color:#ccc;">Ban/Unban User & Chat</li>
+        <li style="font-size:.9rem;color:#ccc;">Add Money, Exp, Limit, ATM, Bank</li>
+        <li style="font-size:.9rem;color:#ccc;">Broadcast Semua / Grup / Private</li>
+        <li style="font-size:.9rem;color:#ccc;">Exec & Run Code Langsung</li>
+        <li style="font-size:.9rem;color:#ccc;">Restart, Clear Session, Backup DB</li>
+        <li style="font-size:.9rem;color:#ccc;">Set PP, Bio, Thumbnail, Audio</li>
+        <li style="font-size:.9rem;color:#ccc;">Buat & Redeem Code</li>
+        <li style="font-size:.9rem;color:#ccc;">VPS Monitor & 50+ tools lainnya</li>
+      </ul>
+    </div>
+
+    <!-- Sticker & Maker -->
+    <div style="padding:0 16px 16px;">
+      <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:12px;">🎨 Sticker & Maker (30+):</div>
+      <ul style="list-style:disc;padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:.9rem;color:#ccc;">Sticker ATTP, TTP, Brat, BratHD</li>
+        <li style="font-size:.9rem;color:#ccc;">Fake Chat, Quote Card, Emoji Mix</li>
+        <li style="font-size:.9rem;color:#ccc;">Wanted, Jail, Triggered, Wasted</li>
+        <li style="font-size:.9rem;color:#ccc;">Carbon, Meme, IQ Card</li>
+        <li style="font-size:.9rem;color:#ccc;">Nulis 10+ Style, Logo Gaming</li>
+        <li style="font-size:.9rem;color:#ccc;">GTA, Naruto, Harry Potter & lainnya</li>
+      </ul>
+    </div>
+
+    <!-- Divider -->
+    <div style="height:1px;background:#1e1e1e;margin:8px 16px 24px;"></div>
+
+    <!-- HARGA -->
+    <div style="padding:0 16px;">
+      <div style="font-size:1.6rem;font-weight:900;color:#fff;margin-bottom:6px;">Rp 50.000</div>
+    </div>
+
+    <!-- TOMBOL BELI -->
+    <div style="padding:0 16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 12.5l3.5 3.5 6-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-size:.9rem;color:#22c55e;font-weight:700;">Stok Tersedia</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding-bottom:40px;">
+        <a href="https://wa.me/6289674097203?text=Halo+min+saya+mau+beli+Script+Astrobot+MD" target="_blank"
+          style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#000;padding:13px 16px;border-radius:10px;font-weight:800;font-size:.92rem;text-decoration:none;letter-spacing:.01em;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          <i class="fas fa-bolt"></i> Hubungi Admin
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
