@@ -74,7 +74,7 @@ img { display: block; max-width: 100%; }
 .brand { display: inline-flex; align-items: center; gap: 11px; flex-shrink: 0; }
 .brand-mark { width: 30px; height: 30px; border: 1px solid var(--line-strong); border-radius: 9px; display: grid; place-items: center; background: var(--surface); box-shadow: inset 0 1px rgba(255,255,255,.05); }
 .brand-mark > span { width: 10px; height: 10px; border: 3px solid var(--text); border-radius: 50%; }
-.brand-mark-logo { width: 36px; height: 36px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.brand-mark-logo { width: 36px; height: 36px; overflow: hidden; border: 0; border-radius: 9px; background: #000; box-shadow: none; }
 .brand-mark-logo > img { width: 100%; height: 100%; object-fit: contain; }
 .brand-name { font-weight: 800; font-size: .93rem; letter-spacing: .14em; }
 .desktop-nav { display: flex; align-items: center; gap: 30px; }
@@ -118,6 +118,8 @@ img { display: block; max-width: 100%; }
 .window-bar { height: 72px; padding: 0 20px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; background: var(--surface-2); }
 .window-brand { display: flex; align-items: center; gap: 11px; }
 .bot-avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--solid); color: var(--solid-text); font-weight: 900; }
+.bot-avatar-logo { width: 42px; height: 42px; overflow: hidden; border-radius: 11px; background: #000; color: inherit; font-weight: inherit; }
+.bot-avatar-logo > img { width: 100%; height: 100%; object-fit: contain; }
 .window-brand div { display: grid; gap: 3px; }
 .window-brand strong { font-size: .78rem; }
 .window-brand small { display: flex; align-items: center; gap: 5px; color: var(--muted-2); font-size: .6rem; }
