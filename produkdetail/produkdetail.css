@@ -417,3 +417,61 @@ html[data-theme="light"] .theme-switch i {
   .order-panel-heading { padding: 26px 22px 22px; }
   .order-form { padding: 24px 22px 26px; }
 }
+
+.qris-status {
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: .72rem;
+  line-height: 1.55;
+}
+.qris-status[hidden] { display: none; }
+.qris-status.is-error { border-color: rgba(217,74,90,.55); color: #e66a79; }
+.qris-status.is-loading { display: flex; align-items: center; gap: 10px; }
+.qris-status.is-loading::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--line-strong);
+  border-top-color: var(--text);
+  border-radius: 50%;
+  animation: qrisSpin .75s linear infinite;
+}
+@keyframes qrisSpin { to { transform: rotate(360deg); } }
+
+.qris-result {
+  padding: 20px;
+  border: 1px solid var(--line-strong);
+  border-radius: 16px;
+  background: var(--bg-soft);
+  display: grid;
+  gap: 18px;
+}
+.qris-result[hidden] { display: none; }
+.qris-result-head { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; }
+.qris-result-head h3 { margin: 7px 0 0; font-size: 1.15rem; }
+.qris-pending-badge {
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-family: "JetBrains Mono", monospace;
+  font-size: .58rem;
+  letter-spacing: .1em;
+}
+.qris-box {
+  width: min(100%, 340px);
+  margin: 0 auto;
+  padding: 15px;
+  border-radius: 18px;
+  background: #fff;
+}
+.qris-box img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+.qris-meta { display: grid; gap: 12px; }
+.qris-meta > div { display: flex; justify-content: space-between; gap: 18px; font-size: .72rem; }
+.qris-meta span { color: var(--muted); }
+.qris-meta strong { color: var(--text); text-align: right; overflow-wrap: anywhere; }
+.qris-hint { margin: 0; color: var(--muted-2); font-size: .63rem; line-height: 1.6; text-align: center; }
+.order-next-button:disabled { opacity: .55; cursor: wait; transform: none; }

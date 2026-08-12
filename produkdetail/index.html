@@ -150,14 +150,36 @@
 
           <div class="order-ready" id="orderReady" hidden>
             <i class="fas fa-circle-check" aria-hidden="true"></i>
-            <span>Data pesanan tersimpan. Integrasi QRIS akan dilanjutkan pada tahap berikutnya.</span>
+            <span>Data pesanan siap. Sistem akan membuat QRIS DavPay.</span>
           </div>
 
-          <button class="order-next-button" type="submit">
-            <span>Lanjut Pembayaran</span>
-            <i class="fas fa-arrow-right" aria-hidden="true"></i>
+          <div class="qris-status" id="qrisStatus" hidden></div>
+
+          <section class="qris-result" id="qrisResult" hidden aria-live="polite">
+            <div class="qris-result-head">
+              <div>
+                <span class="product-detail-kicker">QRIS PEMBAYARAN</span>
+                <h3>Scan QR untuk membayar</h3>
+              </div>
+              <span class="qris-pending-badge">MENUNGGU</span>
+            </div>
+            <div class="qris-box">
+              <img id="qrisImage" alt="QRIS pembayaran Astrobot">
+            </div>
+            <div class="qris-meta">
+              <div><span>Order ID</span><strong id="qrisOrderId">-</strong></div>
+              <div><span>Transaction ID</span><strong id="qrisTransactionId">-</strong></div>
+              <div><span>Total QRIS</span><strong id="qrisTotal">-</strong></div>
+              <div><span>Batas pembayaran</span><strong id="qrisExpiry">-</strong></div>
+            </div>
+            <p class="qris-hint">Setelah QR berhasil dibuat, jangan membuat transaksi baru dari paket lain sebelum pembayaran ini selesai atau dibatalkan di DavPay.</p>
+          </section>
+
+          <button class="order-next-button" id="orderNextButton" type="submit">
+            <span id="orderNextText">Buat QRIS Pembayaran</span>
+            <i class="fas fa-qrcode" aria-hidden="true"></i>
           </button>
-          <small class="order-note"><i class="fas fa-shield-halved" aria-hidden="true"></i> Tahap ini belum melakukan pembayaran atau mengirim data ke WhatsApp owner.</small>
+          <small class="order-note"><i class="fas fa-shield-halved" aria-hidden="true"></i> Kredensial DavPay diproses hanya di backend Vercel dan tidak disimpan di halaman ini.</small>
         </form>
       </section>
     </main>
