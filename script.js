@@ -1,4 +1,4 @@
-/* ASTROBOT PROFESSIONAL BUILD 13 */
+
 (function () {
   'use strict';
 
@@ -11,34 +11,6 @@
   const backTop = document.getElementById('backTop');
   const progress = document.getElementById('scrollProgress');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function initHeroDevTyping() {
-    const target = document.getElementById('heroDevTyping');
-    if (!target) return;
-
-    const text = target.dataset.text || 'Astrobot Dev';
-    if (reduceMotion) {
-      target.textContent = text;
-      return;
-    }
-
-    target.textContent = '';
-    target.classList.add('is-typing');
-    let index = 0;
-
-    const typeNext = () => {
-      if (index < text.length) {
-        target.textContent += text.charAt(index++);
-        window.setTimeout(typeNext, 105);
-      } else {
-        window.setTimeout(() => target.classList.remove('is-typing'), 900);
-      }
-    };
-
-    window.setTimeout(typeNext, 350);
-  }
-
-  initHeroDevTyping();
 
   function getSavedTheme() {
     try { return localStorage.getItem('astrobot-theme'); }
