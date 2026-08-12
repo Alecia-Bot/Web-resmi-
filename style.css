@@ -99,8 +99,14 @@ img { display: block; max-width: 100%; }
 .hero-glow { position: absolute; width: 720px; height: 720px; border-radius: 50%; right: -280px; top: -260px; background: radial-gradient(circle,rgba(255,255,255,.09),transparent 67%); filter: blur(10px); }
 .hero-grid { position: relative; display: grid; grid-template-columns: minmax(0,1fr) minmax(420px,.88fr); align-items: center; gap: 84px; }
 .eyebrow,.section-kicker { color: var(--muted); font-family: "JetBrains Mono",monospace; font-size: .68rem; font-weight: 600; letter-spacing: .14em; }
-.eyebrow { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 25px; }
-.eyebrow > span { width: 26px; height: 1px; background: var(--text); }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 25px; }
+.hero-dev-text { display: inline-block; min-width: 0; color: var(--text); letter-spacing: .08em; white-space: nowrap; }
+.hero-dev-text.is-typing::after { content: ""; display: inline-block; width: 1px; height: 1em; margin-left: 4px; vertical-align: -2px; background: currentColor; animation: hero-caret .75s steps(1,end) infinite; }
+.verified-badge { position: relative; width: 17px; height: 17px; flex: 0 0 17px; display: inline-grid; place-items: center; border-radius: 50%; background: #0095f6; color: #fff; font-size: 9px; line-height: 1; box-shadow: 0 0 0 2px var(--bg); }
+.verified-badge::before,.verified-badge::after { content: ""; position: absolute; inset: 2px; z-index: -1; border-radius: 3px; background: #0095f6; transform: rotate(45deg); }
+.verified-badge::after { transform: rotate(22.5deg); }
+.verified-badge i { position: relative; z-index: 1; font-size: 8px; }
+@keyframes hero-caret { 0%,48%{opacity:1} 49%,100%{opacity:0} }
 .hero h1 { max-width: 760px; margin: 0; font-size: clamp(3rem,6vw,5.75rem); line-height: .96; letter-spacing: -.065em; font-weight: 800; }
 .hero h1 span,.section-heading h2 span,.why-copy h2 span,.faq-copy h2 span,.contact-copy h2 span { color: var(--muted-2); }
 .hero-lead { max-width: 660px; margin: 28px 0 0; color: var(--muted); font-size: clamp(.95rem,1.5vw,1.08rem); line-height: 1.85; }
