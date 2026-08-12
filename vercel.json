@@ -3,6 +3,8 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/group", "destination": "/group/index.html" },
-    { "source": "/group/", "destination": "/group/index.html" }
+    { "source": "/group/", "destination": "/group/index.html" },
+    { "source": "/produkdetail", "destination": "/produkdetail/index.html" },
+    { "source": "/produkdetail/", "destination": "/produkdetail/index.html" }
   ]
 }
