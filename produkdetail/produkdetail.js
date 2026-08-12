@@ -1,6 +1,8 @@
 (() => {
   'use strict';
 
+  const OWNER_NUMBER = '6289674097203';
+
   const PACKAGES = {
     '1': { code: 'PAKET 01', title: 'SEWA BOT 15 HARI', duration: 'Aktif 15 hari', price: 6000 },
     '2': { code: 'PAKET 02', title: 'SEWA BOT 30 HARI', duration: 'Aktif 30 hari', price: 12000 },
@@ -37,16 +39,19 @@
     try { return localStorage.getItem('astrobot-theme'); }
     catch (_) { return null; }
   };
+
   const saveTheme = theme => {
     try { localStorage.setItem('astrobot-theme', theme); }
     catch (_) {}
   };
+
   const syncThemeLabel = () => {
     if (themeLabel) themeLabel.textContent = root.dataset.theme === 'light' ? 'Light' : 'Dark';
   };
 
   if (getSavedTheme() === 'light') root.dataset.theme = 'light';
   syncThemeLabel();
+
   themeToggle?.addEventListener('click', () => {
     const next = root.dataset.theme === 'light' ? 'dark' : 'light';
     if (next === 'light') root.dataset.theme = 'light';
@@ -57,13 +62,11 @@
 
   const form = document.getElementById('productOrderForm');
   const ready = document.getElementById('orderReady');
-  const statusBox = document.getElementById('qrisStatus');
-  const qrisResult = document.getElementById('qrisResult');
-  const nextButton = document.getElementById('orderNextButton');
-  const nextText = document.getElementById('orderNextText');
   const fields = ['buyerName', 'buyerPhone', 'groupLink'].map(id => document.getElementById(id));
 
-  fields.forEach(field => field?.addEventListener('input', () => field.classList.remove('is-invalid')));
+  fields.forEach(field => {
+    field?.addEventListener('input', () => field.classList.remove('is-invalid'));
+  });
 
   function makeOrderId() {
     const stamp = Date.now().toString(36).toUpperCase();
@@ -71,26 +74,11 @@
     return `AST-${stamp}-${random}`;
   }
 
-  function showStatus(message, type = '') {
-    if (!statusBox) return;
-    statusBox.hidden = false;
-    statusBox.className = `qris-status${type ? ` is-${type}` : ''}`;
-    statusBox.textContent = message;
-  }
-
-  function hideStatus() {
-    if (statusBox) statusBox.hidden = true;
-  }
-
-  function setLoading(loading) {
-    if (nextButton) nextButton.disabled = loading;
-    if (nextText) nextText.textContent = loading ? 'Membuat QRIS...' : 'Buat QRIS Pembayaran';
-  }
-
-  form?.addEventListener('submit', async event => {
+  form?.addEventListener('submit', event => {
     event.preventDefault();
 
     let valid = true;
+
     fields.forEach(field => {
       if (!field?.value.trim()) {
         field?.classList.add('is-invalid');
@@ -98,8 +86,8 @@
       }
     });
 
-    const link = document.getElementById('groupLink')?.value.trim() || '';
-    if (link && !/^https:\/\/(chat\.)?whatsapp\.com\//i.test(link)) {
+    const groupLink = document.getElementById('groupLink')?.value.trim() || '';
+    if (groupLink && !/^https:\/\/(chat\.)?whatsapp\.com\//i.test(groupLink)) {
       document.getElementById('groupLink')?.classList.add('is-invalid');
       valid = false;
     }
@@ -109,71 +97,57 @@
       return;
     }
 
+    const buyerName = document.getElementById('buyerName').value.trim();
+    const buyerPhone = document.getElementById('buyerPhone').value.trim();
+    const orderId = makeOrderId();
+    const total = selectedPackage.price + HANDLING_FEE;
+
     const order = {
-      orderId: makeOrderId(),
+      orderId,
       packageId: packageKey,
       packageCode: selectedPackage.code,
       product: selectedPackage.title,
       duration: selectedPackage.duration,
       productPrice: selectedPackage.price,
       handlingFee: HANDLING_FEE,
-      expectedTotal: selectedPackage.price + HANDLING_FEE,
-      buyerName: document.getElementById('buyerName').value.trim(),
-      buyerPhone: document.getElementById('buyerPhone').value.trim(),
-      groupLink: link,
+      total,
+      buyerName,
+      buyerPhone,
+      groupLink,
+      status: 'MENUNGGU PROSES OWNER',
       createdAt: new Date().toISOString()
     };
 
-    try { localStorage.setItem('astrobotPendingOrder', JSON.stringify(order)); }
-    catch (_) {}
-
-    ready.hidden = false;
-    qrisResult.hidden = true;
-    showStatus('Sedang login ke DavPay dan membuat QRIS. Proses ini bisa memakan waktu beberapa detik...', 'loading');
-    setLoading(true);
-
     try {
-      // DavPay menerima nominal produk. Biaya QRIS aktual dibaca kembali dari halaman pembayaran.
-      const response = await fetch('/api/davpay/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          orderId: order.orderId,
-          amount: selectedPackage.price
-        })
-      });
+      localStorage.setItem('astrobotPendingOrder', JSON.stringify(order));
+    } catch (_) {}
 
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok || !data.ok) throw new Error(data.message || 'Gagal membuat QRIS DavPay.');
+    const message = [
+      '*PESANAN SEWA BOT ASTROBOT*',
+      '',
+      `Order ID: ${orderId}`,
+      `Paket: ${selectedPackage.code}`,
+      `Produk: ${selectedPackage.title}`,
+      `Durasi: ${selectedPackage.duration}`,
+      `Harga Produk: ${rupiah(selectedPackage.price)}`,
+      `Biaya Penanganan: ${rupiah(HANDLING_FEE)}`,
+      `Total: ${rupiah(total)}`,
+      '',
+      '*DATA PEMBELI*',
+      `Nama: ${buyerName}`,
+      `Nomor: ${buyerPhone}`,
+      `Link Grup: ${groupLink}`,
+      '',
+      'Mohon diproses secara manual. Terima kasih.'
+    ].join('\n');
 
-      hideStatus();
-      const actualTotal = Number(data.totalPayment || order.expectedTotal);
-      const actualHandling = Math.max(0, actualTotal - selectedPackage.price);
+    if (ready) ready.hidden = false;
 
-      setText('handlingPrice', rupiah(actualHandling));
-      setText('summaryTotal', rupiah(actualTotal));
-      setText('qrisOrderId', data.orderId || order.orderId);
-      setText('qrisTransactionId', data.transactionId || '-');
-      setText('qrisTotal', rupiah(actualTotal));
-      setText('qrisExpiry', data.expiresAtText || 'Ikuti waktu pada QRIS');
+    const url = `https://wa.me/${OWNER_NUMBER}?text=${encodeURIComponent(message)}`;
+    const opened = window.open(url, '_blank', 'noopener');
 
-      const image = document.getElementById('qrisImage');
-      if (image) image.src = data.qrImage;
-
-      order.transactionId = data.transactionId || null;
-      order.total = actualTotal;
-      order.handlingFee = actualHandling;
-      order.paymentStatus = 'PENDING';
-      try { localStorage.setItem('astrobotPendingOrder', JSON.stringify(order)); }
-      catch (_) {}
-
-      qrisResult.hidden = false;
-      qrisResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    } catch (error) {
-      qrisResult.hidden = true;
-      showStatus(error.message || 'Terjadi kesalahan saat membuat QRIS.', 'error');
-    } finally {
-      setLoading(false);
+    if (!opened) {
+      window.location.href = url;
     }
   });
 })();

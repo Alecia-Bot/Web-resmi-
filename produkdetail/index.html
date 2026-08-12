@@ -17,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
   <link href="/style.css?v=15" rel="stylesheet">
-  <link href="/produkdetail/produkdetail.css?v=1" rel="stylesheet">
+  <link href="/produkdetail/produkdetail.css?v=2" rel="stylesheet">
 </head>
 <body class="product-detail-page">
   <div class="page-noise" aria-hidden="true"></div>
@@ -123,7 +123,7 @@
         <div class="order-panel-heading">
           <span class="product-detail-kicker">PESANAN</span>
           <h2>Lengkapi Data Pesanan</h2>
-          <p>Isi data grup yang akan menggunakan Astrobot. Data ini akan digunakan pada tahap pembayaran QRIS berikutnya.</p>
+          <p>Isi data pembeli dan link grup. Setelah tombol ditekan, seluruh data pesanan akan langsung dikirim ke WhatsApp Owner Astrobot untuk diproses secara manual.</p>
         </div>
 
         <form class="order-form" id="productOrderForm" novalidate>
@@ -142,44 +142,26 @@
             <input id="groupLink" name="groupLink" type="url" inputmode="url" placeholder="https://chat.whatsapp.com/..." required>
           </label>
 
-          <div class="order-summary" aria-label="Ringkasan pembayaran">
+          <div class="order-summary" aria-label="Ringkasan pesanan">
             <div><span>Harga Produk</span><strong id="summaryPrice">Rp 6.000</strong></div>
             <div><span>Biaya Penanganan</span><strong id="handlingPrice">Rp 300</strong></div>
             <div class="order-summary-total"><span>Total</span><strong id="summaryTotal">Rp 6.300</strong></div>
           </div>
 
           <div class="order-ready" id="orderReady" hidden>
-            <i class="fas fa-circle-check" aria-hidden="true"></i>
-            <span>Data pesanan siap. Sistem akan membuat QRIS DavPay.</span>
+            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+            <span>Data pesanan siap. Anda akan diarahkan ke WhatsApp Owner Astrobot.</span>
           </div>
 
-          <div class="qris-status" id="qrisStatus" hidden></div>
-
-          <section class="qris-result" id="qrisResult" hidden aria-live="polite">
-            <div class="qris-result-head">
-              <div>
-                <span class="product-detail-kicker">QRIS PEMBAYARAN</span>
-                <h3>Scan QR untuk membayar</h3>
-              </div>
-              <span class="qris-pending-badge">MENUNGGU</span>
-            </div>
-            <div class="qris-box">
-              <img id="qrisImage" alt="QRIS pembayaran Astrobot">
-            </div>
-            <div class="qris-meta">
-              <div><span>Order ID</span><strong id="qrisOrderId">-</strong></div>
-              <div><span>Transaction ID</span><strong id="qrisTransactionId">-</strong></div>
-              <div><span>Total QRIS</span><strong id="qrisTotal">-</strong></div>
-              <div><span>Batas pembayaran</span><strong id="qrisExpiry">-</strong></div>
-            </div>
-            <p class="qris-hint">Setelah QR berhasil dibuat, jangan membuat transaksi baru dari paket lain sebelum pembayaran ini selesai atau dibatalkan di DavPay.</p>
-          </section>
-
           <button class="order-next-button" id="orderNextButton" type="submit">
-            <span id="orderNextText">Buat QRIS Pembayaran</span>
-            <i class="fas fa-qrcode" aria-hidden="true"></i>
+            <span id="orderNextText">Pesan via WhatsApp</span>
+            <i class="fab fa-whatsapp" aria-hidden="true"></i>
           </button>
-          <small class="order-note"><i class="fas fa-shield-halved" aria-hidden="true"></i> Kredensial DavPay diproses hanya di backend Vercel dan tidak disimpan di halaman ini.</small>
+
+          <small class="order-note">
+            <i class="fas fa-shield-halved" aria-hidden="true"></i>
+            Pembayaran dan aktivasi bot diproses manual oleh Owner Astrobot melalui WhatsApp.
+          </small>
         </form>
       </section>
     </main>
@@ -187,6 +169,6 @@
     <footer class="product-detail-footer">© 2026 Astrobot Dev. All rights reserved.</footer>
   </div>
 
-  <script src="/produkdetail/produkdetail.js?v=1"></script>
+  <script src="/produkdetail/produkdetail.js?v=2"></script>
 </body>
 </html>
