@@ -1,6 +1,11 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "functions": {
+    "api/davpay/create.mjs": {
+      "maxDuration": 60
+    }
+  },
   "rewrites": [
     { "source": "/group", "destination": "/group/index.html" },
     { "source": "/group/", "destination": "/group/index.html" },
