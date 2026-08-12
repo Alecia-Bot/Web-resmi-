@@ -1,0 +1,8 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/group", "destination": "/group/index.html" },
+    { "source": "/group/", "destination": "/group/index.html" }
+  ]
+}
