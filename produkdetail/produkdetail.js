@@ -10,7 +10,6 @@
     '4': { code: 'PAKET 04', title: 'SEWA BOT 1 TAHUN', duration: 'Aktif 365 hari', price: 40000 }
   };
 
-  const HANDLING_FEE = 300;
   const params = new URLSearchParams(window.location.search);
   const packageKey = PACKAGES[params.get('paket')] ? params.get('paket') : '1';
   const selectedPackage = PACKAGES[packageKey];
@@ -27,8 +26,7 @@
   setText('topPrice', rupiah(selectedPackage.price));
   setText('durationLabel', selectedPackage.duration);
   setText('summaryPrice', rupiah(selectedPackage.price));
-  setText('handlingPrice', rupiah(HANDLING_FEE));
-  setText('summaryTotal', rupiah(selectedPackage.price + HANDLING_FEE));
+  setText('summaryTotal', rupiah(selectedPackage.price));
   document.title = `${selectedPackage.title} - Astrobot`;
 
   const root = document.documentElement;
@@ -68,12 +66,6 @@
     field?.addEventListener('input', () => field.classList.remove('is-invalid'));
   });
 
-  function makeOrderId() {
-    const stamp = Date.now().toString(36).toUpperCase();
-    const random = Math.random().toString(36).slice(2, 6).toUpperCase();
-    return `AST-${stamp}-${random}`;
-  }
-
   form?.addEventListener('submit', event => {
     event.preventDefault();
 
@@ -99,17 +91,14 @@
 
     const buyerName = document.getElementById('buyerName').value.trim();
     const buyerPhone = document.getElementById('buyerPhone').value.trim();
-    const orderId = makeOrderId();
-    const total = selectedPackage.price + HANDLING_FEE;
+    const total = selectedPackage.price;
 
     const order = {
-      orderId,
       packageId: packageKey,
       packageCode: selectedPackage.code,
       product: selectedPackage.title,
       duration: selectedPackage.duration,
       productPrice: selectedPackage.price,
-      handlingFee: HANDLING_FEE,
       total,
       buyerName,
       buyerPhone,
@@ -123,14 +112,13 @@
     } catch (_) {}
 
     const message = [
-      '*PESANAN SEWA BOT ASTROBOT*',
+      'halo min',
+      'berikut *PESANAN SEWA BOT ASTROBOT*',
       '',
-      `Order ID: ${orderId}`,
       `Paket: ${selectedPackage.code}`,
       `Produk: ${selectedPackage.title}`,
       `Durasi: ${selectedPackage.duration}`,
       `Harga Produk: ${rupiah(selectedPackage.price)}`,
-      `Biaya Penanganan: ${rupiah(HANDLING_FEE)}`,
       `Total: ${rupiah(total)}`,
       '',
       '*DATA PEMBELI*',
@@ -138,7 +126,7 @@
       `Nomor: ${buyerPhone}`,
       `Link Grup: ${groupLink}`,
       '',
-      'Mohon diproses secara manual. Terima kasih.'
+      'Mohon berikan informasi tentang metode pembayaran min'
     ].join('\n');
 
     if (ready) ready.hidden = false;
