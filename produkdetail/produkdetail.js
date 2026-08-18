@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const OWNER_NUMBER = '18763192888';
+  const OWNER_NUMBER = '6289674097203';
 
   const PACKAGES = {
     '1': { code: 'PAKET 01', title: 'SEWA BOT 15 HARI', duration: 'Aktif 15 hari', price: 6000 },
@@ -28,6 +28,125 @@
   setText('summaryPrice', rupiah(selectedPackage.price));
   setText('summaryTotal', rupiah(selectedPackage.price));
   document.title = `${selectedPackage.title} - Astrobot`;
+
+  // Product image gallery: buttons, dots, keyboard arrows, and horizontal swipe/drag.
+  const gallery = document.getElementById('productGallery');
+  const galleryViewport = document.getElementById('productGalleryViewport');
+  const galleryTrack = document.getElementById('productGalleryTrack');
+  const gallerySlides = Array.from(gallery?.querySelectorAll('[data-gallery-slide]') || []);
+  const galleryDots = Array.from(gallery?.querySelectorAll('[data-gallery-dot]') || []);
+  const galleryPrev = document.getElementById('productGalleryPrev');
+  const galleryNext = document.getElementById('productGalleryNext');
+  const galleryCounter = document.getElementById('productGalleryCounter');
+
+  let galleryIndex = 0;
+  let pointerStartX = 0;
+  let pointerDeltaX = 0;
+  let activePointerId = null;
+  let isDraggingGallery = false;
+
+  const clampGalleryIndex = index => {
+    const count = gallerySlides.length;
+    if (!count) return 0;
+    return (index + count) % count;
+  };
+
+  const renderGallery = (index, { animate = true } = {}) => {
+    if (!galleryTrack || !gallerySlides.length) return;
+
+    galleryIndex = clampGalleryIndex(index);
+    galleryTrack.classList.toggle('is-dragging', !animate);
+    galleryTrack.style.transform = `translate3d(${-galleryIndex * 100}%, 0, 0)`;
+
+    gallerySlides.forEach((slide, slideIndex) => {
+      const active = slideIndex === galleryIndex;
+      slide.classList.toggle('is-active', active);
+      slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+    });
+
+    galleryDots.forEach((dot, dotIndex) => {
+      const active = dotIndex === galleryIndex;
+      dot.classList.toggle('is-active', active);
+      if (active) dot.setAttribute('aria-current', 'true');
+      else dot.removeAttribute('aria-current');
+    });
+
+    if (galleryCounter) galleryCounter.textContent = `${galleryIndex + 1} / ${gallerySlides.length}`;
+  };
+
+  const moveGallery = direction => renderGallery(galleryIndex + direction);
+
+  galleryPrev?.addEventListener('click', () => moveGallery(-1));
+  galleryNext?.addEventListener('click', () => moveGallery(1));
+  galleryDots.forEach(dot => {
+    dot.addEventListener('click', () => renderGallery(Number(dot.dataset.galleryDot || 0)));
+  });
+
+  galleryViewport?.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      moveGallery(-1);
+    } else if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      moveGallery(1);
+    } else if (event.key === 'Home') {
+      event.preventDefault();
+      renderGallery(0);
+    } else if (event.key === 'End') {
+      event.preventDefault();
+      renderGallery(gallerySlides.length - 1);
+    }
+  });
+
+  const finishGalleryDrag = () => {
+    if (!galleryTrack || !isDraggingGallery) return;
+
+    const threshold = Math.min(90, Math.max(42, (galleryViewport?.clientWidth || 0) * 0.12));
+    galleryTrack.classList.remove('is-dragging');
+
+    if (Math.abs(pointerDeltaX) >= threshold) {
+      moveGallery(pointerDeltaX < 0 ? 1 : -1);
+    } else {
+      renderGallery(galleryIndex);
+    }
+
+    pointerDeltaX = 0;
+    isDraggingGallery = false;
+    activePointerId = null;
+  };
+
+  galleryViewport?.addEventListener('pointerdown', event => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    if (event.target.closest('.product-gallery-button')) return;
+
+    activePointerId = event.pointerId;
+    pointerStartX = event.clientX;
+    pointerDeltaX = 0;
+    isDraggingGallery = true;
+    galleryTrack?.classList.add('is-dragging');
+    galleryViewport.setPointerCapture?.(event.pointerId);
+  });
+
+  galleryViewport?.addEventListener('pointermove', event => {
+    if (!isDraggingGallery || event.pointerId !== activePointerId || !galleryTrack) return;
+
+    pointerDeltaX = event.clientX - pointerStartX;
+    const width = galleryViewport.clientWidth || 1;
+    const limitedDelta = Math.max(-width, Math.min(width, pointerDeltaX));
+    galleryTrack.style.transform = `translate3d(calc(${-galleryIndex * 100}% + ${limitedDelta}px), 0, 0)`;
+  });
+
+  galleryViewport?.addEventListener('pointerup', event => {
+    if (event.pointerId !== activePointerId) return;
+    galleryViewport.releasePointerCapture?.(event.pointerId);
+    finishGalleryDrag();
+  });
+
+  galleryViewport?.addEventListener('pointercancel', finishGalleryDrag);
+  galleryViewport?.addEventListener('lostpointercapture', finishGalleryDrag);
+
+  renderGallery(0, { animate: false });
+  requestAnimationFrame(() => galleryTrack?.classList.remove('is-dragging'));
 
   const root = document.documentElement;
   const themeToggle = document.getElementById('productThemeToggle');

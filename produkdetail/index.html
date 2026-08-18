@@ -16,8 +16,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-  <link href="/style.css?v=15" rel="stylesheet">
-  <link href="/produkdetail/produkdetail.css?v=2" rel="stylesheet">
+  <link href="/style.css?v=16" rel="stylesheet">
+  <link href="/produkdetail/produkdetail.css?v=4" rel="stylesheet">
 </head>
 <body class="product-detail-page">
   <div class="page-noise" aria-hidden="true"></div>
@@ -41,13 +41,62 @@
     </nav>
 
     <main class="product-detail-main">
-      <section class="product-detail-thumb" aria-label="Thumbnail produk Astrobot">
-        <img src="/IMG-20260729-WA0029.jpg" alt="Astrobot WhatsApp Bot">
-        <div class="product-detail-thumb-overlay" aria-hidden="true"></div>
-        <div class="product-detail-thumb-copy">
-          <span id="heroPackageCode">PAKET 01</span>
-          <strong>Sewa Bot Astrobot</strong>
-          <small>WhatsApp Group Automation</small>
+      <section class="product-gallery" id="productGallery" aria-label="Galeri produk Astrobot" aria-roledescription="carousel">
+        <div class="product-gallery-viewport" id="productGalleryViewport" tabindex="0">
+          <div class="product-gallery-track" id="productGalleryTrack">
+            <figure class="product-gallery-slide is-active" data-gallery-slide aria-label="Gambar 1 dari 7">
+              <img src="/IMG-20260729-WA0029.jpg" alt="Astrobot WhatsApp Bot" draggable="false">
+              <div class="product-detail-thumb-overlay" aria-hidden="true"></div>
+              <figcaption class="product-detail-thumb-copy">
+                <span id="heroPackageCode">PAKET 01</span>
+                <strong>Sewa Bot Astrobot</strong>
+                <small>WhatsApp Group Automation</small>
+              </figcaption>
+            </figure>
+
+            <figure class="product-gallery-slide" data-gallery-slide aria-label="Gambar 2 dari 7" aria-hidden="true">
+              <img src="/assets/product-gallery/fitur-astrobot.jpg" alt="Tampilan jumlah fitur dan kategori Astrobot" loading="lazy" draggable="false">
+            </figure>
+
+            <figure class="product-gallery-slide" data-gallery-slide aria-label="Gambar 3 dari 7" aria-hidden="true">
+              <img src="/assets/product-gallery/fitur-iqc-astrobot.jpg" alt="Contoh fitur interaktif IQC Astrobot di WhatsApp" loading="lazy" draggable="false">
+            </figure>
+
+            <figure class="product-gallery-slide" data-gallery-slide aria-label="Gambar 4 dari 7" aria-hidden="true">
+              <img src="/assets/product-gallery/welcome-astrobot.jpg" alt="Contoh fitur welcome otomatis Astrobot di grup WhatsApp" loading="lazy" draggable="false">
+            </figure>
+
+            <figure class="product-gallery-slide" data-gallery-slide aria-label="Gambar 5 dari 7" aria-hidden="true">
+              <img src="/assets/product-gallery/menu-astrobot.jpg" alt="Tampilan menu utama Astrobot di WhatsApp" loading="lazy" draggable="false">
+            </figure>
+
+            <figure class="product-gallery-slide" data-gallery-slide aria-label="Gambar 6 dari 7" aria-hidden="true">
+              <img src="/assets/product-gallery/statistik-menu-astrobot.jpg" alt="Tampilan statistik pengguna Astrobot di menu WhatsApp" loading="lazy" draggable="false">
+            </figure>
+
+            <figure class="product-gallery-slide" data-gallery-slide aria-label="Gambar 7 dari 7" aria-hidden="true">
+              <img src="/assets/product-gallery/brat-astrobot.jpg" alt="Contoh fitur balasan kreatif Astrobot di WhatsApp" loading="lazy" draggable="false">
+            </figure>
+          </div>
+
+          <button class="product-gallery-button product-gallery-prev" id="productGalleryPrev" type="button" aria-label="Lihat gambar sebelumnya">
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+          </button>
+          <button class="product-gallery-button product-gallery-next" id="productGalleryNext" type="button" aria-label="Lihat gambar berikutnya">
+            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+          </button>
+
+          <div class="product-gallery-counter" id="productGalleryCounter" aria-live="polite">1 / 7</div>
+        </div>
+
+        <div class="product-gallery-dots" id="productGalleryDots" aria-label="Pilih gambar produk">
+          <button class="is-active" type="button" data-gallery-dot="0" aria-label="Buka gambar 1" aria-current="true"></button>
+          <button type="button" data-gallery-dot="1" aria-label="Buka gambar 2"></button>
+          <button type="button" data-gallery-dot="2" aria-label="Buka gambar 3"></button>
+          <button type="button" data-gallery-dot="3" aria-label="Buka gambar 4"></button>
+          <button type="button" data-gallery-dot="4" aria-label="Buka gambar 5"></button>
+          <button type="button" data-gallery-dot="5" aria-label="Buka gambar 6"></button>
+          <button type="button" data-gallery-dot="6" aria-label="Buka gambar 7"></button>
         </div>
       </section>
 
@@ -168,6 +217,6 @@
     <footer class="product-detail-footer">© 2026 Astrobot Dev. All rights reserved.</footer>
   </div>
 
-  <script src="/produkdetail/produkdetail.js?v=2"></script>
+  <script src="/produkdetail/produkdetail.js?v=4"></script>
 </body>
 </html>
