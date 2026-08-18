@@ -44,6 +44,7 @@
   let pointerDeltaX = 0;
   let activePointerId = null;
   let isDraggingGallery = false;
+  let suppressGalleryClickUntil = 0;
 
   const clampGalleryIndex = index => {
     const count = gallerySlides.length;
@@ -104,7 +105,10 @@
     const threshold = Math.min(90, Math.max(42, (galleryViewport?.clientWidth || 0) * 0.12));
     galleryTrack.classList.remove('is-dragging');
 
-    if (Math.abs(pointerDeltaX) >= threshold) {
+    const dragDistance = Math.abs(pointerDeltaX);
+    if (dragDistance > 8) suppressGalleryClickUntil = performance.now() + 260;
+
+    if (dragDistance >= threshold) {
       moveGallery(pointerDeltaX < 0 ? 1 : -1);
     } else {
       renderGallery(galleryIndex);
@@ -147,6 +151,134 @@
 
   renderGallery(0, { animate: false });
   requestAnimationFrame(() => galleryTrack?.classList.remove('is-dragging'));
+
+  // Fullscreen image preview. Opens on image click and supports buttons, keyboard, and swipe.
+  const galleryModal = document.getElementById('productGalleryModal');
+  const galleryModalImage = document.getElementById('productGalleryModalImage');
+  const galleryModalClose = document.getElementById('productGalleryModalClose');
+  const galleryModalPrev = document.getElementById('productGalleryModalPrev');
+  const galleryModalNext = document.getElementById('productGalleryModalNext');
+  const galleryModalCounter = document.getElementById('productGalleryModalCounter');
+  const galleryModalStage = document.getElementById('productGalleryModalStage');
+  let modalIndex = 0;
+  let modalPointerStartX = 0;
+  let modalPointerDeltaX = 0;
+  let modalPointerId = null;
+  let modalDragging = false;
+  let modalLastFocused = null;
+
+  const galleryImageData = index => {
+    const safeIndex = clampGalleryIndex(index);
+    const img = gallerySlides[safeIndex]?.querySelector('img');
+    return {
+      index: safeIndex,
+      src: img?.currentSrc || img?.src || '',
+      alt: img?.alt || `Gambar produk Astrobot ${safeIndex + 1}`
+    };
+  };
+
+  const renderGalleryModal = index => {
+    if (!galleryModalImage || !gallerySlides.length) return;
+    const data = galleryImageData(index);
+    modalIndex = data.index;
+    galleryModalImage.src = data.src;
+    galleryModalImage.alt = data.alt;
+    if (galleryModalCounter) galleryModalCounter.textContent = `${modalIndex + 1} / ${gallerySlides.length}`;
+  };
+
+  const openGalleryModal = index => {
+    if (!galleryModal || !gallerySlides.length) return;
+    modalLastFocused = document.activeElement;
+    renderGalleryModal(index);
+    galleryModal.hidden = false;
+    galleryModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('gallery-modal-open');
+    requestAnimationFrame(() => galleryModalClose?.focus({ preventScroll: true }));
+  };
+
+  const closeGalleryModal = () => {
+    if (!galleryModal || galleryModal.hidden) return;
+    galleryModal.hidden = true;
+    galleryModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('gallery-modal-open');
+    if (modalLastFocused instanceof HTMLElement) modalLastFocused.focus({ preventScroll: true });
+  };
+
+  const moveGalleryModal = direction => renderGalleryModal(modalIndex + direction);
+
+  galleryViewport?.addEventListener('click', event => {
+    if (event.target.closest('.product-gallery-button')) return;
+    if (performance.now() < suppressGalleryClickUntil) return;
+    openGalleryModal(galleryIndex);
+  });
+
+  galleryViewport?.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openGalleryModal(galleryIndex);
+    }
+  });
+
+  galleryModalClose?.addEventListener('click', closeGalleryModal);
+  galleryModalPrev?.addEventListener('click', () => moveGalleryModal(-1));
+  galleryModalNext?.addEventListener('click', () => moveGalleryModal(1));
+  galleryModal?.querySelectorAll('[data-gallery-modal-close]').forEach(el => {
+    el.addEventListener('click', closeGalleryModal);
+  });
+
+  document.addEventListener('keydown', event => {
+    if (!galleryModal || galleryModal.hidden) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeGalleryModal();
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      moveGalleryModal(-1);
+    } else if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      moveGalleryModal(1);
+    } else if (event.key === 'Home') {
+      event.preventDefault();
+      renderGalleryModal(0);
+    } else if (event.key === 'End') {
+      event.preventDefault();
+      renderGalleryModal(gallerySlides.length - 1);
+    }
+  });
+
+  const finishModalDrag = () => {
+    if (!modalDragging) return;
+    const threshold = Math.min(100, Math.max(44, (galleryModalStage?.clientWidth || 0) * 0.12));
+    if (Math.abs(modalPointerDeltaX) >= threshold) {
+      moveGalleryModal(modalPointerDeltaX < 0 ? 1 : -1);
+    }
+    modalPointerDeltaX = 0;
+    modalDragging = false;
+    modalPointerId = null;
+  };
+
+  galleryModalStage?.addEventListener('pointerdown', event => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    modalPointerId = event.pointerId;
+    modalPointerStartX = event.clientX;
+    modalPointerDeltaX = 0;
+    modalDragging = true;
+    galleryModalStage.setPointerCapture?.(event.pointerId);
+  });
+
+  galleryModalStage?.addEventListener('pointermove', event => {
+    if (!modalDragging || event.pointerId !== modalPointerId) return;
+    modalPointerDeltaX = event.clientX - modalPointerStartX;
+  });
+
+  galleryModalStage?.addEventListener('pointerup', event => {
+    if (event.pointerId !== modalPointerId) return;
+    galleryModalStage.releasePointerCapture?.(event.pointerId);
+    finishModalDrag();
+  });
+
+  galleryModalStage?.addEventListener('pointercancel', finishModalDrag);
+  galleryModalStage?.addEventListener('lostpointercapture', finishModalDrag);
 
   const root = document.documentElement;
   const themeToggle = document.getElementById('productThemeToggle');
