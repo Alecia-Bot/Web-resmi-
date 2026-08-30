@@ -29,22 +29,9 @@
   setText('summaryTotal', rupiah(selectedPackage.price));
   document.title = `${selectedPackage.title} - Astrobot`;
 
-  // Product image gallery: buttons, dots, keyboard arrows, and horizontal swipe/drag.
+  // Compact product album. Clicking a thumbnail opens the full-size swipe viewer.
   const gallery = document.getElementById('productGallery');
-  const galleryViewport = document.getElementById('productGalleryViewport');
-  const galleryTrack = document.getElementById('productGalleryTrack');
   const gallerySlides = Array.from(gallery?.querySelectorAll('[data-gallery-slide]') || []);
-  const galleryDots = Array.from(gallery?.querySelectorAll('[data-gallery-dot]') || []);
-  const galleryPrev = document.getElementById('productGalleryPrev');
-  const galleryNext = document.getElementById('productGalleryNext');
-  const galleryCounter = document.getElementById('productGalleryCounter');
-
-  let galleryIndex = 0;
-  let pointerStartX = 0;
-  let pointerDeltaX = 0;
-  let activePointerId = null;
-  let isDraggingGallery = false;
-  let suppressGalleryClickUntil = 0;
 
   const clampGalleryIndex = index => {
     const count = gallerySlides.length;
@@ -52,107 +39,7 @@
     return (index + count) % count;
   };
 
-  const renderGallery = (index, { animate = true } = {}) => {
-    if (!galleryTrack || !gallerySlides.length) return;
-
-    galleryIndex = clampGalleryIndex(index);
-    galleryTrack.classList.toggle('is-dragging', !animate);
-    galleryTrack.style.transform = `translate3d(${-galleryIndex * 100}%, 0, 0)`;
-
-    gallerySlides.forEach((slide, slideIndex) => {
-      const active = slideIndex === galleryIndex;
-      slide.classList.toggle('is-active', active);
-      slide.setAttribute('aria-hidden', active ? 'false' : 'true');
-    });
-
-    galleryDots.forEach((dot, dotIndex) => {
-      const active = dotIndex === galleryIndex;
-      dot.classList.toggle('is-active', active);
-      if (active) dot.setAttribute('aria-current', 'true');
-      else dot.removeAttribute('aria-current');
-    });
-
-    if (galleryCounter) galleryCounter.textContent = `${galleryIndex + 1} / ${gallerySlides.length}`;
-  };
-
-  const moveGallery = direction => renderGallery(galleryIndex + direction);
-
-  galleryPrev?.addEventListener('click', () => moveGallery(-1));
-  galleryNext?.addEventListener('click', () => moveGallery(1));
-  galleryDots.forEach(dot => {
-    dot.addEventListener('click', () => renderGallery(Number(dot.dataset.galleryDot || 0)));
-  });
-
-  galleryViewport?.addEventListener('keydown', event => {
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      moveGallery(-1);
-    } else if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      moveGallery(1);
-    } else if (event.key === 'Home') {
-      event.preventDefault();
-      renderGallery(0);
-    } else if (event.key === 'End') {
-      event.preventDefault();
-      renderGallery(gallerySlides.length - 1);
-    }
-  });
-
-  const finishGalleryDrag = () => {
-    if (!galleryTrack || !isDraggingGallery) return;
-
-    const threshold = Math.min(90, Math.max(42, (galleryViewport?.clientWidth || 0) * 0.12));
-    galleryTrack.classList.remove('is-dragging');
-
-    const dragDistance = Math.abs(pointerDeltaX);
-    if (dragDistance > 8) suppressGalleryClickUntil = performance.now() + 260;
-
-    if (dragDistance >= threshold) {
-      moveGallery(pointerDeltaX < 0 ? 1 : -1);
-    } else {
-      renderGallery(galleryIndex);
-    }
-
-    pointerDeltaX = 0;
-    isDraggingGallery = false;
-    activePointerId = null;
-  };
-
-  galleryViewport?.addEventListener('pointerdown', event => {
-    if (event.pointerType === 'mouse' && event.button !== 0) return;
-    if (event.target.closest('.product-gallery-button')) return;
-
-    activePointerId = event.pointerId;
-    pointerStartX = event.clientX;
-    pointerDeltaX = 0;
-    isDraggingGallery = true;
-    galleryTrack?.classList.add('is-dragging');
-    galleryViewport.setPointerCapture?.(event.pointerId);
-  });
-
-  galleryViewport?.addEventListener('pointermove', event => {
-    if (!isDraggingGallery || event.pointerId !== activePointerId || !galleryTrack) return;
-
-    pointerDeltaX = event.clientX - pointerStartX;
-    const width = galleryViewport.clientWidth || 1;
-    const limitedDelta = Math.max(-width, Math.min(width, pointerDeltaX));
-    galleryTrack.style.transform = `translate3d(calc(${-galleryIndex * 100}% + ${limitedDelta}px), 0, 0)`;
-  });
-
-  galleryViewport?.addEventListener('pointerup', event => {
-    if (event.pointerId !== activePointerId) return;
-    galleryViewport.releasePointerCapture?.(event.pointerId);
-    finishGalleryDrag();
-  });
-
-  galleryViewport?.addEventListener('pointercancel', finishGalleryDrag);
-  galleryViewport?.addEventListener('lostpointercapture', finishGalleryDrag);
-
-  renderGallery(0, { animate: false });
-  requestAnimationFrame(() => galleryTrack?.classList.remove('is-dragging'));
-
-  // Fullscreen image preview. Opens on image click and supports buttons, keyboard, and swipe.
+  // Fullscreen image preview with buttons, keyboard navigation, and touch swipe.
   const galleryModal = document.getElementById('productGalleryModal');
   const galleryModalImage = document.getElementById('productGalleryModalImage');
   const galleryModalClose = document.getElementById('productGalleryModalClose');
@@ -183,6 +70,8 @@
     modalIndex = data.index;
     galleryModalImage.src = data.src;
     galleryModalImage.alt = data.alt;
+    galleryModalImage.style.transform = '';
+    galleryModalImage.style.opacity = '';
     if (galleryModalCounter) galleryModalCounter.textContent = `${modalIndex + 1} / ${gallerySlides.length}`;
   };
 
@@ -206,17 +95,13 @@
 
   const moveGalleryModal = direction => renderGalleryModal(modalIndex + direction);
 
-  galleryViewport?.addEventListener('click', event => {
-    if (event.target.closest('.product-gallery-button')) return;
-    if (performance.now() < suppressGalleryClickUntil) return;
-    openGalleryModal(galleryIndex);
-  });
-
-  galleryViewport?.addEventListener('keydown', event => {
-    if (event.key === 'Enter' || event.key === ' ') {
+  gallerySlides.forEach((slide, index) => {
+    slide.addEventListener('click', () => openGalleryModal(index));
+    slide.addEventListener('keydown', event => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
       event.preventDefault();
-      openGalleryModal(galleryIndex);
-    }
+      openGalleryModal(index);
+    });
   });
 
   galleryModalClose?.addEventListener('click', closeGalleryModal);
@@ -252,6 +137,8 @@
     if (Math.abs(modalPointerDeltaX) >= threshold) {
       moveGalleryModal(modalPointerDeltaX < 0 ? 1 : -1);
     }
+    galleryModalStage?.classList.remove('is-dragging');
+    if (galleryModalImage) galleryModalImage.style.transform = '';
     modalPointerDeltaX = 0;
     modalDragging = false;
     modalPointerId = null;
@@ -263,12 +150,18 @@
     modalPointerStartX = event.clientX;
     modalPointerDeltaX = 0;
     modalDragging = true;
+    galleryModalStage.classList.add('is-dragging');
     galleryModalStage.setPointerCapture?.(event.pointerId);
   });
 
   galleryModalStage?.addEventListener('pointermove', event => {
     if (!modalDragging || event.pointerId !== modalPointerId) return;
     modalPointerDeltaX = event.clientX - modalPointerStartX;
+    if (galleryModalImage) {
+      const stageWidth = galleryModalStage.clientWidth || 1;
+      const limitedDelta = Math.max(-stageWidth * .72, Math.min(stageWidth * .72, modalPointerDeltaX));
+      galleryModalImage.style.transform = `translate3d(${limitedDelta}px, 0, 0) scale(.985)`;
+    }
   });
 
   galleryModalStage?.addEventListener('pointerup', event => {
