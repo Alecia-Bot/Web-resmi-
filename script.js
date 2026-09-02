@@ -170,7 +170,7 @@
     button.addEventListener('click', () => {
       const order = button.dataset.order || 'Layanan Astrobot';
       const message = `Halo Admin Astrobot, saya tertarik dengan ${order}. Bisa minta informasi selanjutnya?`;
-      window.open(`https://wa.me/18763192888?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+      window.open(`https://wa.me/6287842203625?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
     });
   });
 
@@ -198,6 +198,6 @@
     const message = String(data.get('message') || '').trim();
     if (!name || !message) return;
     const text = `Halo Admin Astrobot, saya ${name}.\n\nTopik: ${topic}\nPesan: ${message}`;
-    window.open(`https://wa.me/18763192888?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    window.open(`https://wa.me/6287842203625?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
   });
 })();
