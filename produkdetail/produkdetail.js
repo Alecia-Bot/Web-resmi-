@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const OWNER_NUMBER = '18763192888';
+  const OWNER_NUMBER = '6287842203625';
 
   const PACKAGES = {
     '1': { code: 'PAKET 01', title: 'SEWA BOT 15 HARI', duration: 'Aktif 15 hari', price: 6000 },
